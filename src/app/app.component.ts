@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
     sidenav_mode = 'side';
     @ViewChild('sidenav') private sidenav: MdSidenav;
 
-    constructor(private _ngZone: NgZone, public auth: AngularFireAuth, protected config: Configuration, private router: Router) {
+    constructor(private _ngZone: NgZone, public auth: AngularFireAuth, public config: Configuration, private router: Router) {
     }
 
     ngOnInit() {

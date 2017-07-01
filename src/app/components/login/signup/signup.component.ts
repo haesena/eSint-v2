@@ -11,6 +11,8 @@ import {Configuration} from '../../../configuration';
 export class SignupComponent implements OnInit {
 
     error: any;
+    email: string;
+    password: string;
 
     constructor(private router: Router, private af: AngularFireAuth, private config: Configuration) {
         this.af.authState.map(auth => {
