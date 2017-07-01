@@ -1,0 +1,17 @@
+<md-card class="form-container">
+    <a routerLink="/login" id="goback">Go back</a>
+    <h2>Join now</h2>
+
+    <span class="error" *ngIf="error">{{ error }}</span>
+
+    <form #formData='ngForm' (ngSubmit)="onSubmit(formData)">
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Email address" (ngModel)="email" name="email">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Password" type="password" (ngModel)="password" name="password">
+        </md-input-container>
+
+        <button md-raised-button type="submit" [disabled]="!formData.valid" class="fullwidth-button">Create my account</button>
+    </form>
+</md-card>

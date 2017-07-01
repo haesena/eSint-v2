@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    height: 100%;
+}
+
+.space-filler {
+    flex: 1 1 auto;
+}
+
+.form-container {
+    background:white;
+    width:475px;
+    position:fixed;
+    left:50%;
+    margin-left:-250px;
+}
+
+@media (max-width: 600px) {
+
+    .form-container {
+        padding:1em;
+        width:81%;
+        margin-left:-45%;
+    }
+    button {
+        font-size:1em;
+    }
+}
+
+.error {
+    background: #f1b6ac;
+    padding:0.8em;
+    width:95%;
+    display:block;
+    margin-bottom:20px;
+}

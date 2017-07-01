@@ -1,0 +1,16 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$esint-app-primary: mat-palette($mat-red);
+$esint-app-accent:  mat-palette($mat-red, A200, A100, A400);
+$esint-app-warn:    mat-palette($mat-yellow);
+
+$esint-app-theme: mat-light-theme($esint-app-primary, $esint-app-accent, $esint-app-warn);
+
+@include angular-material-theme($esint-app-theme);
+
+.m2app-dark {
+  $esint-app-theme-dark: mat-dark-theme($esint-app-primary, $esint-app-accent, $esint-app-warn);
+  @include angular-material-theme($esint-app-theme-dark);
+}
