@@ -32,6 +32,7 @@ import {StartComponent} from './components/start/start.component';
 import {EmailComponent} from './components/login/email/email.component';
 import {FormsModule} from '@angular/forms';
 import {SignupComponent} from './components/login/signup/signup.component';
+import {UserService} from './services/firebase/user.service';
 
 @NgModule({
     declarations: [
@@ -61,6 +62,7 @@ import {SignupComponent} from './components/login/signup/signup.component';
     providers: [
         AuthGuard,
         AuthService,
+        UserService,
         Configuration
     ],
     bootstrap: [AppComponent]
