@@ -10,7 +10,6 @@ export class AuthService {
 
     public loggedIn = false;
     loggedIn$ = new BehaviorSubject<boolean>(false);
-    private user: User;
 
     constructor(public auth: AngularFireAuth, public userService: UserService) {
     }
@@ -19,13 +18,7 @@ export class AuthService {
         if (user == null) {
             this.loggedIn = false;
         } else {
-            this.user = new User();
-            this.user.uid = user.uid;
-            this.user.displayName = user.displayName;
-            this.user.photoUrl = user.photoURL;
-
-            this.userService.setUser(user.uid, this.user);
-
+            this.userService.setUser(user);
             this.loggedIn = true;
         }
         this.loggedIn$.next(this.loggedIn);

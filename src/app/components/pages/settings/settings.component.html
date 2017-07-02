@@ -1,0 +1,6 @@
+<md-card class="content">
+    <md-input-container class="full-width">
+        <input mdInput required="true" placeholder="Name" [ngModel]='(userS.user$|async)?.displayName'
+               (ngModelChange)="userS.user$.update({displayName: $event})" name="email">
+    </md-input-container>
+</md-card>

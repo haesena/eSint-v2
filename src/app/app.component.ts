@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {Configuration} from './configuration';
 import {AuthService} from './services/authentication/auth.service';
+import {UserService} from './services/firebase/user.service';
 
 @Component({
     selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent implements OnInit {
     sidenav_mode = 'side';
     @ViewChild('sidenav') private sidenav: MdSidenav;
 
-    constructor(private _ngZone: NgZone, public auth: AuthService, public config: Configuration, private router: Router) {
+    constructor(private _ngZone: NgZone, public auth: AuthService, public uService: UserService,
+                public config: Configuration, private router: Router) {
     }
 
     ngOnInit() {

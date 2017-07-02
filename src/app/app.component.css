@@ -22,11 +22,16 @@
 }
 
 .route-active {
-    color: #00adee;
+    color: #ee1400;
 }
 
 .main-content {
     padding-top:1.2em;
     /*padding: 10px;*/
     /*margin: 10px;*/
+}
+
+.menu-icon {
+    padding-right: 0.5em;
+    height: 55%;
 }

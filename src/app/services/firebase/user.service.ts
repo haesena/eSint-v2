@@ -1,19 +1,48 @@
 import {Injectable} from '@angular/core';
 import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
 import {User} from '../../models/user';
+import * as firebase from 'firebase/app';
+import {Observable} from 'rxjs/Observable';
+import {Configuration} from '../../configuration';
 
 @Injectable()
 export class UserService {
 
-    constructor(public db: AngularFireDatabase) {
+    private user: User;
+    public user$: FirebaseObjectObservable<User>;
+
+    constructor(public db: AngularFireDatabase, public config: Configuration) {
     }
 
     getUser(uid: string) {
         return this.db.object('users/' + uid);
     }
 
-    setUser(uid: string, user: User) {
-        return this.db.object('users/' + uid).update(user);
+    setUser(user: firebase.User) {
+        this.user = new User();
+        this.user.uid = user.uid;
+        this.user.photoUrl = user.photoURL;
+        if (user.displayName != null) {
+            this.user.displayName = user.displayName;
+        } else {
+            this.user.displayName = user.email;
+        }
+        this.user$ = this.db.object('users/' + user.uid);
+        this.config.loading = true;
+        this.user$.subscribe(
+            fbUser => {
+                this.config.loading = false;
+                console.log(fbUser);
+                if (fbUser.displayName != null && fbUser.displayName !== this.user.displayName) {
+                    this.user.displayName = fbUser.displayName;
+                }
+                if (fbUser.photoUrl != null && fbUser.photoUrl !== this.user.photoUrl) {
+                    this.user.photoUrl = fbUser.photoUrl;
+                }
+
+                this.db.object('users/' + user.uid).update(this.user)
+            }
+        );
     }
 
 }

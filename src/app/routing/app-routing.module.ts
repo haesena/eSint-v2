@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {StartComponent} from '../components/start/start.component';
+import {StartComponent} from '../components/pages/start/start.component';
 import {LoginComponent} from '../components/login/login.component';
 import {AuthGuard} from './auth-guard.service';
 import {EmailComponent} from '../components/login/email/email.component';
 import {SignupComponent} from '../components/login/signup/signup.component';
+import {SettingsComponent} from '../components/pages/settings/settings.component';
 
 const appRoutes: Routes = [
   {
@@ -23,6 +24,11 @@ const appRoutes: Routes = [
     path: 'start',
     canActivate: [AuthGuard],
     component: StartComponent
+  },
+  {
+    path: 'settings',
+    canActivate: [AuthGuard],
+    component: SettingsComponent
   },
   {
     path: '',

@@ -6,8 +6,14 @@
 			</span>
         </md-toolbar>
         <md-nav-list *ngIf="this.auth.loggedIn == true" class="side-list">
-            <a md-list-item routerLink="/start" routerLinkActive="route-active" (click)="collapse()"> Start </a>
-            <a md-list-item routerLink="/login" routerLinkActive="route-active" (click)="collapse()"> Login </a>
+            <a md-list-item routerLink="/start" routerLinkActive="route-active" (click)="collapse()">
+                <md-icon class="menu-icon">home</md-icon>
+                Start
+            </a>
+            <a md-list-item routerLink="/settings" routerLinkActive="route-active" (click)="collapse()">
+                <md-icon class="menu-icon">settings</md-icon>
+                Settings
+            </a>
         </md-nav-list>
     </md-sidenav>
     <md-toolbar color="primary">
@@ -25,7 +31,5 @@
 
     <md-progress-bar *ngIf="this.config.loading" mode="indeterminate"></md-progress-bar>
 
-    <div class="main-content">
-        <router-outlet></router-outlet>
-    </div>
+    <router-outlet></router-outlet>
 </md-sidenav-container>

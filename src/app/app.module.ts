@@ -28,11 +28,12 @@ import {AuthService} from './services/authentication/auth.service';
 
 // Components
 import {LoginComponent} from './components/login/login.component';
-import {StartComponent} from './components/start/start.component';
+import {StartComponent} from './components/pages/start/start.component';
 import {EmailComponent} from './components/login/email/email.component';
 import {FormsModule} from '@angular/forms';
 import {SignupComponent} from './components/login/signup/signup.component';
 import {UserService} from './services/firebase/user.service';
+import { SettingsComponent } from './components/pages/settings/settings.component';
 
 @NgModule({
     declarations: [
@@ -40,7 +41,8 @@ import {UserService} from './services/firebase/user.service';
         LoginComponent,
         StartComponent,
         EmailComponent,
-        SignupComponent
+        SignupComponent,
+        SettingsComponent
     ],
     imports: [
         BrowserAnimationsModule,
