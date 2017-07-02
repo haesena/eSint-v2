@@ -3,6 +3,7 @@ import {MdSidenav} from '@angular/material';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {Configuration} from './configuration';
+import {AuthService} from './services/authentication/auth.service';
 
 @Component({
     selector: 'app-root',
@@ -13,12 +14,12 @@ export class AppComponent implements OnInit {
     sidenav_mode = 'side';
     @ViewChild('sidenav') private sidenav: MdSidenav;
 
-    constructor(private _ngZone: NgZone, public auth: AngularFireAuth, public config: Configuration, private router: Router) {
+    constructor(private _ngZone: NgZone, public auth: AuthService, public config: Configuration, private router: Router) {
     }
 
     ngOnInit() {
 
-        this.config.loggedInObs.subscribe(value => {
+        this.auth.loggedIn$.subscribe(value => {
             if (value === true) {
                 this.checkMenu();
             } else {
@@ -41,7 +42,7 @@ export class AppComponent implements OnInit {
     checkMenu() {
         this._ngZone.run(() => {
             const w = window.innerWidth;
-            if (w > 768 && this.config.loggedIn) {
+            if (w > 768 && this.auth.loggedIn) {
                 this.sidenav.open();
                 this.sidenav_mode = 'side';
             } else {
@@ -52,8 +53,7 @@ export class AppComponent implements OnInit {
     }
 
     logOut() {
-        this.config.setLoggedIn(false);
-        this.auth.auth.signOut();
+        this.auth.logOut();
         this.router.navigate(['/login']);
     }
 }

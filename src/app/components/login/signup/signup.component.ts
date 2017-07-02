@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {Configuration} from '../../../configuration';
+import {AuthService} from '../../../services/authentication/auth.service';
 
 @Component({
     selector: 'app-signup',
@@ -14,10 +15,10 @@ export class SignupComponent implements OnInit {
     email: string;
     password: string;
 
-    constructor(private router: Router, private af: AngularFireAuth, private config: Configuration) {
-        this.af.authState.map(auth => {
-            if (auth) {
-                this.config.setLoggedIn(true);
+    constructor(private router: Router, private af: AngularFireAuth, private auth: AuthService) {
+        this.auth.authState().map(state => {
+            if (state) {
+                this.auth.setLoggedIn(state);
                 this.router.navigate(['start']);
             }
         });
@@ -28,19 +29,13 @@ export class SignupComponent implements OnInit {
 
     onSubmit(formData) {
         if (formData.valid) {
-            this.af.auth.createUserWithEmailAndPassword(
-                formData.value.email,
-                formData.value.password,
-            ).then(
-                (success) => {
-                    this.config.setLoggedIn(true);
-                    this.router.navigate(['/start']);
-                }
-            ).catch(
-                (err) => {
-                    this.error = err;
-                }
-            );
+            this.auth.logInSignup(formData.value.email, formData.value.password)
+                .then(
+                    success => this.router.navigate(['/start'])
+                )
+                .catch(
+                    err => this.error = err
+                );
         }
     }
 

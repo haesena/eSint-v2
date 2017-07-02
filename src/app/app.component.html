@@ -5,20 +5,20 @@
 				Logo
 			</span>
         </md-toolbar>
-        <md-nav-list *ngIf="this.config.loggedIn == true" class="side-list">
+        <md-nav-list *ngIf="this.auth.loggedIn == true" class="side-list">
             <a md-list-item routerLink="/start" routerLinkActive="route-active" (click)="collapse()"> Start </a>
             <a md-list-item routerLink="/login" routerLinkActive="route-active" (click)="collapse()"> Login </a>
         </md-nav-list>
     </md-sidenav>
     <md-toolbar color="primary">
-        <button md-icon-button (click)="sidenav.toggle()" *ngIf="sidenav_mode == 'over' && this.config.loggedIn == true">
+        <button md-icon-button (click)="sidenav.toggle()" *ngIf="sidenav_mode == 'over' && this.auth.loggedIn == true">
             <md-icon>menu</md-icon>
         </button>
         <span>
 			Title
 		</span>
         <span class="space-filler"></span>
-        <button md-icon-button (click)="logOut()" *ngIf="this.config.loggedIn == true">
+        <button md-icon-button (click)="logOut()" *ngIf="this.auth.loggedIn == true">
             <md-icon>power_settings_new</md-icon>
         </button>
     </md-toolbar>
