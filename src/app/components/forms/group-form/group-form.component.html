@@ -1,0 +1,6 @@
+<form class="group-form" *ngIf="group">
+    <md-form-field class="example-full-width">
+        <input mdInput placeholder="Name" [(ngModel)]="group.name" name="gName">
+    </md-form-field>
+    <button md-raised-button color="accent" (click)="save()">Save</button>
+</form>

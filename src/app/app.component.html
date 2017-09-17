@@ -8,7 +8,11 @@
         <md-nav-list *ngIf="this.auth.loggedIn == true" class="side-list">
             <a md-list-item routerLink="/start" routerLinkActive="route-active" (click)="collapse()">
                 <md-icon class="menu-icon">home</md-icon>
-                Start
+                Home
+            </a>
+            <a md-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="collapse()">
+                <md-icon class="menu-icon">add</md-icon>
+                New group
             </a>
             <a md-list-item routerLink="/settings" routerLinkActive="route-active" (click)="collapse()">
                 <md-icon class="menu-icon">settings</md-icon>

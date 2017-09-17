@@ -1,3 +1,14 @@
 <md-card class="content" *ngIf="this.userService.user$ | async">
-    Welcome {{ (this.userService.user$ | async)?.displayName}}
+    <div>
+        Welcome {{ (this.userService.user$ | async)?.displayName}}!
+    </div>
+    <div *ngIf="(groups$ | async)?.length > 0; else no_groups">
+        Groups:
+        <ul>
+            <li *ngFor="let g of groups$ | async">
+                <a [routerLink]="'/edit-group/'+g.$key">{{ g.name }}</a>
+            </li>
+        </ul>
+    </div>
+    <ng-template #no_groups>You're in no groups yet...</ng-template>
 </md-card>

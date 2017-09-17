@@ -16,10 +16,12 @@ import {AuthService} from '../services/authentication/auth.service';
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-    constructor(private router: Router, private auth: AuthService) { }
+    constructor(private router: Router, private auth: AuthService, private config: Configuration) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        return this.auth.authState().map(auth => {
+        return this.auth.authState().map(
+            auth => {
+                this.config.userId = auth.uid;
                 if (auth == null) {
                     this.auth.setLoggedIn(auth);
                     this.router.navigate(['/login']);
@@ -28,6 +30,7 @@ export class AuthGuard implements CanActivate {
                     this.auth.setLoggedIn(auth);
                     return true;
                 }
-            });
+            }
+        );
     }
 }

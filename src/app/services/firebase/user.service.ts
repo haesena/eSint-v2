@@ -32,17 +32,21 @@ export class UserService {
         this.user$.subscribe(
             fbUser => {
                 this.config.loading = false;
-                console.log(fbUser);
                 if (fbUser.displayName != null && fbUser.displayName !== this.user.displayName) {
                     this.user.displayName = fbUser.displayName;
                 }
                 if (fbUser.photoUrl != null && fbUser.photoUrl !== this.user.photoUrl) {
                     this.user.photoUrl = fbUser.photoUrl;
                 }
-
                 this.db.object('users/' + user.uid).update(this.user)
             }
         );
+    }
+    addGroup(gid: string, type: string) {
+        const newGroup = {};
+        newGroup[gid] = type;
+        const userGroups = this.db.object('users/' + this.config.userId + '/groups');
+        userGroups.update(newGroup);
     }
 
 }

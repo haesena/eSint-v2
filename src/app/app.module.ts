@@ -34,6 +34,10 @@ import {FormsModule} from '@angular/forms';
 import {SignupComponent} from './components/login/signup/signup.component';
 import {UserService} from './services/firebase/user.service';
 import { SettingsComponent } from './components/pages/settings/settings.component';
+import {GroupsService} from './services/firebase/groups.service';
+import { NewGroupComponent } from './components/pages/new-group/new-group.component';
+import { GroupFormComponent } from './components/forms/group-form/group-form.component';
+import { EditGroupComponent } from './components/pages/edit-group/edit-group.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +46,10 @@ import { SettingsComponent } from './components/pages/settings/settings.componen
         StartComponent,
         EmailComponent,
         SignupComponent,
-        SettingsComponent
+        SettingsComponent,
+        NewGroupComponent,
+        GroupFormComponent,
+        EditGroupComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -65,6 +72,7 @@ import { SettingsComponent } from './components/pages/settings/settings.componen
         AuthGuard,
         AuthService,
         UserService,
+        GroupsService,
         Configuration
     ],
     bootstrap: [AppComponent]
