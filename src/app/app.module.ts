@@ -38,6 +38,7 @@ import {GroupsService} from './services/firebase/groups.service';
 import { NewGroupComponent } from './components/pages/new-group/new-group.component';
 import { GroupFormComponent } from './components/forms/group-form/group-form.component';
 import { EditGroupComponent } from './components/pages/edit-group/edit-group.component';
+import { GroupSelectComponent } from './components/partials/group-select/group-select.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { EditGroupComponent } from './components/pages/edit-group/edit-group.com
         SettingsComponent,
         NewGroupComponent,
         GroupFormComponent,
-        EditGroupComponent
+        EditGroupComponent,
+        GroupSelectComponent
     ],
     imports: [
         BrowserAnimationsModule,

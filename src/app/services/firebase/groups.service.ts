@@ -7,14 +7,30 @@ import {validate} from 'codelyzer/walkerFactory/walkerFn';
 import {Group} from '../../models/group';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable()
 export class GroupsService {
+    private groups$: ReplaySubject<Group[]>;
 
     constructor(public db: AngularFireDatabase, public config: Configuration, public userService: UserService) {
+        this.groups$ = new ReplaySubject();
+        this.db.list('/users/' + this.config.userId + '/groups').subscribe(
+            userGroups => {
+                const groups = [];
+                userGroups.forEach(userGroup => {
+                    this.db.object('/groups/' + userGroup.$key).subscribe(
+                        g => groups.push(g)
+                    );
+                });
+                this.groups$.next(groups);
+            }
+        );
     }
+
     getGroups() {
-        return this.db.list('/groups');
+        return this.groups$;
     }
 
     getGroup(gid) {

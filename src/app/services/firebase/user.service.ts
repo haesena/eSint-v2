@@ -38,7 +38,7 @@ export class UserService {
                 if (fbUser.photoUrl != null && fbUser.photoUrl !== this.user.photoUrl) {
                     this.user.photoUrl = fbUser.photoUrl;
                 }
-                this.db.object('users/' + user.uid).update(this.user)
+                this.db.object('users/' + user.uid).update(this.user);
             }
         );
     }
@@ -47,6 +47,10 @@ export class UserService {
         newGroup[gid] = type;
         const userGroups = this.db.object('users/' + this.config.userId + '/groups');
         userGroups.update(newGroup);
+    }
+    setActiveGroup(gid) {
+        this.user.activeGroup = gid;
+        this.db.object('users/' + this.user.uid).update(this.user);
     }
 
 }

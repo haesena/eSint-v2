@@ -1,19 +1,12 @@
 <md-sidenav-container class="fullscreen">
     <md-sidenav #sidenav mode="{{sidenav_mode}}" class="sidenav">
-        <md-toolbar color="accent">
+        <md-toolbar color="accent" routerLink="/start">
 			<span>
 				Logo
 			</span>
         </md-toolbar>
+        <app-group-select *ngIf="this.auth.loggedIn == true" (linkClicked)="collapse()"></app-group-select>
         <md-nav-list *ngIf="this.auth.loggedIn == true" class="side-list">
-            <a md-list-item routerLink="/start" routerLinkActive="route-active" (click)="collapse()">
-                <md-icon class="menu-icon">home</md-icon>
-                Home
-            </a>
-            <a md-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="collapse()">
-                <md-icon class="menu-icon">add</md-icon>
-                New group
-            </a>
             <a md-list-item routerLink="/settings" routerLinkActive="route-active" (click)="collapse()">
                 <md-icon class="menu-icon">settings</md-icon>
                 Settings
@@ -32,8 +25,6 @@
             <md-icon>power_settings_new</md-icon>
         </button>
     </md-toolbar>
-
     <md-progress-bar *ngIf="this.config.loading" mode="indeterminate"></md-progress-bar>
-
     <router-outlet></router-outlet>
 </md-sidenav-container>
