@@ -1,19 +1,21 @@
 <md-nav-list class="side-list" *ngIf="(groups$ | async)?.length > 0; else no_groups">
     <a md-list-item (click)="toggleGroups()">
         <!--<md-icon class="menu-icon">home</md-icon>-->
-        Toggle
+        {{ activeGroupName }}
         <span class="space-filler"></span>
         <md-icon class="menu-icon" class="rotate" [ngClass]="{'down': showGroups }">keyboard_arrow_down</md-icon>
     </a>
 </md-nav-list>
 <md-nav-list *ngIf="showGroups" class="side-list">
-    <a *ngFor="let g of groups$ | async"
-       md-list-item
-       routerLinkActive="route-active"
-       (click)="chooseGroup(g.$key)">
-        <md-icon class="menu-icon">keyboard_arrow_right</md-icon>
-        {{ g.name }}
-    </a>
+    <span *ngFor="let g of groups$ | async">
+        <a *ngIf="g.name != activeGroupName"
+           md-list-item
+           routerLinkActive="route-active"
+           (click)="chooseGroup(g.$key)">
+            <md-icon class="menu-icon">keyboard_arrow_right</md-icon>
+            {{ g.name }}
+        </a>
+    </span>
     <a md-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="clicked()">
         <md-icon class="menu-icon">add</md-icon>
         New group

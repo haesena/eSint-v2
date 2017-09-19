@@ -44,12 +44,12 @@ const appRoutes: Routes = [
     },
     {
         path: '',
-        redirectTo: '/login',
+        redirectTo: '/start',
         pathMatch: 'full'
     },
     {
         path: '**',
-        redirectTo: '/login'
+        redirectTo: '/start'
     }
 ];
 

@@ -21,13 +21,12 @@ export class AuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         return this.auth.authState().map(
             auth => {
-                this.config.userId = auth.uid;
+                this.auth.setLoggedIn(auth);
                 if (auth == null) {
-                    this.auth.setLoggedIn(auth);
                     this.router.navigate(['/login']);
                     return false;
                 } else {
-                    this.auth.setLoggedIn(auth);
+                    this.config.userId = auth.uid;
                     return true;
                 }
             }

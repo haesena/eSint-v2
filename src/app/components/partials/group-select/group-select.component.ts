@@ -1,6 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {GroupsService} from '../../../services/firebase/groups.service';
 import {UserService} from '../../../services/firebase/user.service';
+import {Observable} from "rxjs/Rx";
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {Group} from '../../../models/group';
 
 @Component({
     selector: 'app-group-select',
@@ -8,16 +11,20 @@ import {UserService} from '../../../services/firebase/user.service';
     styleUrls: ['./group-select.component.css']
 })
 export class GroupSelectComponent implements OnInit {
-    public groups$;
+    public groups$: ReplaySubject<Group[]>;
+    public activeGroupName: string;
     public showGroups: boolean;
     @Output() linkClicked: EventEmitter<any> = new EventEmitter();
 
     constructor(public groupsService: GroupsService, public userService: UserService) {
+        this.groups$ = new ReplaySubject();
     }
 
     ngOnInit() {
         this.groups$ = this.groupsService.getGroups();
-        this.showGroups = false;
+        this.userService.getActiveGroupName().subscribe(a => {
+            this.activeGroupName = a.$value;
+        });
     }
 
     toggleGroups() {

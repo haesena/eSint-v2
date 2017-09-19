@@ -3,6 +3,7 @@ import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/data
 import {User} from '../../models/user';
 import * as firebase from 'firebase/app';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/mergeMap';
 import {Configuration} from '../../configuration';
 
 @Injectable()
@@ -51,6 +52,14 @@ export class UserService {
     setActiveGroup(gid) {
         this.user.activeGroup = gid;
         this.db.object('users/' + this.user.uid).update(this.user);
+    }
+    getActiveGroup() {
+        return this.db.object('users/' + this.user.uid + '/activeGroup');
+    }
+    getActiveGroupName() {
+        return this.getActiveGroup().flatMap(ag => {
+            return this.db.object('groups/' + ag.$value + '/name');
+        });
     }
 
 }

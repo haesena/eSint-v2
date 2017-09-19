@@ -1,7 +1,7 @@
 import {User} from './user';
 
 export class Group {
-    gid: string;
+    $key: string;
     name: string;
     users: any;
 }
