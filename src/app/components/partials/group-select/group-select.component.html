@@ -14,11 +14,16 @@
            (click)="chooseGroup(g.$key)">
             <md-icon class="menu-icon">keyboard_arrow_right</md-icon>
             {{ g.name }}
+            <span class="space-filler"></span>
         </a>
     </span>
     <a md-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="clicked()">
         <md-icon class="menu-icon">add</md-icon>
         New group
+    </a>
+    <a md-list-item routerLink="/manage-groups" routerLinkActive="route-active" (click)="clicked()">
+        <md-icon class="menu-icon">settings</md-icon>
+        Manage groups
     </a>
 </md-nav-list>
 <ng-template #no_groups>

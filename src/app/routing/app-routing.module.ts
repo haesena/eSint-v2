@@ -8,6 +8,7 @@ import {SignupComponent} from '../components/login/signup/signup.component';
 import {SettingsComponent} from '../components/pages/settings/settings.component';
 import {NewGroupComponent} from '../components/pages/new-group/new-group.component';
 import {EditGroupComponent} from '../components/pages/edit-group/edit-group.component';
+import {ManageGroupsComponent} from '../components/pages/manage-groups/manage-groups.component';
 
 const appRoutes: Routes = [
     {
@@ -31,6 +32,11 @@ const appRoutes: Routes = [
         path: 'new-group',
         canActivate: [AuthGuard],
         component: NewGroupComponent
+    },
+    {
+        path: 'manage-groups',
+        canActivate: [AuthGuard],
+        component: ManageGroupsComponent
     },
     {
         path: 'edit-group/:gid',

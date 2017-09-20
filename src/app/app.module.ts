@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -39,6 +40,7 @@ import { NewGroupComponent } from './components/pages/new-group/new-group.compon
 import { GroupFormComponent } from './components/forms/group-form/group-form.component';
 import { EditGroupComponent } from './components/pages/edit-group/edit-group.component';
 import { GroupSelectComponent } from './components/partials/group-select/group-select.component';
+import { ManageGroupsComponent } from './components/pages/manage-groups/manage-groups.component';
 
 @NgModule({
     declarations: [
@@ -51,7 +53,8 @@ import { GroupSelectComponent } from './components/partials/group-select/group-s
         NewGroupComponent,
         GroupFormComponent,
         EditGroupComponent,
-        GroupSelectComponent
+        GroupSelectComponent,
+        ManageGroupsComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -68,7 +71,8 @@ import { GroupSelectComponent } from './components/partials/group-select/group-s
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         AngularFireAuthModule,
-        AppRoutingModule
+        AppRoutingModule,
+        FlexLayoutModule
     ],
     providers: [
         AuthGuard,
