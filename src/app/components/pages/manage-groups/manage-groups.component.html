@@ -1,0 +1,7 @@
+<div fxLayout='row' fxLayout.lt-lg="column" fxLayoutWrap class="container">
+    <md-card *ngFor="let g of groups$ | async" fxFlex="calc(50% - 1.6em)" class="content">
+        <md-card-header>
+            <md-card-title>{{g.name}}</md-card-title>
+        </md-card-header>
+    </md-card>
+</div>
