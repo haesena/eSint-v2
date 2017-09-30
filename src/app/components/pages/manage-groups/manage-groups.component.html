@@ -1,7 +1,15 @@
 <div fxLayout='row' fxLayout.lt-lg="column" fxLayoutWrap class="container">
-    <md-card *ngFor="let g of groups$ | async" fxFlex="calc(50% - 1.6em)" class="content">
+    <md-card *ngFor="let g of groups" fxFlex="calc(50% - 1.6em)" class="content">
         <md-card-header>
-            <md-card-title>{{g.name}}</md-card-title>
+            <md-card-title><h3>{{g.name}}</h3></md-card-title>
         </md-card-header>
+        <md-card-content>
+            <app-group-form [group]="g"></app-group-form>
+        </md-card-content>
+        <md-card-actions>
+            <button md-raised-button (click)="leaveGroup(g.$key)">Leave</button>
+            <a md-raised-button *ngIf="g.users[config.userId] == 'creator'" [routerLink]="'/edit-group/'+g.$key">Edit</a>
+            <button md-raised-button *ngIf="g.users[config.userId] == 'creator'">Invite</button>
+        </md-card-actions>
     </md-card>
 </div>

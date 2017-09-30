@@ -3,34 +3,57 @@ import {Injectable} from '@angular/core';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {Configuration} from '../../configuration';
 import {UserService} from './user.service';
-import {validate} from 'codelyzer/walkerFactory/walkerFn';
 import {Group} from '../../models/group';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/operator/first';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable()
 export class GroupsService {
-    private groups$: ReplaySubject<Group[]>;
-
     constructor(public db: AngularFireDatabase, public config: Configuration, public userService: UserService) {
-        this.groups$ = new ReplaySubject();
-        this.db.list('/users/' + this.config.userId + '/groups').subscribe(
-            userGroups => {
-                const groups = [];
-                userGroups.forEach(userGroup => {
-                    this.db.object('/groups/' + userGroup.$key).subscribe(
-                        g => groups.push(g)
-                    );
-                });
-                this.groups$.next(groups);
-            }
-        );
     }
 
-    getGroups() {
-        return this.groups$;
+    getUserGroups(uid) {
+        const groups$ = new ReplaySubject();
+        this.db.list('users/' + uid + '/groups').subscribe(gList => {
+            const groups = [];
+            gList.forEach(group => {
+                this.db.object('groups/' + group.$key).subscribe(g => {
+                    groups.push(g);
+                });
+            });
+            groups$.next(groups);
+        });
+        return groups$;
+    }
+
+    getGroupUsers(gid) {
+        const users$ = new ReplaySubject();
+        this.db.list('groups/' + gid + '/users').first().subscribe(uList => {
+            const users = [];
+            uList.forEach(user => {
+                this.db.object('users/' + user.$key).subscribe(u => {
+                    users.push(u);
+                });
+            });
+            users$.next(users);
+        });
+        return users$;
+    }
+
+    removeUserFromGroup(gid, uid) {
+        const users = this.db.list('/groups/' + gid + '/users');
+
+        users.subscribe(u => {
+            if (u.length === 1) {
+                this.db.list('/groups').remove(gid);
+            } else {
+                users.remove(uid);
+            }
+        });
+
+
     }
 
     getGroup(gid) {
@@ -38,7 +61,6 @@ export class GroupsService {
     }
 
     createGroup(g: Group): Observable<string> {
-        // const uid = this.config.userId;
         g.users = {};
         g.users[this.config.userId] = 'creator';
         const items = this.db.list('/groups');
@@ -47,6 +69,11 @@ export class GroupsService {
                 return v.path.pieces_[1];
             }
         )
+    }
+
+    saveGroup(group: Group) {
+        const gid = group.$key;
+        this.db.object('groups/' + gid).update(group);
     }
 
 }

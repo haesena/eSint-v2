@@ -1,14 +1,14 @@
-<md-nav-list class="side-list" *ngIf="(groups$ | async)?.length > 0; else no_groups">
+<!-- if the user has groups, show the active group and a toggle to open the select menu -->
+<md-nav-list class="side-list" *ngIf="groups && groups.length > 0; else no_groups">
     <a md-list-item (click)="toggleGroups()">
-        <!--<md-icon class="menu-icon">home</md-icon>-->
-        {{ activeGroupName }}
+        {{ (userService.getActiveGroupName() | async)?.$value }}
         <span class="space-filler"></span>
         <md-icon class="menu-icon" class="rotate" [ngClass]="{'down': showGroups }">keyboard_arrow_down</md-icon>
     </a>
 </md-nav-list>
 <md-nav-list *ngIf="showGroups" class="side-list">
-    <span *ngFor="let g of groups$ | async">
-        <a *ngIf="g.name != activeGroupName"
+    <span *ngFor="let g of groups">
+        <a *ngIf="g.name != (userService.getActiveGroupName() | async)?.$value"
            md-list-item
            routerLinkActive="route-active"
            (click)="chooseGroup(g.$key)">

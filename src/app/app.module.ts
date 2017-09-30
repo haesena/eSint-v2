@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -41,6 +41,8 @@ import { GroupFormComponent } from './components/forms/group-form/group-form.com
 import { EditGroupComponent } from './components/pages/edit-group/edit-group.component';
 import { GroupSelectComponent } from './components/partials/group-select/group-select.component';
 import { ManageGroupsComponent } from './components/pages/manage-groups/manage-groups.component';
+import { MyListComponent } from './components/pages/my-list/my-list.component';
+import { ListSelectComponent } from './components/partials/list-select/list-select.component';
 
 @NgModule({
     declarations: [
@@ -54,7 +56,9 @@ import { ManageGroupsComponent } from './components/pages/manage-groups/manage-g
         GroupFormComponent,
         EditGroupComponent,
         GroupSelectComponent,
-        ManageGroupsComponent
+        ManageGroupsComponent,
+        MyListComponent,
+        ListSelectComponent
     ],
     imports: [
         BrowserAnimationsModule,

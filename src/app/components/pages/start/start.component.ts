@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../../services/firebase/user.service';
 import {GroupsService} from '../../../services/firebase/groups.service';
+import {Group} from '../../../models/group';
 
 @Component({
     selector: 'app-start',
@@ -8,13 +9,16 @@ import {GroupsService} from '../../../services/firebase/groups.service';
     styleUrls: ['./start.component.css']
 })
 export class StartComponent implements OnInit {
-    public groups$;
+    public activeGroup: Group;
 
-    constructor(public userService: UserService, public groupsService: GroupsService) {
+    constructor(public userService: UserService, private gServce: GroupsService) {
     }
 
     ngOnInit() {
-        this.groups$ = this.groupsService.getGroups();
+        this.userService.user$.subscribe(u => {
+            this.gServce.getGroup(u.activeGroup).subscribe(g => {
+                this.activeGroup = g;
+            });
+        });
     }
-
 }

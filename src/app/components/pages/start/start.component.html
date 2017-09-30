@@ -2,13 +2,8 @@
     <div>
         Welcome {{ (this.userService.user$ | async)?.displayName}}!
     </div>
-    <div *ngIf="(groups$ | async)?.length > 0; else no_groups">
-        Groups:
-        <ul>
-            <li *ngFor="let g of groups$ | async">
-                <a [routerLink]="'/edit-group/'+g.$key">{{ g.name }}</a>
-            </li>
-        </ul>
+    <div *ngIf="activeGroup; else no_groups">
+        Active group: {{ activeGroup.name }}
     </div>
     <ng-template #no_groups>You're in no groups yet...</ng-template>
 </md-card>

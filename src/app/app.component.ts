@@ -1,10 +1,8 @@
 import {Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import {MdSidenav} from '@angular/material';
-import {Router} from '@angular/router';
-import {AngularFireAuth} from 'angularfire2/auth';
-import {Configuration} from './configuration';
 import {AuthService} from './services/authentication/auth.service';
 import {UserService} from './services/firebase/user.service';
+import {Configuration} from './configuration';
 
 @Component({
     selector: 'app-root',
@@ -14,9 +12,9 @@ import {UserService} from './services/firebase/user.service';
 export class AppComponent implements OnInit {
     sidenav_mode = 'side';
     @ViewChild('sidenav') private sidenav: MdSidenav;
+    public photoUrl: string;
 
-    constructor(private _ngZone: NgZone, public auth: AuthService, public uService: UserService,
-                public config: Configuration, private router: Router) {
+    constructor(private _ngZone: NgZone, public auth: AuthService, public uService: UserService, public config: Configuration) {
     }
 
     ngOnInit() {
@@ -24,10 +22,18 @@ export class AppComponent implements OnInit {
         this.auth.loggedIn$.subscribe(value => {
             if (value === true) {
                 this.checkMenu();
+
+                this.uService.user$.subscribe(u => {
+                    if (u.photoUrl) {
+                        this.photoUrl = u.photoUrl;
+                    } else {
+                        this.photoUrl = '../../assets/images/user-default.png';
+                    }
+                });
             } else {
                 this.sidenav.close();
             }
-        })
+        });
 
         window.onresize = (e) => {
             this.checkMenu();
@@ -52,10 +58,5 @@ export class AppComponent implements OnInit {
                 this.sidenav_mode = 'over';
             }
         });
-    }
-
-    logOut() {
-        this.auth.logOut();
-        this.router.navigate(['/login']);
     }
 }

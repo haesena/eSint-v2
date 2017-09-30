@@ -4,6 +4,7 @@ import {AngularFireAuth} from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import {User} from '../../models/user';
 import {UserService} from '../firebase/user.service';
+import {Configuration} from '../../configuration';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +12,16 @@ export class AuthService {
     public loggedIn = false;
     loggedIn$ = new BehaviorSubject<boolean>(false);
 
-    constructor(public auth: AngularFireAuth, public userService: UserService) {
+    constructor(public auth: AngularFireAuth, public userService: UserService, private config: Configuration) {
+        this.auth.idToken.subscribe(id => {
+            if (id !== null) {
+                this.config.userId = id.uid;
+                this.config.userId$.next(id.uid);
+            } else {
+                this.config.userId = null;
+                this.config.userId$.next(null);
+            }
+        });
     }
 
     setLoggedIn(user: firebase.User | null) {

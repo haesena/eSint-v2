@@ -21,7 +21,8 @@ export class NewGroupComponent implements OnInit {
         this.groupsService.createGroup(g).subscribe(
             v => {
                 this.userService.addGroup(v, 'creator');
-                this.router.navigate(['/edit-group/' + v]);
+                this.userService.setActiveGroup(v);
+                this.router.navigate(['/start']);
             }
         );
     }

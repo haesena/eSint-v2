@@ -1,5 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Group} from '../../../models/group';
+import {GroupsService} from '../../../services/firebase/groups.service';
+import {UserService} from '../../../services/firebase/user.service';
+import {User} from '../../../models/user';
 
 @Component({
     selector: 'app-group-form',
@@ -9,14 +12,21 @@ import {Group} from '../../../models/group';
 export class GroupFormComponent implements OnInit {
     @Input() group: Group = null;
     @Output() saveEvent: EventEmitter<any> = new EventEmitter();
+    public readOnly: boolean;
+    public userList = [];
 
-    constructor() {
+    constructor(public groupService: GroupsService, public userService: UserService) {
     }
 
     ngOnInit() {
         if (this.group == null) {
             this.group = new Group();
         }
+
+        this.groupService.getGroupUsers(this.group.$key).subscribe((uList: User[]) => {
+            this.userList = uList;
+        });
+        this.readOnly = this.saveEvent.observers.length === 0;
     }
 
     save() {

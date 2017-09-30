@@ -1,6 +1,9 @@
 <md-card class="content">
-    <md-input-container class="full-width">
-        <input mdInput required="true" placeholder="Name" [ngModel]='(userS.user$|async)?.displayName'
-               (ngModelChange)="userS.user$.update({displayName: $event})" name="email">
-    </md-input-container>
+    <p>
+        <md-input-container class="full-width">
+            <input mdInput required="true" placeholder="Name" [ngModel]='(userS.user$|async)?.displayName'
+                   (ngModelChange)="userS.user$.update({displayName: $event})" name="email">
+        </md-input-container>
+    </p>
+    <button md-raised-button color="primary" (click)="logOut()">Log out</button>
 </md-card>

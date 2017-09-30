@@ -1,0 +1,14 @@
+<md-nav-list class="side-list">
+    <a md-list-item routerLink="/my-list" routerLinkActive="route-active">
+        <md-icon class="menu-icon">
+            <img md-fab-image class="avatar" [src]="photoUrl">
+        </md-icon>
+        My list
+    </a>
+    <a *ngFor="let l of wishlists">
+        <md-icon class="menu-icon">
+            <img md-fab-image class="avatar" [src]="l.picture">
+        </md-icon>
+        {{ l.name }}
+    </a>
+</md-nav-list>

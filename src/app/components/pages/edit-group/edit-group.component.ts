@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Group} from '../../../models/group';
 import {GroupsService} from '../../../services/firebase/groups.service';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 
 @Component({
     selector: 'app-edit-group',
@@ -11,7 +11,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 export class EditGroupComponent implements OnInit {
     public group: Group;
 
-    constructor(private groupsService: GroupsService, private route: ActivatedRoute) {
+    constructor(private groupsService: GroupsService, private route: ActivatedRoute, private router: Router) {
     }
 
     ngOnInit() {
@@ -27,7 +27,8 @@ export class EditGroupComponent implements OnInit {
     }
 
     saveGroup(g) {
-        console.log(g);
+        this.groupsService.saveGroup(g);
+        this.router.navigate(['manage-groups']);
     }
 
 }

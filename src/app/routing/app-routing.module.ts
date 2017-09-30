@@ -9,6 +9,7 @@ import {SettingsComponent} from '../components/pages/settings/settings.component
 import {NewGroupComponent} from '../components/pages/new-group/new-group.component';
 import {EditGroupComponent} from '../components/pages/edit-group/edit-group.component';
 import {ManageGroupsComponent} from '../components/pages/manage-groups/manage-groups.component';
+import {MyListComponent} from '../components/pages/my-list/my-list.component';
 
 const appRoutes: Routes = [
     {
@@ -47,6 +48,11 @@ const appRoutes: Routes = [
         path: 'settings',
         canActivate: [AuthGuard],
         component: SettingsComponent
+    },
+    {
+        path: 'my-list',
+        canActivate: [AuthGuard],
+        component: MyListComponent
     },
     {
         path: '',

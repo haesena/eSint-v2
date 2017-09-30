@@ -1,9 +1,8 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {GroupsService} from '../../../services/firebase/groups.service';
 import {UserService} from '../../../services/firebase/user.service';
-import {Observable} from "rxjs/Rx";
-import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {Group} from '../../../models/group';
+import {Router} from '@angular/router';
+import {Configuration} from '../../../configuration';
 
 @Component({
     selector: 'app-group-select',
@@ -11,19 +10,17 @@ import {Group} from '../../../models/group';
     styleUrls: ['./group-select.component.css']
 })
 export class GroupSelectComponent implements OnInit {
-    public groups$: ReplaySubject<Group[]>;
-    public activeGroupName: string;
     public showGroups: boolean;
+    public groups;
     @Output() linkClicked: EventEmitter<any> = new EventEmitter();
 
-    constructor(public groupsService: GroupsService, public userService: UserService) {
-        this.groups$ = new ReplaySubject();
+    constructor(public config: Configuration, public groupsService: GroupsService,
+                public userService: UserService, private router: Router) {
     }
 
     ngOnInit() {
-        this.groups$ = this.groupsService.getGroups();
-        this.userService.getActiveGroupName().subscribe(a => {
-            this.activeGroupName = a.$value;
+        this.groupsService.getUserGroups(this.config.userId).subscribe(g => {
+            this.groups = g
         });
     }
 
@@ -33,13 +30,13 @@ export class GroupSelectComponent implements OnInit {
 
     clicked() {
         this.linkClicked.emit();
-    }
-
-    chooseGroup(gid) {
-        console.log(gid);
-        this.userService.setActiveGroup(gid);
-        this.linkClicked.emit();
         this.showGroups = false;
     }
 
+    chooseGroup(gid) {
+        this.userService.setActiveGroup(gid);
+        this.linkClicked.emit();
+        this.showGroups = false;
+        this.router.navigate(['/start']);
+    }
 }
