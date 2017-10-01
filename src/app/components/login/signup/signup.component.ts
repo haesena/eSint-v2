@@ -15,11 +15,11 @@ export class SignupComponent implements OnInit {
     email: string;
     password: string;
 
-    constructor(private router: Router, private af: AngularFireAuth, private auth: AuthService) {
+    constructor(private auth: AuthService) {
         this.auth.authState().map(state => {
             if (state) {
                 this.auth.setLoggedIn(state);
-                this.router.navigate(['start']);
+                this.auth.redirectAfterLogin();
             }
         });
     }
@@ -31,7 +31,7 @@ export class SignupComponent implements OnInit {
         if (formData.valid) {
             this.auth.logInSignup(formData.value.email, formData.value.password)
                 .then(
-                    success => this.router.navigate(['/start'])
+                    success => this.auth.redirectAfterLogin()
                 )
                 .catch(
                     err => this.error = err

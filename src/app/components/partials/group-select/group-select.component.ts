@@ -19,8 +19,12 @@ export class GroupSelectComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.groupsService.getUserGroups(this.config.userId).subscribe(g => {
-            this.groups = g
+        this.config.userId$.subscribe(uid => {
+            if (uid !== null) {
+                this.groupsService.getUserGroups(uid).subscribe(g => {
+                    this.groups = g
+                });
+            }
         });
     }
 

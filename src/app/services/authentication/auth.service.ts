@@ -5,6 +5,8 @@ import * as firebase from 'firebase/app';
 import {User} from '../../models/user';
 import {UserService} from '../firebase/user.service';
 import {Configuration} from '../../configuration';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthService {
@@ -12,22 +14,20 @@ export class AuthService {
     public loggedIn = false;
     loggedIn$ = new BehaviorSubject<boolean>(false);
 
-    constructor(public auth: AngularFireAuth, public userService: UserService, private config: Configuration) {
-        this.auth.idToken.subscribe(id => {
-            if (id !== null) {
-                this.config.userId = id.uid;
-                this.config.userId$.next(id.uid);
-            } else {
-                this.config.userId = null;
-                this.config.userId$.next(null);
-            }
-        });
+    constructor(public auth: AngularFireAuth, public userService: UserService, private config: Configuration,
+                private router: Router) {
     }
 
     setLoggedIn(user: firebase.User | null) {
         if (user == null) {
             this.loggedIn = false;
+            this.config.userId = null;
+            this.config.userId$.next(null);
         } else {
+            this.config.userId$ = new ReplaySubject();
+
+            this.config.userId = user.uid;
+            this.config.userId$.next(user.uid);
             this.userService.setUser(user);
             this.loggedIn = true;
         }
@@ -73,4 +73,12 @@ export class AuthService {
                 user => this.setLoggedIn(user)
             );
     };
+
+    redirectAfterLogin() {
+        if (this.config.invite == null) {
+            this.router.navigate(['/start']);
+        } else {
+            this.router.navigate(['/invite/' + this.config.invite]);
+        }
+    }
 }

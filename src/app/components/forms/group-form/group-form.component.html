@@ -6,7 +6,8 @@
         <md-form-field class="example-full-width">
             <input mdInput placeholder="Description" [(ngModel)]="group.description" name="gDescription">
         </md-form-field>
-        <button *ngIf="!readOnly" md-raised-button color="accent" (click)="save()">Save</button>
+        <button md-raised-button color="accent" (click)="save()">Save</button>
+        <button md-raised-button color="accent" (click)="cancel()">Cancel</button>
     </form>
 </div>
 <ng-template #readonlyForm>

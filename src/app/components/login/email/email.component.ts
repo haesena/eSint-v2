@@ -14,11 +14,11 @@ export class EmailComponent implements OnInit {
     error: any;
     email: string;
     password: string;
-    constructor(private router: Router, private af: AngularFireAuth, private auth: AuthService) {
+    constructor(private auth: AuthService) {
         this.auth.authState().map(state => {
             if (state) {
                 this.auth.setLoggedIn(state);
-                this.router.navigate(['start']);
+                this.auth.redirectAfterLogin();
             }
         });
     }
@@ -30,7 +30,7 @@ export class EmailComponent implements OnInit {
         if (formData.valid) {
             this.auth.logInEmail(formData.value.email, formData.value.password)
                 .then(
-                    success => this.router.navigate(['/start'])
+                    success => this.auth.redirectAfterLogin()
                 )
                 .catch(
                     err => this.error = err

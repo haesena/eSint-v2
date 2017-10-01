@@ -12,7 +12,7 @@ import {AuthService} from '../../services/authentication/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-    constructor(private router: Router, private auth: AuthService) {
+    constructor(private auth: AuthService) {
     }
 
     ngOnInit() {
@@ -20,13 +20,13 @@ export class LoginComponent implements OnInit {
 
     googleLogin() {
         this.auth.logInWithProvider('google').then(
-            result => this.router.navigate(['start'])
+            result => this.auth.redirectAfterLogin()
         );
     }
 
     facebookLogin() {
         this.auth.logInWithProvider('facebook').then(
-            result => this.router.navigate(['start'])
+            result => this.auth.redirectAfterLogin()
         );
     }
 }

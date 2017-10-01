@@ -3,6 +3,7 @@ import {Group} from '../../../models/group';
 import {GroupsService} from '../../../services/firebase/groups.service';
 import {UserService} from '../../../services/firebase/user.service';
 import {User} from '../../../models/user';
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'app-group-form',
@@ -15,7 +16,7 @@ export class GroupFormComponent implements OnInit {
     public readOnly: boolean;
     public userList = [];
 
-    constructor(public groupService: GroupsService, public userService: UserService) {
+    constructor(public groupService: GroupsService, public userService: UserService, private loc: Location) {
     }
 
     ngOnInit() {
@@ -31,6 +32,10 @@ export class GroupFormComponent implements OnInit {
 
     save() {
         this.saveEvent.emit(this.group);
+    }
+
+    cancel() {
+        this.loc.back();
     }
 
 }

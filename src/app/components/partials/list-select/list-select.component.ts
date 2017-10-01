@@ -18,10 +18,6 @@ export class ListSelectComponent implements OnInit {
     }
 
     ngOnInit() {
-
-        this.uService.getActiveGroup().subscribe(ag => {
-        });
-
         this.uService.user$.subscribe(u => {
             if (u.photoUrl) {
                 this.photoUrl = u.photoUrl;

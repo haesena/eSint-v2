@@ -76,4 +76,22 @@ export class GroupsService {
         this.db.object('groups/' + gid).update(group);
     }
 
+    userInGroup(uid, gid) {
+        return this.db.list('users/' + uid + '/groups').map(gList => {
+            let inGroup = false;
+            gList.forEach(g => {
+                if (g.$key === gid) {
+                    inGroup = true;
+                }
+            });
+            return inGroup;
+        });
+    }
+
+    addUser(gid, uid, type) {
+        const newUser = {};
+        newUser[uid] = type;
+        return this.db.object('groups/' + gid + '/users').update(newUser);
+    }
+
 }

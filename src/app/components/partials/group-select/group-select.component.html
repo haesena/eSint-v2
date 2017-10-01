@@ -8,7 +8,7 @@
 </md-nav-list>
 <md-nav-list *ngIf="showGroups" class="side-list">
     <span *ngFor="let g of groups">
-        <a *ngIf="g.name != (userService.getActiveGroupName() | async)?.$value"
+        <a *ngIf="g.$key != config.activeGroup"
            md-list-item
            routerLinkActive="route-active"
            (click)="chooseGroup(g.$key)">

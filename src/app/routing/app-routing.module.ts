@@ -10,6 +10,7 @@ import {NewGroupComponent} from '../components/pages/new-group/new-group.compone
 import {EditGroupComponent} from '../components/pages/edit-group/edit-group.component';
 import {ManageGroupsComponent} from '../components/pages/manage-groups/manage-groups.component';
 import {MyListComponent} from '../components/pages/my-list/my-list.component';
+import {InviteComponent} from '../components/pages/invite/invite.component';
 
 const appRoutes: Routes = [
     {
@@ -23,6 +24,10 @@ const appRoutes: Routes = [
     {
         path: 'signup',
         component: SignupComponent
+    },
+    {
+        path: 'invite/:inviteId',
+        component: InviteComponent
     },
     {
         path: 'start',
