@@ -22,7 +22,7 @@ export class GroupSelectComponent implements OnInit {
         this.config.userId$.subscribe(uid => {
             if (uid !== null) {
                 this.groupsService.getUserGroups(uid).subscribe(g => {
-                    this.groups = g
+                    this.groups = g;
                 });
             }
         });

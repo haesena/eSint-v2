@@ -28,6 +28,10 @@ export class GroupsService {
         return groups$;
     }
 
+    getUserGroupIds(uid) {
+        return this.db.object('users/' + uid + '/groups');
+    }
+
     getGroupUsers(gid) {
         const users$ = new ReplaySubject();
         this.db.list('groups/' + gid + '/users').first().subscribe(uList => {

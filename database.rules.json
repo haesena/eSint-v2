@@ -1,6 +1,23 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    "groups": {
+      "$gid": {
+        ".read": "data.child('users').child(auth.uid).exists() || root.child('users').child(auth.uid).child('groups').child($gid).exists()",
+        ".write": "!data.exists() || (!data.child('users').exists() && !newData.exists()) || data.child('users').child(auth.uid).val() === 'creator' || (data.child('users').child(auth.uid).exists() && !newData.child('users').child(auth.uid).exists()) || (!data.child('users').child(auth.uid).exists() && newData.child('users').child(auth.uid).val() === 'invite')"
+      }
+    },
+    "users": {
+      "$userId": {
+        ".read": "auth !== null",
+        ".write": "auth.uid === $userId"
+      }
+    },
+    "invites": {
+      ".read": "true",
+      ".write": "auth !== null",
+      "$inviteId": {
+        ".write": "!data.exists() && data.child('user').val() === auth.uid"
+      }
+    }
   }
 }

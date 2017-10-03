@@ -12,8 +12,8 @@
 </div>
 <ng-template #readonlyForm>
     <md-list>
-        <h3 md-subheader class="label-header">Description</h3>
-        <md-list-item>
+        <h3 md-subheader class="label-header" *ngIf="group.description">Description</h3>
+        <md-list-item *ngIf="group.description">
             <h4 md-line>{{ group.description }}</h4>
         </md-list-item>
         <h3 md-subheader class="label-header">Users</h3>
