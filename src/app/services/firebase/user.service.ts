@@ -31,6 +31,7 @@ export class UserService {
         this.user$.subscribe(fbUser => {
             this.config.loading = false;
             this.config.activeGroup = fbUser.activeGroup;
+            this.config.activeGroup$.next(fbUser.activeGroup);
             if (fbUser.displayName != null && fbUser.displayName !== this.user.displayName) {
                 this.user.displayName = fbUser.displayName;
             }
@@ -46,6 +47,7 @@ export class UserService {
 
     setActiveGroup(gid) {
         this.config.activeGroup = gid;
+        this.config.activeGroup$.next(gid);
         this.user.activeGroup = gid;
         this.db.object('users/' + this.user.uid).update(this.user);
     }

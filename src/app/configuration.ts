@@ -6,5 +6,7 @@ export class Configuration {
     userId$ = new ReplaySubject();
 
     activeGroup: string;
+    activeGroup$ = new ReplaySubject();
+
     invite: string;
 }

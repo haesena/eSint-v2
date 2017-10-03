@@ -1,0 +1,17 @@
+<div *ngIf="!readOnly; else readonlyForm">
+    <form class="group-form" *ngIf="wish">
+        <md-form-field class="example-full-width">
+            <input mdInput placeholder="Wish" [(ngModel)]="wish.name" name="wName">
+        </md-form-field>
+        <button md-raised-button color="accent" (click)="save()">Save</button>
+        <button md-raised-button color="accent" (click)="cancel()">Cancel</button>
+    </form>
+</div>
+<ng-template #readonlyForm>
+    <md-list>
+        <h3 md-subheader class="label-header">Wish</h3>
+        <md-list-item>
+            <h4 md-line>{{ wish.name }}</h4>
+        </md-list-item>
+    </md-list>
+</ng-template>

@@ -5,27 +5,21 @@
 				Logo
 			</span>
         </md-toolbar>
-        <app-group-select *ngIf="this.auth.loggedIn == true" (linkClicked)="collapse()"></app-group-select>
-        <app-list-select *ngIf="this.auth.loggedIn == true"></app-list-select>
-        <md-nav-list *ngIf="this.auth.loggedIn == true" class="side-list">
-            <!--<a md-list-item routerLink="/settings" routerLinkActive="route-active" (click)="collapse()">-->
-                <!--<md-icon class="menu-icon">settings</md-icon>-->
-                <!--Settings-->
-            <!--</a>-->
-        </md-nav-list>
+        <app-group-select *ngIf="auth.loggedIn == true" (linkClicked)="collapse()"></app-group-select>
+        <app-list-select *ngIf="config.activeGroup"></app-list-select>
     </md-sidenav>
     <md-toolbar color="primary">
-        <button md-icon-button (click)="sidenav.toggle()" *ngIf="sidenav_mode == 'over' && this.auth.loggedIn == true">
+        <button md-icon-button (click)="sidenav.toggle()" *ngIf="sidenav_mode == 'over' && auth.loggedIn == true">
             <md-icon>menu</md-icon>
         </button>
         <span>
 			Title
 		</span>
         <span class="space-filler"></span>
-        <button md-icon-button *ngIf="photoUrl && this.auth.loggedIn == true" routerLink="/settings">
+        <button md-icon-button *ngIf="photoUrl && auth.loggedIn == true" routerLink="/settings">
             <img md-fab-image class="avatar" [src]="photoUrl">
         </button>
     </md-toolbar>
-    <md-progress-bar *ngIf="this.config.loading" mode="indeterminate"></md-progress-bar>
+    <md-progress-bar *ngIf="config.loading" mode="indeterminate"></md-progress-bar>
     <router-outlet></router-outlet>
 </md-sidenav-container>

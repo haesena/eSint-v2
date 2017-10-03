@@ -18,6 +18,14 @@
       "$inviteId": {
         ".write": "!data.exists() && data.child('user').val() === auth.uid"
       }
+    },
+    "wishlists": {
+      "$groupId": {
+        ".read": "root.child('users').child(auth.uid).child('groups').child($groupId).exists()",
+        "$userId": {
+          ".write": "$userId === auth.uid"
+        }
+      }
     }
   }
 }

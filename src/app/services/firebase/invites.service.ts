@@ -8,7 +8,7 @@ import {UserService} from './user.service';
 @Injectable()
 export class InvitesService {
 
-    constructor(private db: AngularFireDatabase, private config: Configuration, private uService: UserService) {
+    constructor(private db: AngularFireDatabase, private config: Configuration) {
     }
 
     getInvite(inviteId) {

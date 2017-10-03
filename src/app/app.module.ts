@@ -51,6 +51,9 @@ import { InvitesService } from './services/firebase/invites.service';
 import { UserService } from './services/firebase/user.service';
 import { InviteDialogComponent } from './components/partials/invite-dialog/invite-dialog.component';
 import { InviteComponent } from './components/pages/invite/invite.component';
+import { WishFormComponent } from './components/forms/wish-form/wish-form.component';
+import {WishlistsService} from './services/firebase/wishlists.service';
+import {ActiveGroupGuard} from './routing/active-group-guard.service';
 
 @NgModule({
     declarations: [
@@ -68,7 +71,8 @@ import { InviteComponent } from './components/pages/invite/invite.component';
         MyListComponent,
         ListSelectComponent,
         InviteDialogComponent,
-        InviteComponent
+        InviteComponent,
+        WishFormComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -91,10 +95,12 @@ import { InviteComponent } from './components/pages/invite/invite.component';
     ],
     providers: [
         AuthGuard,
+        ActiveGroupGuard,
         AuthService,
         UserService,
         GroupsService,
         InvitesService,
+        WishlistsService,
         Configuration
     ],
     entryComponents: [
