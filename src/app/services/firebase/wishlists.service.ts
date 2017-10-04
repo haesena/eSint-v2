@@ -13,6 +13,10 @@ export class WishlistsService {
         return this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes');
     }
 
+    getWish(wid) {
+        return this.db.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wid);
+    }
+
     saveWish(wish: Wish) {
         if (wish.$key == null) {
             return this.db.list('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes').push(wish);

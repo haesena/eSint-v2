@@ -1,3 +1,9 @@
 <md-card class="content">
-    <app-wish-form (saveEvent)="saveWish($event)"></app-wish-form>
+
+    <div *ngFor="let w of wishes">
+        <app-wish-form [wish]="w"></app-wish-form>
+    </div>
+
+    <button md-raised-button (click)="showNewForm = true" *ngIf="!showNewForm">Add</button>
+    <app-wish-form (saveEvent)="saveWish($event)" *ngIf="showNewForm || noWishes" [readOnly]="false"></app-wish-form>
 </md-card>

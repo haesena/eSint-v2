@@ -13,6 +13,7 @@ import {MyListComponent} from '../components/pages/my-list/my-list.component';
 import {InviteComponent} from '../components/pages/invite/invite.component';
 import {ActiveGroupGuard} from './active-group-guard.service';
 import {InviteGuard} from './invite-guard.service';
+import {EditWishComponent} from '../components/pages/edit-wish/edit-wish.component';
 
 const appRoutes: Routes = [
     {
@@ -61,6 +62,11 @@ const appRoutes: Routes = [
         path: 'my-list',
         canActivate: [AuthGuard, ActiveGroupGuard],
         component: MyListComponent
+    },
+    {
+        path: 'edit-wish/:wid',
+        canActivate: [AuthGuard, ActiveGroupGuard],
+        component: EditWishComponent
     },
     {
         path: '',

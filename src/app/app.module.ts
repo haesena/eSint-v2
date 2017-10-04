@@ -11,7 +11,9 @@ import {
     MdProgressBarModule,
     MdCardModule,
     MdButtonModule,
-    MdInputModule, MdDialogModule
+    MdInputModule,
+    MdDialogModule,
+    MdMenuModule
 } from '@angular/material';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -55,6 +57,7 @@ import { WishFormComponent } from './components/forms/wish-form/wish-form.compon
 import {WishlistsService} from './services/firebase/wishlists.service';
 import {ActiveGroupGuard} from './routing/active-group-guard.service';
 import {InviteGuard} from './routing/invite-guard.service';
+import { EditWishComponent } from './components/pages/edit-wish/edit-wish.component';
 
 @NgModule({
     declarations: [
@@ -73,7 +76,8 @@ import {InviteGuard} from './routing/invite-guard.service';
         ListSelectComponent,
         InviteDialogComponent,
         InviteComponent,
-        WishFormComponent
+        WishFormComponent,
+        EditWishComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -88,6 +92,7 @@ import {InviteGuard} from './routing/invite-guard.service';
         BrowserModule,
         FormsModule,
         MdDialogModule,
+        MdMenuModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         AngularFireAuthModule,

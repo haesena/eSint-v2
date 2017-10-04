@@ -9,19 +9,18 @@ import {Location} from '@angular/common';
 })
 export class WishFormComponent implements OnInit {
     @Input() wish: Wish = null;
+    @Input() readOnly = true;
     @Output() saveEvent: EventEmitter<any> = new EventEmitter();
-    public readOnly: boolean;
 
     constructor(private loc: Location) {
         if (this.wish == null) {
             this.wish = new Wish();
         }
-
-        this.readOnly = this.saveEvent.observers.length === 0;
-        console.log(this.readOnly);
     }
 
     ngOnInit() {
+        // this.readOnly = this.saveEvent.observers.length === 0;
+        console.log(this.saveEvent.observers);
     }
 
     save() {
