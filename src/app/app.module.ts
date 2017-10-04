@@ -54,6 +54,7 @@ import { InviteComponent } from './components/pages/invite/invite.component';
 import { WishFormComponent } from './components/forms/wish-form/wish-form.component';
 import {WishlistsService} from './services/firebase/wishlists.service';
 import {ActiveGroupGuard} from './routing/active-group-guard.service';
+import {InviteGuard} from './routing/invite-guard.service';
 
 @NgModule({
     declarations: [
@@ -96,6 +97,7 @@ import {ActiveGroupGuard} from './routing/active-group-guard.service';
     providers: [
         AuthGuard,
         ActiveGroupGuard,
+        InviteGuard,
         AuthService,
         UserService,
         GroupsService,

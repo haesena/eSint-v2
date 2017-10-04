@@ -78,7 +78,7 @@ export class AuthService {
         if (this.config.invite == null) {
             this.router.navigate(['/start']);
         } else {
-            this.router.navigate(['/invite/' + this.config.invite]);
+            this.router.navigate(['/invite/' + this.config.invite.$key]);
         }
     }
 }

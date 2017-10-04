@@ -12,6 +12,7 @@ import {ManageGroupsComponent} from '../components/pages/manage-groups/manage-gr
 import {MyListComponent} from '../components/pages/my-list/my-list.component';
 import {InviteComponent} from '../components/pages/invite/invite.component';
 import {ActiveGroupGuard} from './active-group-guard.service';
+import {InviteGuard} from './invite-guard.service';
 
 const appRoutes: Routes = [
     {
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
     },
     {
         path: 'invite/:inviteId',
+        canActivate: [InviteGuard],
         component: InviteComponent
     },
     {

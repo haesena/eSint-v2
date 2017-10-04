@@ -1,14 +1,14 @@
-<md-card class="content" *ngIf="invite; else no_invite">
+<md-card class="content" *ngIf="config.invite; else no_invite">
     <div *ngIf="alreadyInGroup; else show_invite">
-        You're already part of the group {{invite.groupName}}. Start wishing!
+        You're already part of the group {{config.invite.groupName}}. Start wishing!
     </div>
     <ng-template #show_invite>
-        <p>{{invite.userName}} invited you to join the group {{invite.groupName}}</p>
+        <p>{{config.invite.userName}} invited you to join the group {{config.invite.groupName}}</p>
         <div *ngIf="loggedIn">
             <button md-raised-button (click)="join()">Join !</button>
         </div>
         <div *ngIf="!loggedIn">
-            <button md-raised-button (click)="logIn()">Log in!</button>
+            <button md-raised-button routerLink="/login">Log in!</button>
         </div>
     </ng-template>
 </md-card>

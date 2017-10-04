@@ -1,4 +1,5 @@
 import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {Invite} from './models/invite';
 
 export class Configuration {
     loading = false;
@@ -8,5 +9,5 @@ export class Configuration {
     activeGroup: string;
     activeGroup$ = new ReplaySubject();
 
-    invite: string;
+    invite: Invite;
 }

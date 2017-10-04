@@ -19,56 +19,34 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 })
 export class InviteComponent implements OnInit {
 
-    public invite: Invite;
-    private invite$ = new ReplaySubject();
     public loggedIn = false;
     public alreadyInGroup = false;
     public msg = 'loading invite...';
 
-    constructor(private route: ActivatedRoute, public inviteService: InvitesService, public config: Configuration,
-                private router: Router, private auth: AuthService, private gService: GroupsService, private uService: UserService,
-                private cdref: ChangeDetectorRef) {
-        // initialize the invite-subject
-        this.invite$.next(false);
+    constructor(public config: Configuration, private router: Router, private auth: AuthService,
+                private gService: GroupsService, private uService: UserService) {
     }
 
     ngOnInit() {
-        this.route.paramMap.subscribe((p: ParamMap) => {
-            this.inviteService.getInvite(p.get('inviteId')).subscribe(i => {
-                if (i.$value === null) {
-                    this.invite = null;
-                    this.msg = 'Invalid invite';
-                } else {
-                    this.invite = i;
-                    this.invite$.next(true);
+        if (this.config.invite == null) {
+            this.msg = 'Invalid invite';
+        } else {
+            this.auth.authState().subscribe(auth => {
+                this.auth.setLoggedIn(auth);
+                if (auth !== null) {
+                    this.loggedIn = true;
+                    this.gService.getUserGroupIds(auth.uid).subscribe(groups => {
+                        this.alreadyInGroup = groups[this.config.invite.group] != null;
+                    });
                 }
             });
-        });
-
-        this.auth.authState().subscribe(auth => {
-            this.auth.setLoggedIn(auth);
-            if (auth !== null) {
-                this.loggedIn = true;
-                this.invite$.subscribe(v => {
-                    if (v) {
-                        this.gService.getUserGroupIds(auth.uid).subscribe(groups => {
-                            this.alreadyInGroup = groups[this.invite.group] != null;
-                        });
-                    }
-                });
-            }
-        });
-    }
-
-    logIn() {
-        this.config.invite = this.invite.$key;
-        this.router.navigate(['login']);
+        }
     }
 
     join() {
-        this.uService.addGroup(this.invite.group, 'invite').then(v => {
-            this.gService.addUser(this.invite.group, this.config.userId, 'invite').then(ok => {
-                this.uService.setActiveGroup(this.invite.group);
+        this.uService.addGroup(this.config.invite.group, 'invite').then(v => {
+            this.gService.addUser(this.config.invite.group, this.config.userId, 'invite').then(ok => {
+                this.uService.setActiveGroup(this.config.invite.group);
                 this.router.navigate(['/start']);
             });
         });
