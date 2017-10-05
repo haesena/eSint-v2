@@ -21,5 +21,7 @@
         </button>
     </md-toolbar>
     <md-progress-bar *ngIf="config.loading" mode="indeterminate"></md-progress-bar>
-    <router-outlet></router-outlet>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
 </md-sidenav-container>

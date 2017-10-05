@@ -3,11 +3,12 @@ import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/data
 import {User} from '../../models/user';
 import 'rxjs/add/operator/mergeMap';
 import {Configuration} from '../../configuration';
+import {WishlistsService} from './wishlists.service';
 
 @Injectable()
 export class UserService {
 
-    private user: User;
+    public user: User;
     public user$: FirebaseObjectObservable<User>;
 
     constructor(public db: AngularFireDatabase, public config: Configuration) {

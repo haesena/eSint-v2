@@ -3,6 +3,7 @@ import {Group} from '../../../models/group';
 import {GroupsService} from '../../../services/firebase/groups.service';
 import {UserService} from '../../../services/firebase/user.service';
 import {Router} from '@angular/router';
+import {WishlistsService} from '../../../services/firebase/wishlists.service';
 
 @Component({
     selector: 'app-new-group',
@@ -11,7 +12,8 @@ import {Router} from '@angular/router';
 })
 export class NewGroupComponent implements OnInit {
 
-    constructor(public groupsService: GroupsService, private userService: UserService, private router: Router) {
+    constructor(public groupsService: GroupsService, private userService: UserService, private router: Router,
+                private wService: WishlistsService) {
     }
 
     ngOnInit() {

@@ -9,8 +9,10 @@ import {Location} from '@angular/common';
 })
 export class WishFormComponent implements OnInit {
     @Input() wish: Wish = null;
+    @Input() idx;
     @Input() readOnly = true;
     @Output() saveEvent: EventEmitter<any> = new EventEmitter();
+    @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
 
     constructor(private loc: Location) {
         if (this.wish == null) {
@@ -19,12 +21,15 @@ export class WishFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        // this.readOnly = this.saveEvent.observers.length === 0;
-        console.log(this.saveEvent.observers);
+        this.readOnly = this.saveEvent.observers.length === 0;
     }
 
     save() {
         this.saveEvent.emit(this.wish);
+    }
+
+    delete() {
+        this.deleteEvent.emit(this.wish);
     }
 
     cancel() {

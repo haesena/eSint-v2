@@ -1,4 +1,4 @@
-<md-card class="content" *ngIf="config.invite; else no_invite">
+<md-card *ngIf="config.invite; else no_invite">
     <div *ngIf="alreadyInGroup; else show_invite">
         You're already part of the group {{config.invite.groupName}}. Start wishing!
     </div>
@@ -13,7 +13,7 @@
     </ng-template>
 </md-card>
 <ng-template #no_invite>
-    <md-card class="content">
+    <md-card>
         {{ msg }}
     </md-card>
 </ng-template>

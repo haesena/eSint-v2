@@ -1,9 +1,15 @@
-<md-card class="content">
-
-    <div *ngFor="let w of wishes">
-        <app-wish-form [wish]="w"></app-wish-form>
+<md-toolbar class="card-header-toolbar">
+    <span (click)="editName = true" *ngIf="!editName">{{(wishlist$|async)?.name}}</span>
+    <md-form-field class="full-width" style="width: 100%;" *ngIf="editName">
+        <input mdInput required="true" [ngModel]='(wishlist$|async)?.name'
+               (ngModelChange)="wishlist$.update({name  : $event})" name="email">
+    </md-form-field>
+</md-toolbar>
+<md-card>
+    <div *ngFor="let w of wishes; let i = index;">
+        <app-wish-form [wish]="w" [idx]="i" (deleteEvent)="deleteWish($event)"></app-wish-form>
     </div>
-
-    <button md-raised-button (click)="showNewForm = true" *ngIf="!showNewForm">Add</button>
-    <app-wish-form (saveEvent)="saveWish($event)" *ngIf="showNewForm || noWishes" [readOnly]="false"></app-wish-form>
+    <p>
+        <button md-raised-button routerLink="/edit-wish/new">Add</button>
+    </p>
 </md-card>

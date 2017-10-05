@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {WishlistsService} from '../../../services/firebase/wishlists.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {Wish} from '../../../models/wish';
 
 @Component({
     selector: 'app-edit-wish',
@@ -17,16 +18,19 @@ export class EditWishComponent implements OnInit {
     ngOnInit() {
         this.route.paramMap.subscribe(
             (p: ParamMap) => {
-                this.wService.getWish(p.get('wid')).subscribe(w => {
-                    this.wish = w;
-                });
+                if (p.get('wid') === 'new') {
+                    this.wish = new Wish();
+                } else {
+                    this.wService.getWish(p.get('wid')).subscribe(w => {
+                        this.wish = w;
+                    });
+                }
             }
         )
     }
 
-    saveWish(g) {
-        this.wService.saveWish(this.wish);
+    saveWish(wish) {
+        this.wService.saveWish(wish);
         this.router.navigate(['my-list']);
     }
-
 }

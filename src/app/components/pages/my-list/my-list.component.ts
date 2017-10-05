@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {WishlistsService} from '../../../services/firebase/wishlists.service';
 import {Configuration} from '../../../configuration';
 import {Wish} from '../../../models/wish';
+import {UserService} from '../../../services/firebase/user.service';
+import {MdInput} from '@angular/material';
 
 @Component({
     selector: 'app-my-list',
@@ -9,23 +11,30 @@ import {Wish} from '../../../models/wish';
     styleUrls: ['./my-list.component.css']
 })
 export class MyListComponent implements OnInit {
-
-    showNewForm = false;
     noWishes = false;
+    editName = false;
     wishes: Wish[];
-
-    constructor(public wService: WishlistsService, private config: Configuration) {
+    wishlist$;
+    constructor(public wService: WishlistsService, public config: Configuration, private uService: UserService) {
     }
 
     ngOnInit() {
+        this.wishlist$ = this.wService.getWishlist();
+        this.wishlist$.subscribe(n => {
+            if (n.name == null) {
+                this.wishlist$.update({name: this.uService.user.displayName + '\'s wishlist'});
+            } else {
+                console.log(n);
+            }
+        });
+
         this.wService.getWishes(this.config.userId).subscribe(wishes => {
             this.noWishes = (wishes.length === 0);
             this.wishes = wishes;
         });
     }
 
-    saveWish(wish) {
-        this.wService.saveWish(wish);
-        this.showNewForm = false;
+    deleteWish(wish: Wish) {
+        this.wService.deleteWish(wish.$key)
     }
 }

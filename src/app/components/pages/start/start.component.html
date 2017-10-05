@@ -1,4 +1,4 @@
-<md-card class="content" *ngIf="this.userService.user$ | async">
+<md-card *ngIf="this.userService.user$ | async">
     <div>
         Welcome {{ (this.userService.user$ | async)?.displayName}}!
     </div>
