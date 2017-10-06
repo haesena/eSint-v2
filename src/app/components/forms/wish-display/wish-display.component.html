@@ -1,0 +1,19 @@
+<md-list-item>
+    <h4 md-line>{{ wish.name }}</h4>
+    <p md-line *ngIf="wish.linkURL">
+        <a href="{{ wish.linkURL }}" target="_blank">{{ wish.linkTitle ? wish.linkTitle : wish.linkURL }}</a>
+    </p>
+    <button md-icon-button [mdMenuTriggerFor]="menu" *ngIf="myWish">
+        <md-icon>more_vert</md-icon>
+    </button>
+    <md-menu #menu="mdMenu">
+        <button md-menu-item [routerLink]="'/edit-wish/' + wish.$key">
+            <md-icon>mode_edit</md-icon>
+            <span>Edit</span>
+        </button>
+        <button md-menu-item (click)="deleteWish()">
+            <md-icon>delete</md-icon>
+            <span>delete</span>
+        </button>
+    </md-menu>
+</md-list-item>

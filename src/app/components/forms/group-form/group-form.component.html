@@ -19,7 +19,7 @@
         <h3 md-subheader class="label-header">Users</h3>
         <md-list-item *ngFor="let u of this.userList">
             <md-icon md-list-icon *ngIf="u.photoUrl">
-                <img md-fab-image class="avatar" [src]="u.photoUrl">
+                <img md-fab-image class="avatar" style="border-radius: 12px;" [src]="u.photoUrl">
             </md-icon>
             <h4 md-line>{{ u.displayName }}</h4>
         </md-list-item>

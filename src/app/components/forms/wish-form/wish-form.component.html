@@ -1,30 +1,13 @@
-<div *ngIf="!readOnly; else readonlyForm">
-    <form class="wish-form" *ngIf="wish">
-        <md-form-field class="example-full-width">
-            <input mdInput placeholder="Wish" [(ngModel)]="wish.name" name="wName">
-        </md-form-field>
-        <button md-raised-button color="accent" (click)="save()">Save</button>
-        <button md-raised-button color="accent" (click)="cancel()">Cancel</button>
-    </form>
-</div>
-<ng-template #readonlyForm>
-    <md-list>
-        <md-divider *ngIf="idx > 0"></md-divider>
-        <md-list-item>
-            <h4 md-line>{{ wish.name }}</h4>
-            <button md-icon-button [mdMenuTriggerFor]="menu">
-                <md-icon>more_vert</md-icon>
-            </button>
-            <md-menu #menu="mdMenu">
-                <button md-menu-item [routerLink]="'/edit-wish/' + wish.$key">
-                    <md-icon>mode_edit</md-icon>
-                    <span>Edit</span>
-                </button>
-                <button md-menu-item (click)="delete()">
-                    <md-icon>delete</md-icon>
-                    <span>delete</span>
-                </button>
-            </md-menu>
-        </md-list-item>
-    </md-list>
-</ng-template>
+ <form class="wish-form" *ngIf="wish">
+    <md-form-field class="example-full-width">
+        <input mdInput placeholder="Wish" [(ngModel)]="wish.name" name="wName">
+    </md-form-field>
+    <md-form-field class="example-full-width">
+        <input mdInput placeholder="Link" [(ngModel)]="wish.linkURL" name="wLinkURL">
+    </md-form-field>
+    <md-form-field class="example-full-width">
+        <input mdInput placeholder="Link Title" [(ngModel)]="wish.linkTitle" name="wLinkTitle">
+    </md-form-field>
+    <button md-raised-button color="accent" (click)="save()">Save</button>
+    <button md-raised-button color="accent" (click)="cancel()">Cancel</button>
+</form>

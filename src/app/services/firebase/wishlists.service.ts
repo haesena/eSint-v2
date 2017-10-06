@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Configuration} from '../../configuration';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {Wish} from '../../models/wish';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class WishlistsService {
@@ -29,12 +30,34 @@ export class WishlistsService {
         }
     }
 
-    getWishlist() {
-        return this.db.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId);
+    getWishlist(uid) {
+        return this.db.object('wishlists/' + this.config.activeGroup + '/' + uid);
     }
 
     deleteWish(wid) {
         this.db.list('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes').remove(wid);
+    }
+
+    getWishlistOfActiveGroup() {
+        const lists$ = new ReplaySubject();
+        this.db.list('wishlists/' + this.config.activeGroup).first().subscribe(lists => {
+            const wLists = [];
+            lists.forEach(list => {
+                if(list.$key == this.config.userId) {
+                    return;
+                }
+                this.db.object('users/' + list.$key).subscribe(u => {
+                    wLists.push({
+                        name: list.name,
+                        photoUrl: u.photoUrl,
+                        lid: list.$key
+                    });
+                });
+            });
+            console.log(wLists);
+            lists$.next(wLists);
+        });
+        return lists$;
     }
 
 }

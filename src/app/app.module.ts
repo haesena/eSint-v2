@@ -58,6 +58,8 @@ import {WishlistsService} from './services/firebase/wishlists.service';
 import {ActiveGroupGuard} from './routing/active-group-guard.service';
 import {InviteGuard} from './routing/invite-guard.service';
 import { EditWishComponent } from './components/pages/edit-wish/edit-wish.component';
+import { WishDisplayComponent } from './components/forms/wish-display/wish-display.component';
+import { WishlistComponent } from './components/pages/wishlist/wishlist.component';
 
 @NgModule({
     declarations: [
@@ -77,7 +79,9 @@ import { EditWishComponent } from './components/pages/edit-wish/edit-wish.compon
         InviteDialogComponent,
         InviteComponent,
         WishFormComponent,
-        EditWishComponent
+        EditWishComponent,
+        WishDisplayComponent,
+        WishlistComponent
     ],
     imports: [
         BrowserAnimationsModule,

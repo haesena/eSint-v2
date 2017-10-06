@@ -5,10 +5,12 @@
         </md-icon>
         My list
     </a>
-    <a *ngFor="let l of wishlists">
+    <span *ngFor="let l of wishlists">
+        <a md-list-item [routerLink]="'/wishlist/' + l.lid">
         <md-icon class="menu-icon">
-            <img md-fab-image class="avatar" [src]="l.picture">
+            <img md-fab-image class="avatar" [src]="l.photoUrl">
         </md-icon>
         {{ l.name }}
     </a>
+    </span>
 </md-nav-list>

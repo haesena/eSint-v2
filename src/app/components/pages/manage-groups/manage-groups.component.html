@@ -1,15 +1,17 @@
 <div fxLayout='row' fxLayout.lt-lg="column" fxLayoutWrap class="container">
-    <md-card *ngFor="let g of groups" fxFlex="calc(50% - 1.6em)">
-        <md-card-header>
-            <md-card-title><h3>{{g.name}}</h3></md-card-title>
-        </md-card-header>
-        <md-card-content>
-            <app-group-form [group]="g"></app-group-form>
-        </md-card-content>
-        <md-card-actions>
-            <button md-raised-button (click)="leaveGroup(g.$key)">Leave</button>
-            <a md-raised-button *ngIf="g.users[config.userId] == 'creator'" [routerLink]="'/edit-group/'+g.$key">Edit</a>
-            <button md-raised-button *ngIf="g.users[config.userId] == 'creator'" (click)="inviteGroup(g.$key, g.name)">Invite</button>
-        </md-card-actions>
-    </md-card>
+    <div *ngFor="let g of groups" fxFlex="calc(50% - 1.6em)" style="margin-bottom: 0.8em;">
+        <md-toolbar class="card-header-toolbar">
+            <span>{{ g.name }}</span>
+        </md-toolbar>
+        <md-card>
+            <md-card-content>
+                <app-group-form [group]="g"></app-group-form>
+            </md-card-content>
+            <md-card-actions>
+                <button md-raised-button (click)="leaveGroup(g.$key)">Leave</button>
+                <a md-raised-button *ngIf="g.users[config.userId] == 'creator'" [routerLink]="'/edit-group/'+g.$key">Edit</a>
+                <button md-raised-button *ngIf="g.users[config.userId] == 'creator'" (click)="inviteGroup(g.$key, g.name)">Invite</button>
+            </md-card-actions>
+        </md-card>
+    </div>
 </div>

@@ -19,7 +19,7 @@ export class MyListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.wishlist$ = this.wService.getWishlist();
+        this.wishlist$ = this.wService.getWishlist(this.config.userId);
         this.wishlist$.subscribe(n => {
             if (n.name == null) {
                 this.wishlist$.update({name: this.uService.user.displayName + '\'s wishlist'});

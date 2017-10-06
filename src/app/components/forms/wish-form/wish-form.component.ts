@@ -9,10 +9,8 @@ import {Location} from '@angular/common';
 })
 export class WishFormComponent implements OnInit {
     @Input() wish: Wish = null;
-    @Input() idx;
     @Input() readOnly = true;
     @Output() saveEvent: EventEmitter<any> = new EventEmitter();
-    @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
 
     constructor(private loc: Location) {
         if (this.wish == null) {
@@ -25,15 +23,13 @@ export class WishFormComponent implements OnInit {
     }
 
     save() {
+        if (this.wish.linkURL && this.wish.linkURL.length > 0 && !this.wish.linkURL.startsWith('http')) {
+            this.wish.linkURL = 'http://' + this.wish.linkURL;
+        }
         this.saveEvent.emit(this.wish);
-    }
-
-    delete() {
-        this.deleteEvent.emit(this.wish);
     }
 
     cancel() {
         this.loc.back();
     }
-
 }

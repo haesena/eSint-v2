@@ -24,10 +24,13 @@ export class GroupFormComponent implements OnInit {
             this.group = new Group();
         }
 
-        this.groupService.getGroupUsers(this.group.$key).subscribe((uList: User[]) => {
-            this.userList = uList;
-        });
         this.readOnly = this.saveEvent.observers.length === 0;
+
+        if (this.readOnly) {
+            this.groupService.getGroupUsers(this.group.$key).subscribe((uList: User[]) => {
+                this.userList = uList;
+            });
+        }
     }
 
     save() {
