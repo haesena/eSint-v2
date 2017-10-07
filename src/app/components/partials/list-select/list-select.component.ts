@@ -29,7 +29,7 @@ export class ListSelectComponent implements OnInit {
 
         this.wService.getWishlistOfActiveGroup().subscribe((wLists: any) => {
             this.wishlists = wLists;
-        })
+        });
     }
 
 }

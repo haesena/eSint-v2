@@ -1,19 +1,19 @@
-<md-card *ngIf="config.invite; else no_invite">
+<mat-card *ngIf="config.invite; else no_invite">
     <div *ngIf="alreadyInGroup; else show_invite">
         You're already part of the group {{config.invite.groupName}}. Start wishing!
     </div>
     <ng-template #show_invite>
         <p>{{config.invite.userName}} invited you to join the group {{config.invite.groupName}}</p>
         <div *ngIf="loggedIn">
-            <button md-raised-button (click)="join()">Join !</button>
+            <button mat-raised-button (click)="join()">Join !</button>
         </div>
         <div *ngIf="!loggedIn">
-            <button md-raised-button routerLink="/login">Log in!</button>
+            <button mat-raised-button routerLink="/login">Log in!</button>
         </div>
     </ng-template>
-</md-card>
+</mat-card>
 <ng-template #no_invite>
-    <md-card>
+    <mat-card>
         {{ msg }}
-    </md-card>
+    </mat-card>
 </ng-template>

@@ -1,5 +1,5 @@
 import {Component, NgZone, OnInit, ViewChild} from '@angular/core';
-import {MdSidenav} from '@angular/material';
+import {MatDrawer} from '@angular/material';
 import {AuthService} from './services/authentication/auth.service';
 import {UserService} from './services/firebase/user.service';
 import {Configuration} from './configuration';
@@ -11,7 +11,7 @@ import {Configuration} from './configuration';
 })
 export class AppComponent implements OnInit {
     sidenav_mode = 'side';
-    @ViewChild('sidenav') private sidenav: MdSidenav;
+    @ViewChild('sidenav') private sidenav: MatDrawer;
     public photoUrl: string;
 
     constructor(private _ngZone: NgZone, public auth: AuthService, public uService: UserService, public config: Configuration) {

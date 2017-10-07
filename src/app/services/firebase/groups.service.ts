@@ -56,6 +56,7 @@ export class GroupsService {
                 users.remove(uid);
             }
         });
+
     }
 
     getGroup(gid) {

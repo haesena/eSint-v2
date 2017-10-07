@@ -26,5 +26,4 @@ export class WishDisplayComponent implements OnInit {
             this.deleteEvent.emit(this.wish);
         }
     }
-
 }

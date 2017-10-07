@@ -1,4 +1,4 @@
-<md-card *ngIf="this.userService.user$ | async">
+<mat-card *ngIf="this.userService.user$ | async">
     <div>
         Welcome {{ (this.userService.user$ | async)?.displayName}}!
     </div>
@@ -6,4 +6,4 @@
         Active group: {{ activeGroup.name }}
     </div>
     <ng-template #no_groups>You're in no groups yet...</ng-template>
-</md-card>
+</mat-card>

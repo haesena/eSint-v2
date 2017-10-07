@@ -4,16 +4,16 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-    MdSidenavModule,
-    MdListModule,
-    MdToolbarModule,
-    MdIconModule,
-    MdProgressBarModule,
-    MdCardModule,
-    MdButtonModule,
-    MdInputModule,
-    MdDialogModule,
-    MdMenuModule
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatCardModule,
+    MatButtonModule,
+    MatInputModule,
+    MatDialogModule,
+    MatMenuModule
 } from '@angular/material';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -85,18 +85,18 @@ import { WishlistComponent } from './components/pages/wishlist/wishlist.componen
     ],
     imports: [
         BrowserAnimationsModule,
-        MdSidenavModule,
-        MdListModule,
-        MdToolbarModule,
-        MdIconModule,
-        MdProgressBarModule,
-        MdButtonModule,
-        MdCardModule,
-        MdInputModule,
+        MatSidenavModule,
+        MatListModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatProgressBarModule,
+        MatButtonModule,
+        MatCardModule,
+        MatInputModule,
         BrowserModule,
         FormsModule,
-        MdDialogModule,
-        MdMenuModule,
+        MatDialogModule,
+        MatMenuModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         AngularFireAuthModule,

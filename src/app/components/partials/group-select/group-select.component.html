@@ -1,36 +1,37 @@
 <!-- if the user has groups, show the active group and a toggle to open the select menu -->
-<md-nav-list class="side-list" *ngIf="groups && groups.length > 0; else no_groups">
-    <a md-list-item (click)="toggleGroups()">
+<mat-nav-list class="side-list" *ngIf="groups && groups.length > 0; else no_groups">
+    <a mat-list-item (click)="toggleGroups()">
         {{ (userService.getActiveGroupName() | async)?.$value }}
         <span class="space-filler"></span>
-        <md-icon class="menu-icon" class="rotate" [ngClass]="{'down': showGroups }">keyboard_arrow_down</md-icon>
+        <mat-icon class="menu-icon" class="rotate" [ngClass]="{'down': showGroups }">keyboard_arrow_down</mat-icon>
     </a>
-</md-nav-list>
-<md-nav-list *ngIf="showGroups" class="side-list">
+</mat-nav-list>
+<mat-nav-list *ngIf="showGroups" class="side-list" style="padding-left: 1em;">
     <span *ngFor="let g of groups">
         <a *ngIf="g.$key != config.activeGroup"
-           md-list-item
+           mat-list-item
            routerLinkActive="route-active"
            (click)="chooseGroup(g.$key)">
-            <md-icon class="menu-icon">keyboard_arrow_right</md-icon>
+            <mat-icon class="menu-icon">keyboard_arrow_right</mat-icon>
             {{ g.name }}
             <span class="space-filler"></span>
         </a>
     </span>
-    <a md-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="clicked()">
-        <md-icon class="menu-icon">add</md-icon>
+    <a mat-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="clicked()">
+        <mat-icon class="menu-icon">add</mat-icon>
         New group
     </a>
-    <a md-list-item routerLink="/manage-groups" routerLinkActive="route-active" (click)="clicked()">
-        <md-icon class="menu-icon">settings</md-icon>
+    <a mat-list-item routerLink="/manage-groups" routerLinkActive="route-active" (click)="clicked()">
+        <mat-icon class="menu-icon">settings</mat-icon>
         Manage groups
     </a>
-</md-nav-list>
+    <mat-divider></mat-divider>
+</mat-nav-list>
 <ng-template #no_groups>
-    <md-nav-list class="side-list">
-        <a md-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="clicked()">
-            <md-icon class="menu-icon">add</md-icon>
+    <mat-nav-list class="side-list">
+        <a mat-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="clicked()">
+            <mat-icon class="menu-icon">add</mat-icon>
             New group
         </a>
-    </md-nav-list>
+    </mat-nav-list>
 </ng-template>

@@ -1,27 +1,27 @@
 <div *ngIf="!readOnly; else readonlyForm">
     <form class="group-form" *ngIf="group">
-        <md-form-field class="example-full-width">
-            <input mdInput placeholder="Name" [(ngModel)]="group.name" name="gName">
-        </md-form-field>
-        <md-form-field class="example-full-width">
-            <input mdInput placeholder="Description" [(ngModel)]="group.description" name="gDescription">
-        </md-form-field>
-        <button md-raised-button color="accent" (click)="save()">Save</button>
-        <button md-raised-button color="accent" (click)="cancel()">Cancel</button>
+        <mat-form-field class="example-full-width">
+            <input matInput placeholder="Name" [(ngModel)]="group.name" name="gName">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <input matInput placeholder="Description" [(ngModel)]="group.description" name="gDescription">
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="save()">Save</button>
+        <button mat-raised-button color="accent" (click)="cancel()">Cancel</button>
     </form>
 </div>
 <ng-template #readonlyForm>
-    <md-list>
-        <h3 md-subheader class="label-header" *ngIf="group.description">Description</h3>
-        <md-list-item *ngIf="group.description">
-            <h4 md-line>{{ group.description }}</h4>
-        </md-list-item>
-        <h3 md-subheader class="label-header">Users</h3>
-        <md-list-item *ngFor="let u of this.userList">
-            <md-icon md-list-icon *ngIf="u.photoUrl">
-                <img md-fab-image class="avatar" style="border-radius: 12px;" [src]="u.photoUrl">
-            </md-icon>
-            <h4 md-line>{{ u.displayName }}</h4>
-        </md-list-item>
-    </md-list>
+    <mat-list>
+        <h3 mat-subheader class="label-header" *ngIf="group.description">Description</h3>
+        <mat-list-item *ngIf="group.description">
+            <h4 mat-line>{{ group.description }}</h4>
+        </mat-list-item>
+        <h3 mat-subheader class="label-header">Users</h3>
+        <mat-list-item *ngFor="let u of this.userList">
+            <mat-icon mat-list-icon *ngIf="u.photoUrl">
+                <img mat-fab-image class="avatar" style="border-radius: 12px;" [src]="u.photoUrl">
+            </mat-icon>
+            <h4 mat-line>{{ u.displayName }}</h4>
+        </mat-list-item>
+    </mat-list>
 </ng-template>

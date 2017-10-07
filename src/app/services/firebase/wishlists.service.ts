@@ -3,6 +3,7 @@ import {Configuration} from '../../configuration';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {Wish} from '../../models/wish';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
+import 'rxjs/add/operator/switchMap';
 
 @Injectable()
 export class WishlistsService {
@@ -39,25 +40,26 @@ export class WishlistsService {
     }
 
     getWishlistOfActiveGroup() {
-        const lists$ = new ReplaySubject();
-        this.db.list('wishlists/' + this.config.activeGroup).first().subscribe(lists => {
-            const wLists = [];
-            lists.forEach(list => {
-                if(list.$key == this.config.userId) {
-                    return;
-                }
-                this.db.object('users/' + list.$key).subscribe(u => {
-                    wLists.push({
-                        name: list.name,
-                        photoUrl: u.photoUrl,
-                        lid: list.$key
+        return this.config.activeGroup$.switchMap(ag => {
+            const lists$ = new ReplaySubject();
+            this.db.list('wishlists/' + this.config.activeGroup).first().subscribe(lists => {
+                const wLists = [];
+                lists.forEach(list => {
+                    if (list.$key === this.config.userId) {
+                        return;
+                    }
+                    this.db.object('users/' + list.$key).subscribe(u => {
+                        wLists.push({
+                            name: list.name,
+                            photoUrl: u.photoUrl,
+                            lid: list.$key
+                        });
                     });
                 });
+                lists$.next(wLists);
             });
-            console.log(wLists);
-            lists$.next(wLists);
+            return lists$;
         });
-        return lists$;
     }
 
 }

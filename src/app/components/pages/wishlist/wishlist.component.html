@@ -1,11 +1,11 @@
-<md-toolbar class="card-header-toolbar">
+<mat-toolbar class="card-header-toolbar">
     <span>{{ wListName }}</span>
-</md-toolbar>
-<md-card>
-    <md-list>
+</mat-toolbar>
+<mat-card>
+    <mat-list>
         <div *ngFor="let w of wishes; let i = index;">
-            <md-divider *ngIf="i > 0"></md-divider>
+            <mat-divider *ngIf="i > 0"></mat-divider>
             <app-wish-display [wish]="w"></app-wish-display>
         </div>
-    </md-list>
-</md-card>
+    </mat-list>
+</mat-card>

@@ -19,8 +19,6 @@ export class WishlistComponent implements OnInit {
 
     ngOnInit() {
         this.route.paramMap.subscribe((p: ParamMap) => {
-            // p.get('lid')
-            console.log('uid: ' + p.get('lid'));
             this.wService.getWishlist(p.get('lid')).subscribe(wList => {
                 this.wListName = wList.name;
             });

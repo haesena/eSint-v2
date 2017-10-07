@@ -1,13 +1,13 @@
  <form class="wish-form" *ngIf="wish">
-    <md-form-field class="example-full-width">
-        <input mdInput placeholder="Wish" [(ngModel)]="wish.name" name="wName">
-    </md-form-field>
-    <md-form-field class="example-full-width">
-        <input mdInput placeholder="Link" [(ngModel)]="wish.linkURL" name="wLinkURL">
-    </md-form-field>
-    <md-form-field class="example-full-width">
-        <input mdInput placeholder="Link Title" [(ngModel)]="wish.linkTitle" name="wLinkTitle">
-    </md-form-field>
-    <button md-raised-button color="accent" (click)="save()">Save</button>
-    <button md-raised-button color="accent" (click)="cancel()">Cancel</button>
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Wish" [(ngModel)]="wish.name" name="wName">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Link" [(ngModel)]="wish.linkURL" name="wLinkURL">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Link Title" [(ngModel)]="wish.linkTitle" name="wLinkTitle">
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="save()">Save</button>
+    <button mat-raised-button color="accent" (click)="cancel()">Cancel</button>
 </form>

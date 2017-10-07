@@ -1,9 +1,9 @@
-<md-card>
+<mat-card>
     <p>
-        <md-input-container class="full-width">
-            <input mdInput required="true" placeholder="Name" [ngModel]='(userS.user$|async)?.displayName'
+        <mat-input-container class="full-width">
+            <input matInput required="true" placeholder="Name" [ngModel]='(userS.user$|async)?.displayName'
                    (ngModelChange)="userS.user$.update({displayName: $event})" name="email">
-        </md-input-container>
+        </mat-input-container>
     </p>
-    <button md-raised-button color="primary" (click)="logOut()">Log out</button>
-</md-card>
+    <button mat-raised-button color="primary" (click)="logOut()">Log out</button>
+</mat-card>

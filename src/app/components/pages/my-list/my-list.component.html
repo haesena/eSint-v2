@@ -1,18 +1,21 @@
-<md-toolbar class="card-header-toolbar">
+<mat-toolbar class="card-header-toolbar">
     <span (click)="editName = true" *ngIf="!editName">{{(wishlist$|async)?.name}}</span>
-    <md-form-field class="full-width" style="width: 100%;" *ngIf="editName">
+    <mat-form-field class="full-width" style="width: 100%;" *ngIf="editName">
         <input mdInput required="true" [ngModel]='(wishlist$|async)?.name'
                (ngModelChange)="wishlist$.update({name  : $event})" name="email">
-    </md-form-field>
-</md-toolbar>
-<md-card>
-    <md-list>
+    </mat-form-field>
+</mat-toolbar>
+<mat-card>
+    <mat-list>
         <div *ngFor="let w of wishes; let i = index;">
-            <md-divider *ngIf="i > 0"></md-divider>
+            <mat-divider *ngIf="i > 0"></mat-divider>
             <app-wish-display [wish]="w" (deleteEvent)="deleteWish($event)" [myWish]="true"></app-wish-display>
         </div>
-    </md-list>
+    </mat-list>
+    <mat-card-content *ngIf="wishes && wishes.length === 0">
+        Your wishlist is empty, start by adding your first wish:
+    </mat-card-content>
     <p>
-        <button md-raised-button routerLink="/edit-wish/new">Add</button>
+        <button mat-raised-button routerLink="/edit-wish/new">Add</button>
     </p>
-</md-card>
+</mat-card>

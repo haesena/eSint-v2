@@ -1,16 +1,16 @@
-<md-nav-list class="side-list">
-    <a md-list-item routerLink="/my-list" routerLinkActive="route-active">
-        <md-icon class="menu-icon">
-            <img md-fab-image class="avatar" [src]="photoUrl">
-        </md-icon>
+<mat-nav-list class="side-list">
+    <a mat-list-item routerLink="/my-list" routerLinkActive="route-active">
+        <mat-icon class="menu-icon">
+            <img mat-fab-image class="avatar" [src]="photoUrl">
+        </mat-icon>
         My list
     </a>
     <span *ngFor="let l of wishlists">
-        <a md-list-item [routerLink]="'/wishlist/' + l.lid">
-        <md-icon class="menu-icon">
-            <img md-fab-image class="avatar" [src]="l.photoUrl">
-        </md-icon>
+        <a mat-list-item [routerLink]="'/wishlist/' + l.lid">
+        <mat-icon class="menu-icon">
+            <img mat-fab-image class="avatar" [src]="l.photoUrl">
+        </mat-icon>
         {{ l.name }}
     </a>
     </span>
-</md-nav-list>
+</mat-nav-list>

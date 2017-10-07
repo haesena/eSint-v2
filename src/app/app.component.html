@@ -1,27 +1,27 @@
-<md-sidenav-container class="fullscreen">
-    <md-sidenav #sidenav mode="{{sidenav_mode}}" class="sidenav">
-        <md-toolbar color="accent" routerLink="/start">
+<mat-sidenav-container class="fullscreen">
+    <mat-sidenav #sidenav mode="{{sidenav_mode}}" class="sidenav">
+        <mat-toolbar color="accent" routerLink="/start">
 			<span>
 				Logo
 			</span>
-        </md-toolbar>
+        </mat-toolbar>
         <app-group-select *ngIf="auth.loggedIn == true" (linkClicked)="collapse()"></app-group-select>
         <app-list-select *ngIf="config.activeGroup"></app-list-select>
-    </md-sidenav>
-    <md-toolbar color="primary">
-        <button md-icon-button (click)="sidenav.toggle()" *ngIf="sidenav_mode == 'over' && auth.loggedIn == true">
-            <md-icon>menu</md-icon>
+    </mat-sidenav>
+    <mat-toolbar color="primary">
+        <button mat-icon-button (click)="sidenav.toggle()" *ngIf="sidenav_mode == 'over' && auth.loggedIn == true">
+            <mat-icon>menu</mat-icon>
         </button>
         <span>
 			Title
 		</span>
         <span class="space-filler"></span>
-        <button md-icon-button *ngIf="photoUrl && auth.loggedIn == true" routerLink="/settings">
-            <img md-fab-image class="avatar" [src]="photoUrl">
+        <button mat-icon-button *ngIf="photoUrl && auth.loggedIn == true" routerLink="/settings">
+            <img mat-fab-image class="avatar" [src]="photoUrl">
         </button>
-    </md-toolbar>
-    <md-progress-bar *ngIf="config.loading" mode="indeterminate"></md-progress-bar>
+    </mat-toolbar>
+    <mat-progress-bar *ngIf="config.loading" mode="indeterminate"></mat-progress-bar>
     <div class="content">
         <router-outlet></router-outlet>
     </div>
-</md-sidenav-container>
+</mat-sidenav-container>

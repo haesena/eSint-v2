@@ -3,7 +3,7 @@ import {WishlistsService} from '../../../services/firebase/wishlists.service';
 import {Configuration} from '../../../configuration';
 import {Wish} from '../../../models/wish';
 import {UserService} from '../../../services/firebase/user.service';
-import {MdInput} from '@angular/material';
+import {MatInput} from '@angular/material';
 
 @Component({
     selector: 'app-my-list',
@@ -23,8 +23,6 @@ export class MyListComponent implements OnInit {
         this.wishlist$.subscribe(n => {
             if (n.name == null) {
                 this.wishlist$.update({name: this.uService.user.displayName + '\'s wishlist'});
-            } else {
-                console.log(n);
             }
         });
 

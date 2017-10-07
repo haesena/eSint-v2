@@ -1,19 +1,22 @@
-<md-list-item>
-    <h4 md-line>{{ wish.name }}</h4>
-    <p md-line *ngIf="wish.linkURL">
+<mat-list-item>
+    <h4 mat-line>{{ wish.name }}</h4>
+    <p mat-line *ngIf="wish.linkURL">
         <a href="{{ wish.linkURL }}" target="_blank">{{ wish.linkTitle ? wish.linkTitle : wish.linkURL }}</a>
     </p>
-    <button md-icon-button [mdMenuTriggerFor]="menu" *ngIf="myWish">
-        <md-icon>more_vert</md-icon>
+    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="myWish">
+        <mat-icon>more_vert</mat-icon>
     </button>
-    <md-menu #menu="mdMenu">
-        <button md-menu-item [routerLink]="'/edit-wish/' + wish.$key">
-            <md-icon>mode_edit</md-icon>
+    <button mat-icon-button *ngIf="!myWish">
+        <i class="fa fa-gift fa-2x"></i>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="'/edit-wish/' + wish.$key">
+            <mat-icon>mode_edit</mat-icon>
             <span>Edit</span>
         </button>
-        <button md-menu-item (click)="deleteWish()">
-            <md-icon>delete</md-icon>
+        <button mat-menu-item (click)="deleteWish()">
+            <mat-icon>delete</mat-icon>
             <span>delete</span>
         </button>
-    </md-menu>
-</md-list-item>
+    </mat-menu>
+</mat-list-item>
