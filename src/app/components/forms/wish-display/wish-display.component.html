@@ -1,13 +1,16 @@
 <mat-list-item>
-    <h4 mat-line>{{ wish.name }}</h4>
-    <p mat-line *ngIf="wish.linkURL">
+    <h4 mat-line [ngClass]="{'taken':wish.taken}">{{ wish.name }}</h4>
+    <p mat-line *ngIf="wish.linkURL" [ngClass]="{'taken':wish.taken}">
         <a href="{{ wish.linkURL }}" target="_blank">{{ wish.linkTitle ? wish.linkTitle : wish.linkURL }}</a>
     </p>
     <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="myWish">
         <mat-icon>more_vert</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="!myWish">
+    <button mat-icon-button *ngIf="!wish.taken" (click)="takeWish()">
         <i class="fa fa-gift fa-2x"></i>
+    </button>
+    <button mat-icon-button *ngIf="canDelete" (click)="deleteWish()">
+        <mat-icon>delete</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item [routerLink]="'/edit-wish/' + wish.$key">

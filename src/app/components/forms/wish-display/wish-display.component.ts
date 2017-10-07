@@ -10,7 +10,9 @@ export class WishDisplayComponent implements OnInit {
 
     @Input() wish: Wish = null;
     @Input() myWish = false;
+    @Input() canDelete = false;
     @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
+    @Output() takeEvent: EventEmitter<any> = new EventEmitter();
 
     constructor() {
         if (this.wish == null) {
@@ -22,8 +24,10 @@ export class WishDisplayComponent implements OnInit {
     }
 
     deleteWish() {
-        if (this.myWish) {
-            this.deleteEvent.emit(this.wish);
-        }
+        this.deleteEvent.emit(this.wish);
+    }
+
+    takeWish() {
+        this.takeEvent.emit(this.wish);
     }
 }

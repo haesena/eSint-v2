@@ -19,6 +19,21 @@ export class WishlistsService {
         return this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes');
     }
 
+    getWishesWithAdditionalInfos(uid) {
+        const wishes$ = new ReplaySubject();
+        this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes').subscribe(wList => {
+            const wishes = [];
+            wList.forEach(wish => {
+                this.db.object('takenFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(t => {
+                    wish.taken = t.$value;
+                });
+                wishes.push(wish);
+            });
+            wishes$.next(wishes);
+        });
+        return wishes$;
+    }
+
     getWish(wid) {
         return this.db.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wid);
     }
@@ -42,7 +57,7 @@ export class WishlistsService {
     getWishlistOfActiveGroup() {
         return this.config.activeGroup$.switchMap(ag => {
             const lists$ = new ReplaySubject();
-            this.db.list('wishlists/' + this.config.activeGroup).first().subscribe(lists => {
+            this.db.list('wishlists/' + ag).first().subscribe(lists => {
                 const wLists = [];
                 lists.forEach(list => {
                     if (list.$key === this.config.userId) {
@@ -62,4 +77,7 @@ export class WishlistsService {
         });
     }
 
+    takeWish(gid, uid, wid) {
+        this.db.object('takenFlag/' + gid + '/' + uid + '/' + wid).set(true);
+    }
 }

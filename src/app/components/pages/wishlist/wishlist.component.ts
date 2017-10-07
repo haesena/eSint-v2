@@ -11,22 +11,29 @@ import {Wish} from '../../../models/wish';
 })
 export class WishlistComponent implements OnInit {
 
-    wishes: Wish[];
+    wishes;
     wListName: string;
+    private lid: string;
 
     constructor(public wService: WishlistsService, public config: Configuration, private route: ActivatedRoute) {
     }
 
     ngOnInit() {
         this.route.paramMap.subscribe((p: ParamMap) => {
-            this.wService.getWishlist(p.get('lid')).subscribe(wList => {
+            this.lid = p.get('lid');
+            this.wService.getWishlist(this.lid).subscribe(wList => {
                 this.wListName = wList.name;
             });
 
-            this.wService.getWishes(p.get('lid')).subscribe(wishes => {
+            this.wService.getWishesWithAdditionalInfos(this.lid).subscribe(wishes => {
+                console.log(wishes);
                 this.wishes = wishes;
             });
         });
+    }
+
+    takeWish(wish) {
+        this.wService.takeWish(this.config.activeGroup, this.lid, wish.$key);
     }
 
 }

@@ -3,4 +3,5 @@ export class Wish {
     name: string;
     linkTitle: string;
     linkURL: any;
+    taken: boolean;
 }

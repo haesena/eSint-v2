@@ -12,8 +12,7 @@ import {WishlistsService} from '../../../services/firebase/wishlists.service';
 })
 export class NewGroupComponent implements OnInit {
 
-    constructor(public groupsService: GroupsService, private userService: UserService, private router: Router,
-                private wService: WishlistsService) {
+    constructor(public groupsService: GroupsService, private userService: UserService, private router: Router) {
     }
 
     ngOnInit() {
