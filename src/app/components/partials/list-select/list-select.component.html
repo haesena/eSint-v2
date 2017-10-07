@@ -5,6 +5,12 @@
         </mat-icon>
         My list
     </a>
+    <a mat-list-item routerLink="/my-gifts" routerLinkActive="route-active">
+        <mat-icon class="menu-icon">
+            <i class="fa fa-gift"></i>
+        </mat-icon>
+        My gifts
+    </a>
     <span *ngFor="let l of wishlists">
         <a mat-list-item [routerLink]="'/wishlist/' + l.lid">
         <mat-icon class="menu-icon">

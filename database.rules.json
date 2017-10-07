@@ -34,6 +34,14 @@
           ".write": "root.child('users').child(auth.uid).child('groups').child($groupId).exists() && $userId !== auth.uid"
         }
       }
+    },
+    "gifts": {
+      "$groupId": {
+        "$userId": {
+          ".read": "root.child('users').child(auth.uid).child('groups').child($groupId).exists() && $userId === auth.uid",
+          ".write": "root.child('users').child(auth.uid).child('groups').child($groupId).exists() && $userId === auth.uid"
+        }
+      }
     }
   }
 }

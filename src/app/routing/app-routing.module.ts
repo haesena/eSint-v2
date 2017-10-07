@@ -15,6 +15,7 @@ import {ActiveGroupGuard} from './active-group-guard.service';
 import {InviteGuard} from './invite-guard.service';
 import {EditWishComponent} from '../components/pages/edit-wish/edit-wish.component';
 import {WishlistComponent} from '../components/pages/wishlist/wishlist.component';
+import {MyGiftsComponent} from '../components/pages/my-gifts/my-gifts.component';
 
 const appRoutes: Routes = [
     {
@@ -63,6 +64,11 @@ const appRoutes: Routes = [
         path: 'my-list',
         canActivate: [AuthGuard, ActiveGroupGuard],
         component: MyListComponent
+    },
+    {
+        path: 'my-gifts',
+        canActivate: [AuthGuard, ActiveGroupGuard],
+        component: MyGiftsComponent
     },
     {
         path: 'edit-wish/:wid',

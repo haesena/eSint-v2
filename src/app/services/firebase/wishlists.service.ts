@@ -79,5 +79,9 @@ export class WishlistsService {
 
     takeWish(gid, uid, wid) {
         this.db.object('takenFlag/' + gid + '/' + uid + '/' + wid).set(true);
+        this.db.list('gifts/' + gid + '/' + this.config.userId).push({
+            wish: wid,
+            user: uid
+        });
     }
 }

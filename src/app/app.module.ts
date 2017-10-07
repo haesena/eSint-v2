@@ -51,15 +51,18 @@ import { ListSelectComponent } from './components/partials/list-select/list-sele
 import { GroupsService } from './services/firebase/groups.service';
 import { InvitesService } from './services/firebase/invites.service';
 import { UserService } from './services/firebase/user.service';
+import { WishlistsService } from './services/firebase/wishlists.service';
+import { GiftsService } from './services/firebase/gifts.service';
 import { InviteDialogComponent } from './components/partials/invite-dialog/invite-dialog.component';
 import { InviteComponent } from './components/pages/invite/invite.component';
 import { WishFormComponent } from './components/forms/wish-form/wish-form.component';
-import {WishlistsService} from './services/firebase/wishlists.service';
 import {ActiveGroupGuard} from './routing/active-group-guard.service';
 import {InviteGuard} from './routing/invite-guard.service';
 import { EditWishComponent } from './components/pages/edit-wish/edit-wish.component';
 import { WishDisplayComponent } from './components/forms/wish-display/wish-display.component';
 import { WishlistComponent } from './components/pages/wishlist/wishlist.component';
+import { MyGiftsComponent } from './components/pages/my-gifts/my-gifts.component';
+import { GiftDisplayComponent } from './components/forms/gift-display/gift-display.component';
 
 @NgModule({
     declarations: [
@@ -81,7 +84,9 @@ import { WishlistComponent } from './components/pages/wishlist/wishlist.componen
         WishFormComponent,
         EditWishComponent,
         WishDisplayComponent,
-        WishlistComponent
+        WishlistComponent,
+        MyGiftsComponent,
+        GiftDisplayComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -112,6 +117,7 @@ import { WishlistComponent } from './components/pages/wishlist/wishlist.componen
         GroupsService,
         InvitesService,
         WishlistsService,
+        GiftsService,
         Configuration
     ],
     entryComponents: [

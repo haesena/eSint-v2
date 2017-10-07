@@ -11,7 +11,6 @@ import {MatInput} from '@angular/material';
     styleUrls: ['./my-list.component.css']
 })
 export class MyListComponent implements OnInit {
-    noWishes = false;
     editName = false;
     wishes: Wish[];
     wishlist$;
@@ -27,7 +26,6 @@ export class MyListComponent implements OnInit {
         });
 
         this.wService.getWishes(this.config.userId).subscribe(wishes => {
-            this.noWishes = (wishes.length === 0);
             this.wishes = wishes;
         });
     }

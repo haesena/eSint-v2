@@ -1,0 +1,9 @@
+<mat-list-item *ngIf="gift.wish">
+    <h4 mat-line>{{ gift.wish.name }}</h4>
+    <p mat-line *ngIf="gift.wish.linkURL">
+        <a href="{{ gift.wish.linkURL }}" target="_blank">{{ gift.wish.linkTitle ? gift.wish.linkTitle : gift.wish.linkURL }}</a>
+    </p>
+    <p mat-line>
+        For {{ gift.user.displayName }}
+    </p>
+</mat-list-item>
