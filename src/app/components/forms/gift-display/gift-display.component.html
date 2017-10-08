@@ -1,8 +1,8 @@
 <mat-list-item *ngIf="gift.wish">
+    <mat-icon mat-list-icon *ngIf="gift.user.photoUrl">
+        <img mat-fab-image class="avatar" style="border-radius: 12px;" [src]="gift.user.photoUrl">
+    </mat-icon>
     <h4 mat-line>{{ gift.wish.name }}</h4>
-    <p mat-line *ngIf="gift.wish.linkURL">
-        <a href="{{ gift.wish.linkURL }}" target="_blank">{{ gift.wish.linkTitle ? gift.wish.linkTitle : gift.wish.linkURL }}</a>
-    </p>
     <p mat-line>
         For {{ gift.user.displayName }}
     </p>

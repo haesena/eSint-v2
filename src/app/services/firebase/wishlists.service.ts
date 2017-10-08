@@ -84,4 +84,15 @@ export class WishlistsService {
             user: uid
         });
     }
+
+    untakeWish(gid, uid, wid) {
+        this.db.object('takenFlag/' + gid + '/' + uid + '/' + wid).remove();
+        this.db.list('gifts/' + gid + '/' + this.config.userId).first().subscribe(gList => {
+            gList.forEach(g => {
+                if (g.wish === wid) {
+                    this.db.object('gifts/' + gid + '/' + this.config.userId + '/' + g.$key).remove();
+                }
+            });
+        });
+    }
 }

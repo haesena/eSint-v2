@@ -3,6 +3,7 @@ import {WishlistsService} from '../../../services/firebase/wishlists.service';
 import {Configuration} from '../../../configuration';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Wish} from '../../../models/wish';
+import {GiftsService} from '../../../services/firebase/gifts.service';
 
 @Component({
     selector: 'app-wishlist',
@@ -12,10 +13,11 @@ import {Wish} from '../../../models/wish';
 export class WishlistComponent implements OnInit {
 
     wishes;
+    myGifts = [];
     wListName: string;
     private lid: string;
 
-    constructor(public wService: WishlistsService, public config: Configuration, private route: ActivatedRoute) {
+    constructor(public wService: WishlistsService, public config: Configuration, private route: ActivatedRoute, private gService: GiftsService) {
     }
 
     ngOnInit() {
@@ -26,14 +28,21 @@ export class WishlistComponent implements OnInit {
             });
 
             this.wService.getWishesWithAdditionalInfos(this.lid).subscribe(wishes => {
-                console.log(wishes);
                 this.wishes = wishes;
+            });
+
+            this.gService.getMyGiftIds().subscribe(gids => {
+                this.myGifts = gids.map(v => v.wish);
             });
         });
     }
 
     takeWish(wish) {
         this.wService.takeWish(this.config.activeGroup, this.lid, wish.$key);
+    }
+
+    untakeWish(wish) {
+        this.wService.untakeWish(this.config.activeGroup, this.lid, wish.$key);
     }
 
 }

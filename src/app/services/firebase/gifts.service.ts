@@ -9,6 +9,10 @@ export class GiftsService {
     constructor(private db: AngularFireDatabase, private config: Configuration) {
     }
 
+    getMyGiftIds() {
+        return this.db.list('gifts/' + this.config.activeGroup + '/' + this.config.userId);
+    }
+
     getMyGifts() {
         const gifts$ = new ReplaySubject();
         this.db.list('gifts/' + this.config.activeGroup + '/' + this.config.userId).subscribe(gList => {
