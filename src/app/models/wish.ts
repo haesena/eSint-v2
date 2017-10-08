@@ -4,4 +4,5 @@ export class Wish {
     linkTitle: string;
     linkURL: any;
     taken: boolean;
+    deleted: boolean;
 }
