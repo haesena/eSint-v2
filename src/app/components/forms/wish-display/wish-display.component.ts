@@ -12,6 +12,7 @@ export class WishDisplayComponent implements OnInit {
     @Input() myWish = false;
     @Input() canDelete = false;
     @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
+    @Output() restoreEvent: EventEmitter<any> = new EventEmitter();
     @Output() takeEvent: EventEmitter<any> = new EventEmitter();
 
     constructor() {
@@ -25,6 +26,10 @@ export class WishDisplayComponent implements OnInit {
 
     deleteWish() {
         this.deleteEvent.emit(this.wish);
+    }
+
+    restoreWish() {
+        this.restoreEvent.emit(this.wish);
     }
 
     takeWish() {

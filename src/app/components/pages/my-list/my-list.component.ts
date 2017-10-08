@@ -12,7 +12,7 @@ import {MatInput} from '@angular/material';
 })
 export class MyListComponent implements OnInit {
     editName = false;
-    wishes: Wish[];
+    wishes;
     wishlist$;
     constructor(public wService: WishlistsService, public config: Configuration, private uService: UserService) {
     }
@@ -32,5 +32,9 @@ export class MyListComponent implements OnInit {
 
     deleteWish(wish: Wish) {
         this.wService.deleteWish(wish.$key)
+    }
+
+    restoreWish(wish: Wish) {
+        this.wService.restoreWish(wish.$key)
     }
 }

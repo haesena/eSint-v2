@@ -1,3 +1,7 @@
 .taken {
     text-decoration: line-through;
 }
+.deleted {
+    text-decoration: line-through;
+    color: red;
+}

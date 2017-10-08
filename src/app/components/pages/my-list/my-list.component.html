@@ -9,7 +9,7 @@
     <mat-list>
         <div *ngFor="let w of wishes; let i = index;">
             <mat-divider *ngIf="i > 0"></mat-divider>
-            <app-wish-display [wish]="w" (deleteEvent)="deleteWish($event)" [myWish]="true"></app-wish-display>
+            <app-wish-display [wish]="w" (deleteEvent)="deleteWish($event)" (restoreEvent)="restoreWish($event)" [myWish]="true"></app-wish-display>
         </div>
     </mat-list>
     <mat-card-content *ngIf="wishes && wishes.length === 0">

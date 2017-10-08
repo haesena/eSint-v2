@@ -35,6 +35,7 @@ export class AuthService {
     };
 
     logOut() {
+        localStorage.setItem('esintAuth', null);
         this.setLoggedIn(null);
         this.auth.auth.signOut();
     };
@@ -46,8 +47,10 @@ export class AuthService {
     logInWithProvider(type: string): firebase.Promise<any> {
         let provider = null;
         if (type === 'google') {
+            localStorage.setItem('esintAuth', 'google');
             provider = new firebase.auth.GoogleAuthProvider();
         } else if (type === 'facebook') {
+            localStorage.setItem('esintAuth', 'facebook');
             provider = new firebase.auth.FacebookAuthProvider()
         }
         return this.auth.auth.signInWithPopup(provider).then(
@@ -61,6 +64,7 @@ export class AuthService {
     };
 
     logInEmail(email: string, password: string) {
+        localStorage.setItem('esintAuth', 'email');
         return this.auth.auth.signInWithEmailAndPassword(email, password)
             .then(
                 user => this.setLoggedIn(user)

@@ -16,7 +16,18 @@ export class WishlistsService {
     }
 
     getWishes(uid) {
-        return this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes');
+        const wishes$ = new ReplaySubject();
+        this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes').subscribe(wList => {
+            const wishes = [];
+            wList.forEach(wish => {
+                this.db.object('deleteFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(d => {
+                    wish.deleted = d.$value;
+                });
+                wishes.push(wish);
+            });
+            wishes$.next(wishes);
+        });
+        return wishes$;
     }
 
     getWishesWithAdditionalInfos(uid) {
@@ -26,6 +37,9 @@ export class WishlistsService {
             wList.forEach(wish => {
                 this.db.object('takenFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(t => {
                     wish.taken = t.$value;
+                });
+                this.db.object('deleteFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(d => {
+                    wish.deleted = d.$value;
                 });
                 wishes.push(wish);
             });
@@ -51,7 +65,11 @@ export class WishlistsService {
     }
 
     deleteWish(wid) {
-        this.db.list('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes').remove(wid);
+        this.db.object('deleteFlag/' + this.config.activeGroup + '/' + this.config.userId + '/' + wid).set(true);
+    }
+
+    restoreWish(wid) {
+        this.db.object('deleteFlag/' + this.config.activeGroup + '/' + this.config.userId + '/' + wid).remove();
     }
 
     getWishlistOfActiveGroup() {

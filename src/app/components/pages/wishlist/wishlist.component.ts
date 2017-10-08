@@ -25,6 +25,7 @@ export class WishlistComponent implements OnInit {
             this.lid = p.get('lid');
             this.wService.getWishlist(this.lid).subscribe(wList => {
                 this.wListName = wList.name;
+                console.log(this.wListName);
             });
 
             this.wService.getWishesWithAdditionalInfos(this.lid).subscribe(wishes => {
