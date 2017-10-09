@@ -21,7 +21,7 @@ export class WishlistsService {
             const wishes = [];
             wList.forEach(wish => {
                 this.db.object('deleteFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(d => {
-                    wish.deleted = d.$value;
+                    wish.deleted = (d.marked === 'yes');
                 });
                 wishes.push(wish);
             });
@@ -39,7 +39,7 @@ export class WishlistsService {
                     wish.taken = t.$value;
                 });
                 this.db.object('deleteFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(d => {
-                    wish.deleted = d.$value;
+                    wish.deleted = (d.marked === 'yes');
                 });
                 wishes.push(wish);
             });
@@ -65,7 +65,9 @@ export class WishlistsService {
     }
 
     deleteWish(wid) {
-        this.db.object('deleteFlag/' + this.config.activeGroup + '/' + this.config.userId + '/' + wid).set(true);
+        this.db.object('deleteFlag/' + this.config.activeGroup + '/' + this.config.userId + '/' + wid).set({
+            marked: 'yes'
+        });
     }
 
     restoreWish(wid) {

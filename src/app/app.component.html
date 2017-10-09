@@ -17,7 +17,7 @@
 		</span>
         <span class="space-filler"></span>
         <button mat-icon-button *ngIf="photoUrl && auth.loggedIn == true" routerLink="/settings">
-            <img mat-fab-image class="avatar" [src]="photoUrl">
+            <img mat-fab-image class="avatar" [src]="photoUrl" onerror="brokenImg(this);">
         </button>
     </mat-toolbar>
     <mat-progress-bar *ngIf="config.loading" mode="indeterminate"></mat-progress-bar>

@@ -19,7 +19,7 @@
         <h3 mat-subheader class="label-header">Users</h3>
         <mat-list-item *ngFor="let u of this.userList">
             <mat-icon mat-list-icon *ngIf="u.photoUrl">
-                <img mat-fab-image class="avatar" style="border-radius: 12px;" [src]="u.photoUrl">
+                <img mat-fab-image class="avatar" style="border-radius: 12px;" [src]="u.photoUrl" onerror="brokenImg(this);">
             </mat-icon>
             <h4 mat-line>{{ u.displayName }}</h4>
         </mat-list-item>

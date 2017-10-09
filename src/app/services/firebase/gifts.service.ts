@@ -18,14 +18,15 @@ export class GiftsService {
         this.db.list('gifts/' + this.config.activeGroup + '/' + this.config.userId).subscribe(gList => {
             const gifts = [];
             gList.forEach(g => {
-                const gift = {};
                 this.db.object('users/' + g.user).subscribe(u => {
-                    gift['user'] = u;
+                    g['user'] = u;
                 });
-                this.db.object('wishlists/' + this.config.activeGroup + '/' + g.user + '/wishes/' + g.wish).subscribe(w => {
-                    gift['wish'] = w;
-                });
-                gifts.push(gift);
+                if (g.wish) {
+                    this.db.object('wishlists/' + this.config.activeGroup + '/' + g.user + '/wishes/' + g.wish).subscribe(w => {
+                        g['name'] = w.name;
+                    });
+                }
+                gifts.push(g);
             });
             gifts$.next(gifts);
         });
