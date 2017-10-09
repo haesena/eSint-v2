@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
     selector: 'app-gift-display',
@@ -8,6 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
 export class GiftDisplayComponent implements OnInit {
 
     @Input() gift = null;
+    @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
 
     constructor() {
     }
@@ -15,4 +16,7 @@ export class GiftDisplayComponent implements OnInit {
     ngOnInit() {
     }
 
+    deleteGift() {
+        this.deleteEvent.emit(this.gift);
+    }
 }

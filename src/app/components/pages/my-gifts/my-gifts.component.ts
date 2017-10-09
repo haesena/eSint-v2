@@ -15,9 +15,13 @@ export class MyGiftsComponent implements OnInit {
 
     ngOnInit() {
         this.gService.getMyGifts().subscribe(gList => {
-            this.gifts = gList;
             console.log(gList);
+            this.gifts = gList;
         });
+    }
+
+    deleteGift(gift) {
+        this.gService.deleteGift(gift);
     }
 
 }

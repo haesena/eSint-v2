@@ -13,7 +13,8 @@ import {
     MatButtonModule,
     MatInputModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSelectModule
 } from '@angular/material';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -63,6 +64,8 @@ import { WishDisplayComponent } from './components/forms/wish-display/wish-displ
 import { WishlistComponent } from './components/pages/wishlist/wishlist.component';
 import { MyGiftsComponent } from './components/pages/my-gifts/my-gifts.component';
 import { GiftDisplayComponent } from './components/forms/gift-display/gift-display.component';
+import { EditGiftComponent } from './components/pages/edit-gift/edit-gift.component';
+import { GiftFormComponent } from './components/forms/gift-form/gift-form.component';
 
 @NgModule({
     declarations: [
@@ -86,7 +89,9 @@ import { GiftDisplayComponent } from './components/forms/gift-display/gift-displ
         WishDisplayComponent,
         WishlistComponent,
         MyGiftsComponent,
-        GiftDisplayComponent
+        GiftDisplayComponent,
+        EditGiftComponent,
+        GiftFormComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -102,6 +107,7 @@ import { GiftDisplayComponent } from './components/forms/gift-display/gift-displ
         FormsModule,
         MatDialogModule,
         MatMenuModule,
+        MatSelectModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         AngularFireAuthModule,

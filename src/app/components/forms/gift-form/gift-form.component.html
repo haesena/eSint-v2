@@ -1,0 +1,14 @@
+<form class="wish-form" *ngIf="gift">
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Gift" [(ngModel)]="gift.name" name="gName">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <mat-select placeholder="For user" [(ngModel)]="gift.user" name="gUser">
+            <mat-option *ngFor="let u of users" [value]="u.$key">
+                {{u.displayName}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="save()">Save</button>
+    <button mat-raised-button color="accent" (click)="cancel()">Cancel</button>
+</form>

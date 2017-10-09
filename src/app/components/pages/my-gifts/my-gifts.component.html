@@ -5,10 +5,13 @@
     <mat-list>
         <div *ngFor="let g of gifts; let i = index;">
             <mat-divider *ngIf="i > 0"></mat-divider>
-            <app-gift-display [gift]="g"></app-gift-display>
+            <app-gift-display [gift]="g" (deleteEvent)="deleteGift($event)"></app-gift-display>
         </div>
     </mat-list>
     <mat-card-content *ngIf="gifts && gifts.length === 0">
         You have no gifts yet. Browse the wishlists of other people and select the gift you'll be buying for them.
     </mat-card-content>
+    <p>
+        <button mat-raised-button routerLink="/edit-gift/new">Add</button>
+    </p>
 </mat-card>

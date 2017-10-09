@@ -16,6 +16,7 @@ import {InviteGuard} from './invite-guard.service';
 import {EditWishComponent} from '../components/pages/edit-wish/edit-wish.component';
 import {WishlistComponent} from '../components/pages/wishlist/wishlist.component';
 import {MyGiftsComponent} from '../components/pages/my-gifts/my-gifts.component';
+import {EditGiftComponent} from '../components/pages/edit-gift/edit-gift.component';
 
 const appRoutes: Routes = [
     {
@@ -74,6 +75,11 @@ const appRoutes: Routes = [
         path: 'edit-wish/:wid',
         canActivate: [AuthGuard, ActiveGroupGuard],
         component: EditWishComponent
+    },
+    {
+        path: 'edit-gift/:gid',
+        canActivate: [AuthGuard, ActiveGroupGuard],
+        component: EditGiftComponent
     },
     {
         path: 'wishlist/:lid',
