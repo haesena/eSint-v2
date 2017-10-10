@@ -23,7 +23,6 @@ export class GroupDisplayComponent implements OnInit {
         if (this.group == null) {
             this.group = new Group();
         } else {
-            console.log(this.group);
             this.groupService.getGroupUsers(this.group.$key).subscribe((uList: User[]) => {
                 this.userList = uList;
             });

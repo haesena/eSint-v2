@@ -79,7 +79,6 @@ export class AuthService {
             provider = new firebase.auth.FacebookAuthProvider()
         }
 
-        console.log('signing in with popup');
         return this.auth.auth.signInWithPopup(provider).then(
             result => {
                 this.setLoggedIn(result.user);

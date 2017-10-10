@@ -33,6 +33,7 @@ exports.wishMarkedAsDeleted = functions.database.ref('/deleteFlag/{gid}/{uid}/{w
                                     var wish = _wish.val();
                                     wish.user = gifts[u][g]['user'];
                                     wish.deletedByUser = true;
+                                    wish.manualAdd = true;
 
                                     // update the gift, no more reference to wish
                                     admin.database().ref('gifts/' + gid + '/' + u + '/' + g).set(wish);
