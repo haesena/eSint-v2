@@ -38,7 +38,6 @@ import { SignupComponent } from './components/login/signup/signup.component';
 // Page-Components
 import { StartComponent } from './components/pages/start/start.component';
 import { SettingsComponent } from './components/pages/settings/settings.component';
-import { NewGroupComponent } from './components/pages/new-group/new-group.component';
 import { GroupFormComponent } from './components/forms/group-form/group-form.component';
 import { EditGroupComponent } from './components/pages/edit-group/edit-group.component';
 import { ManageGroupsComponent } from './components/pages/manage-groups/manage-groups.component';
@@ -66,6 +65,8 @@ import { MyGiftsComponent } from './components/pages/my-gifts/my-gifts.component
 import { GiftDisplayComponent } from './components/forms/gift-display/gift-display.component';
 import { EditGiftComponent } from './components/pages/edit-gift/edit-gift.component';
 import { GiftFormComponent } from './components/forms/gift-form/gift-form.component';
+import { GroupDisplayComponent } from './components/forms/group-display/group-display.component';
+import { ConfirmDialogComponent } from './components/partials/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
     declarations: [
@@ -75,7 +76,6 @@ import { GiftFormComponent } from './components/forms/gift-form/gift-form.compon
         EmailComponent,
         SignupComponent,
         SettingsComponent,
-        NewGroupComponent,
         GroupFormComponent,
         EditGroupComponent,
         GroupSelectComponent,
@@ -91,7 +91,9 @@ import { GiftFormComponent } from './components/forms/gift-form/gift-form.compon
         MyGiftsComponent,
         GiftDisplayComponent,
         EditGiftComponent,
-        GiftFormComponent
+        GiftFormComponent,
+        GroupDisplayComponent,
+        ConfirmDialogComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -127,7 +129,8 @@ import { GiftFormComponent } from './components/forms/gift-form/gift-form.compon
         Configuration
     ],
     entryComponents: [
-        InviteDialogComponent
+        InviteDialogComponent,
+        ConfirmDialogComponent
     ],
     bootstrap: [AppComponent]
 })

@@ -22,8 +22,13 @@ export class AuthGuard implements CanActivate {
         return this.auth.authState().map(auth => {
             this.auth.setLoggedIn(auth);
             if (auth == null) {
-                this.router.navigate(['/login']);
-                return false;
+                const a = localStorage.getItem('esintAuth');
+                if (a !== null) {
+                    return this.auth.tryLogin(a);
+                } else {
+                    this.router.navigate(['/login']);
+                    return false;
+                }
             } else {
                 return true;
             }

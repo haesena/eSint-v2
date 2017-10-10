@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewGroupComponent } from './new-group.component';
+import { ConfirmDialogComponent } from './confirm-dialog.component';
 
-describe('NewGroupComponent', () => {
-  let component: NewGroupComponent;
-  let fixture: ComponentFixture<NewGroupComponent>;
+describe('ConfirmDialogComponent', () => {
+  let component: ConfirmDialogComponent;
+  let fixture: ComponentFixture<ConfirmDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewGroupComponent ]
+      declarations: [ ConfirmDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NewGroupComponent);
+    fixture = TestBed.createComponent(ConfirmDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

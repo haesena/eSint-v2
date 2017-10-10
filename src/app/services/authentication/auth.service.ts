@@ -7,6 +7,8 @@ import {UserService} from '../firebase/user.service';
 import {Configuration} from '../../configuration';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
+import {map} from 'rxjs/operator/map';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +18,29 @@ export class AuthService {
 
     constructor(public auth: AngularFireAuth, public userService: UserService, private config: Configuration,
                 private router: Router) {
+    }
+
+    tryLogin(type) {
+        console.log('trying login type: ' + type);
+        if (type === 'email') {
+            const mail = localStorage.get('esintLoginMail');
+            const pwd = localStorage.get('esintLoginMail');
+            return Observable.fromPromise(this.logInEmail(mail, pwd)).map(r => {
+                    return true;
+                },
+                e => {
+                    return false;
+                });
+        } else {
+            return Observable.fromPromise(this.logInWithProvider(type)).map(r => {
+                console.log('2 got result');
+                return true;
+            },
+            e => {
+                console.log('2 got error');
+                return false;
+            });
+        }
     }
 
     setLoggedIn(user: firebase.User | null) {
@@ -53,6 +78,8 @@ export class AuthService {
             localStorage.setItem('esintAuth', 'facebook');
             provider = new firebase.auth.FacebookAuthProvider()
         }
+
+        console.log('signing in with popup');
         return this.auth.auth.signInWithPopup(provider).then(
             result => {
                 this.setLoggedIn(result.user);

@@ -17,13 +17,14 @@ export class GroupsService {
     getUserGroups(uid) {
         const groups$ = new ReplaySubject();
         this.db.list('users/' + uid + '/groups').subscribe(gList => {
-            const groups = [];
+            let groups = [];
             gList.forEach(group => {
                 this.db.object('groups/' + group.$key).subscribe(g => {
+                    groups = groups.filter(fg => fg.$key !== g.$key);
                     groups.push(g);
+                    groups$.next(groups);
                 });
             });
-            groups$.next(groups);
         });
         return groups$;
     }
@@ -69,7 +70,7 @@ export class GroupsService {
         const items = this.db.list('/groups');
         return Observable.fromPromise(items.push(g)).map(
             v => {
-                return v.path.pieces_[1];
+                return v.key;
             }
         )
     }

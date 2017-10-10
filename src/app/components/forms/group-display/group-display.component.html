@@ -1,0 +1,25 @@
+<mat-toolbar class="card-header-toolbar">
+    <span>{{ group.name }}</span>
+</mat-toolbar>
+<mat-card>
+    <mat-card-content>
+        <mat-list>
+            <h3 mat-subheader class="label-header" *ngIf="group.description">Description</h3>
+            <mat-list-item *ngIf="group.description">
+                <h4 mat-line>{{ group.description }}</h4>
+            </mat-list-item>
+            <h3 mat-subheader class="label-header">Users</h3>
+            <mat-list-item *ngFor="let u of userList">
+                <mat-icon mat-list-icon *ngIf="u.photoUrl">
+                    <img mat-fab-image class="avatar" style="border-radius: 12px;" [src]="u.photoUrl" onerror="brokenImg(this);">
+                </mat-icon>
+                <h4 mat-line>{{ u.displayName }}</h4>
+            </mat-list-item>
+        </mat-list>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button (click)="leaveGroup()">Leave</button>
+        <a mat-raised-button *ngIf="group.users[config.userId] == 'creator'" [routerLink]="'/edit-group/'+group.$key">Edit</a>
+        <button mat-raised-button *ngIf="group.users[config.userId] == 'creator'" (click)="inviteGroup()">Invite</button>
+    </mat-card-actions>
+</mat-card>

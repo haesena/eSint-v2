@@ -1,8 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Group} from '../../../models/group';
-import {GroupsService} from '../../../services/firebase/groups.service';
-import {UserService} from '../../../services/firebase/user.service';
-import {User} from '../../../models/user';
 import {Location} from '@angular/common';
 
 @Component({
@@ -13,23 +10,13 @@ import {Location} from '@angular/common';
 export class GroupFormComponent implements OnInit {
     @Input() group: Group = null;
     @Output() saveEvent: EventEmitter<any> = new EventEmitter();
-    public readOnly: boolean;
-    public userList = [];
 
-    constructor(public groupService: GroupsService, public userService: UserService, private loc: Location) {
+    constructor(private loc: Location) {
     }
 
     ngOnInit() {
         if (this.group == null) {
             this.group = new Group();
-        }
-
-        this.readOnly = this.saveEvent.observers.length === 0;
-
-        if (this.readOnly) {
-            this.groupService.getGroupUsers(this.group.$key).subscribe((uList: User[]) => {
-                this.userList = uList;
-            });
         }
     }
 
@@ -40,5 +27,4 @@ export class GroupFormComponent implements OnInit {
     cancel() {
         this.loc.back();
     }
-
 }

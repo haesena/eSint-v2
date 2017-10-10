@@ -6,6 +6,8 @@ import {Configuration} from '../../../configuration';
 import {InvitesService} from '../../../services/firebase/invites.service';
 import {MatDialog} from '@angular/material';
 import {InviteDialogComponent} from '../../partials/invite-dialog/invite-dialog.component';
+import {Group} from '../../../models/group';
+import {ConfirmDialogComponent} from '../../partials/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-manage-groups',
@@ -25,19 +27,26 @@ export class ManageGroupsComponent implements OnInit {
         });
     }
 
-    leaveGroup(gid) {
-        this.groupsService.removeUserFromGroup(gid, this.config.userId);
-        this.userService.removeGroupFromUser(this.config.userId, gid);
+    leaveGroup(group: Group) {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            data: {confirmMessage: 'Are you sure you want to leave this group?'}
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result === true) {
+                this.groupsService.removeUserFromGroup(group.$key, this.config.userId);
+                this.userService.removeGroupFromUser(this.config.userId, group.$key);
+            }
+        });
     }
 
-    inviteGroup(gid, gName) {
+    inviteGroup(group: Group) {
         this.userService.user$.subscribe(u => {
-            this.inviteService.getInviteForGroup(gid, u.displayName, gName).subscribe(i => {
+            this.inviteService.getInviteForGroup(group.$key, u.displayName, group.name).subscribe(i => {
                 const dialogRef = this.dialog.open(InviteDialogComponent, {
                     data: {invite: i}
                 });
             });
         });
     }
-
 }

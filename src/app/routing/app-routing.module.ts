@@ -6,7 +6,6 @@ import {AuthGuard} from './auth-guard.service';
 import {EmailComponent} from '../components/login/email/email.component';
 import {SignupComponent} from '../components/login/signup/signup.component';
 import {SettingsComponent} from '../components/pages/settings/settings.component';
-import {NewGroupComponent} from '../components/pages/new-group/new-group.component';
 import {EditGroupComponent} from '../components/pages/edit-group/edit-group.component';
 import {ManageGroupsComponent} from '../components/pages/manage-groups/manage-groups.component';
 import {MyListComponent} from '../components/pages/my-list/my-list.component';
@@ -40,11 +39,6 @@ const appRoutes: Routes = [
         path: 'start',
         canActivate: [AuthGuard],
         component: StartComponent
-    },
-    {
-        path: 'new-group',
-        canActivate: [AuthGuard],
-        component: NewGroupComponent
     },
     {
         path: 'manage-groups',

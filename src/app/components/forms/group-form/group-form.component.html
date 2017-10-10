@@ -1,27 +1,10 @@
-<div *ngIf="!readOnly; else readonlyForm">
-    <form class="group-form" *ngIf="group">
-        <mat-form-field class="example-full-width">
-            <input matInput placeholder="Name" [(ngModel)]="group.name" name="gName">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-            <input matInput placeholder="Description" [(ngModel)]="group.description" name="gDescription">
-        </mat-form-field>
-        <button mat-raised-button color="accent" (click)="save()">Save</button>
-        <button mat-raised-button color="accent" (click)="cancel()">Cancel</button>
-    </form>
-</div>
-<ng-template #readonlyForm>
-    <mat-list>
-        <h3 mat-subheader class="label-header" *ngIf="group.description">Description</h3>
-        <mat-list-item *ngIf="group.description">
-            <h4 mat-line>{{ group.description }}</h4>
-        </mat-list-item>
-        <h3 mat-subheader class="label-header">Users</h3>
-        <mat-list-item *ngFor="let u of this.userList">
-            <mat-icon mat-list-icon *ngIf="u.photoUrl">
-                <img mat-fab-image class="avatar" style="border-radius: 12px;" [src]="u.photoUrl" onerror="brokenImg(this);">
-            </mat-icon>
-            <h4 mat-line>{{ u.displayName }}</h4>
-        </mat-list-item>
-    </mat-list>
-</ng-template>
+<form class="group-form" *ngIf="group">
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Name" [(ngModel)]="group.name" name="gName">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Description" [(ngModel)]="group.description" name="gDescription">
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="save()">Save</button>
+    <button mat-raised-button color="accent" (click)="cancel()">Cancel</button>
+</form>

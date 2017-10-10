@@ -17,7 +17,7 @@
             <span class="space-filler"></span>
         </a>
     </span>
-    <a mat-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="clicked()">
+    <a mat-list-item routerLink="/edit-group/new" routerLinkActive="route-active" (click)="clicked()">
         <mat-icon class="menu-icon">add</mat-icon>
         New group
     </a>
@@ -29,7 +29,7 @@
 </mat-nav-list>
 <ng-template #no_groups>
     <mat-nav-list class="side-list">
-        <a mat-list-item routerLink="/new-group" routerLinkActive="route-active" (click)="clicked()">
+        <a mat-list-item routerLink="/edit-group/new" routerLinkActive="route-active" (click)="clicked()">
             <mat-icon class="menu-icon">add</mat-icon>
             New group
         </a>
