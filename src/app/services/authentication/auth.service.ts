@@ -20,6 +20,10 @@ export class AuthService {
                 private router: Router) {
     }
 
+    refreshLogin() {
+        // this.auth
+    }
+
     tryLogin(type) {
         console.log('trying login type: ' + type);
         if (type === 'email') {
@@ -66,7 +70,7 @@ export class AuthService {
     };
 
     authState() {
-        return this.auth.authState;
+        return this.auth.idToken;
     };
 
     logInWithProvider(type: string): firebase.Promise<any> {
@@ -81,6 +85,7 @@ export class AuthService {
 
         return this.auth.auth.signInWithPopup(provider).then(
             result => {
+                console.log(result);
                 this.setLoggedIn(result.user);
             },
             error => {

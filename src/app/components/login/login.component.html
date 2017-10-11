@@ -1,4 +1,4 @@
-<mat-card class="form-container">
+<mat-card class="form-container" *ngIf="!loggingIn; else loginLoader">
     <button class="fullwidth-button" mat-raised-button (click)="facebookLogin()" id="fb">Login with Facebook</button>
     <br>
     <button class="fullwidth-button" mat-raised-button (click)="googleLogin()" id="google">Login with Google</button>
@@ -6,3 +6,6 @@
     <button class="fullwidth-button" mat-raised-button routerLink="/login-email" id="email">Email</button>
 </mat-card>
 
+<ng-template #loginLoader>
+    Logging in...
+</ng-template>

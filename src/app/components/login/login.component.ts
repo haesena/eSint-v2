@@ -1,8 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-
-import {Router} from '@angular/router';
-import {Configuration} from '../../configuration';
 import {AuthService} from '../../services/authentication/auth.service';
 
 @Component({
@@ -12,6 +8,8 @@ import {AuthService} from '../../services/authentication/auth.service';
 })
 export class LoginComponent implements OnInit {
 
+    public loggingIn = false;
+
     constructor(private auth: AuthService) {
     }
 
@@ -19,12 +17,14 @@ export class LoginComponent implements OnInit {
     }
 
     googleLogin() {
+        this.loggingIn = true;
         this.auth.logInWithProvider('google').then(
             result => this.auth.redirectAfterLogin()
         );
     }
 
     facebookLogin() {
+        this.loggingIn = true;
         this.auth.logInWithProvider('facebook').then(
             result => this.auth.redirectAfterLogin()
         );

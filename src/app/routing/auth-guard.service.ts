@@ -6,6 +6,7 @@ import {
     RouterStateSnapshot
 } from '@angular/router';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/take';
 
 import {AngularFireAuth} from 'angularfire2/auth';
 import {Observable} from 'rxjs/Observable';
@@ -19,16 +20,10 @@ export class AuthGuard implements CanActivate {
     constructor(private router: Router, private auth: AuthService, private config: Configuration) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        return this.auth.authState().map(auth => {
+        return this.auth.authState().take(1).map(auth => {
             this.auth.setLoggedIn(auth);
             if (auth == null) {
-                // const a = localStorage.getItem('esintAuth');
-                // if (a !== null) {
-                //     return this.auth.tryLogin(a);
-                // } else {
-                //     this.router.navigate(['/login']);
-                //     return false;
-                // }
+                this.router.navigate(['/login']);
                 return false;
             } else {
                 return true;
