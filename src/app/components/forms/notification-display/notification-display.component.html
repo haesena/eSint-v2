@@ -1,0 +1,10 @@
+<!--<mat-list-item class="notif-list-item">-->
+    <!--<mat-icon mat-list-icon>folder</mat-icon>-->
+    <!--<h4 mat-line>{{ notification.msg }}</h4>-->
+<!--</mat-list-item>-->
+<mat-card>
+    {{ notification.msg }}
+    <mat-card-actions *ngIf="!notification.seen">
+        <button mat-raised-button (click)="markAsRead()">Mark as read</button>
+    </mat-card-actions>
+</mat-card>

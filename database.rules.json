@@ -23,7 +23,17 @@
       "$groupId": {
         ".read": "root.child('users').child(auth.uid).child('groups').child($groupId).exists()",
         "$userId": {
-          ".write": "$userId === auth.uid"
+          "name": {
+            ".write": "$userId === auth.uid"
+          },
+          "wishes": {
+            ".write": "$userId === auth.uid"
+          },
+          "subscriptions": {
+            "$subscriber": {
+              ".write": "$subscriber === auth.uid"
+            }
+          }
         }
       }
     },
@@ -49,6 +59,12 @@
           ".read": "root.child('users').child(auth.uid).child('groups').child($groupId).exists() && $userId === auth.uid",
           ".write": "root.child('users').child(auth.uid).child('groups').child($groupId).exists() && $userId === auth.uid"
         }
+      }
+    },
+    "notifications": {
+      "$userId": {
+        ".read": "$userId === auth.uid",
+        ".write": "$userId === auth.uid"
       }
     }
   }

@@ -4,7 +4,7 @@
 
 $esint-app-primary: mat-palette($mat-red);
 $esint-app-accent:  mat-palette($mat-red, A200, A100, A400);
-$esint-app-warn:    mat-palette($mat-yellow);
+$esint-app-warn:    mat-palette($mat-grey,  A200, A100, A400);
 
 $esint-app-theme: mat-light-theme($esint-app-primary, $esint-app-accent, $esint-app-warn);
 

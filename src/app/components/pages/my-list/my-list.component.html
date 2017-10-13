@@ -1,7 +1,7 @@
 <mat-toolbar class="card-header-toolbar">
     <span (click)="editName = true" *ngIf="!editName">{{(wishlist$|async)?.name}}</span>
     <mat-form-field class="full-width" style="width: 100%;" *ngIf="editName">
-        <input mdInput required="true" [ngModel]='(wishlist$|async)?.name'
+        <input matInput required="true" [ngModel]='(wishlist$|async)?.name'
                (ngModelChange)="wishlist$.update({name  : $event})" name="email">
     </mat-form-field>
 </mat-toolbar>

@@ -71,3 +71,6 @@ body {
     width: 100%;
 }
 
+.route-active {
+    color: #ee1400;
+}

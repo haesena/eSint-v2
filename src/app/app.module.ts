@@ -14,7 +14,8 @@ import {
     MatInputModule,
     MatDialogModule,
     MatMenuModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSlideToggleModule
 } from '@angular/material';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -28,6 +29,8 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 // Routing
 import { AppRoutingModule } from './routing/app-routing.module';
 import { AuthGuard } from './routing/auth-guard.service';
+import { ActiveGroupGuard } from './routing/active-group-guard.service';
+import { InviteGuard } from './routing/invite-guard.service';
 import { AuthService } from './services/authentication/auth.service';
 
 // Login-Components
@@ -35,13 +38,30 @@ import { LoginComponent } from './components/login/login.component';
 import { EmailComponent } from './components/login/email/email.component';
 import { SignupComponent } from './components/login/signup/signup.component';
 
-// Page-Components
+// Page Components
 import { StartComponent } from './components/pages/start/start.component';
 import { SettingsComponent } from './components/pages/settings/settings.component';
-import { GroupFormComponent } from './components/forms/group-form/group-form.component';
 import { EditGroupComponent } from './components/pages/edit-group/edit-group.component';
 import { ManageGroupsComponent } from './components/pages/manage-groups/manage-groups.component';
 import { MyListComponent } from './components/pages/my-list/my-list.component';
+import { InviteComponent } from './components/pages/invite/invite.component';
+import { EditWishComponent } from './components/pages/edit-wish/edit-wish.component';
+import { WishlistComponent } from './components/pages/wishlist/wishlist.component';
+import { MyGiftsComponent } from './components/pages/my-gifts/my-gifts.component';
+import { EditGiftComponent } from './components/pages/edit-gift/edit-gift.component';
+import { NotificationsComponent } from './components/pages/notifications/notifications.component';
+
+// Display Components
+import { GroupDisplayComponent } from './components/forms/group-display/group-display.component';
+import { GroupFormComponent } from './components/forms/group-form/group-form.component';
+import { WishDisplayComponent } from './components/forms/wish-display/wish-display.component';
+import { WishFormComponent } from './components/forms/wish-form/wish-form.component';
+import { GiftDisplayComponent } from './components/forms/gift-display/gift-display.component';
+import { GiftFormComponent } from './components/forms/gift-form/gift-form.component';
+
+// Dialog Components
+import { InviteDialogComponent } from './components/partials/invite-dialog/invite-dialog.component';
+import { ConfirmDialogComponent } from './components/partials/confirm-dialog/confirm-dialog.component';
 
 // Menu Components
 import { GroupSelectComponent } from './components/partials/group-select/group-select.component';
@@ -53,20 +73,9 @@ import { InvitesService } from './services/firebase/invites.service';
 import { UserService } from './services/firebase/user.service';
 import { WishlistsService } from './services/firebase/wishlists.service';
 import { GiftsService } from './services/firebase/gifts.service';
-import { InviteDialogComponent } from './components/partials/invite-dialog/invite-dialog.component';
-import { InviteComponent } from './components/pages/invite/invite.component';
-import { WishFormComponent } from './components/forms/wish-form/wish-form.component';
-import {ActiveGroupGuard} from './routing/active-group-guard.service';
-import {InviteGuard} from './routing/invite-guard.service';
-import { EditWishComponent } from './components/pages/edit-wish/edit-wish.component';
-import { WishDisplayComponent } from './components/forms/wish-display/wish-display.component';
-import { WishlistComponent } from './components/pages/wishlist/wishlist.component';
-import { MyGiftsComponent } from './components/pages/my-gifts/my-gifts.component';
-import { GiftDisplayComponent } from './components/forms/gift-display/gift-display.component';
-import { EditGiftComponent } from './components/pages/edit-gift/edit-gift.component';
-import { GiftFormComponent } from './components/forms/gift-form/gift-form.component';
-import { GroupDisplayComponent } from './components/forms/group-display/group-display.component';
-import { ConfirmDialogComponent } from './components/partials/confirm-dialog/confirm-dialog.component';
+import { NotificationsService } from './services/firebase/notifications.service';
+import { NotificationDisplayComponent } from './components/forms/notification-display/notification-display.component';
+
 
 @NgModule({
     declarations: [
@@ -93,7 +102,9 @@ import { ConfirmDialogComponent } from './components/partials/confirm-dialog/con
         EditGiftComponent,
         GiftFormComponent,
         GroupDisplayComponent,
-        ConfirmDialogComponent
+        ConfirmDialogComponent,
+        NotificationsComponent,
+        NotificationDisplayComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -110,6 +121,7 @@ import { ConfirmDialogComponent } from './components/partials/confirm-dialog/con
         MatDialogModule,
         MatMenuModule,
         MatSelectModule,
+        MatSlideToggleModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         AngularFireAuthModule,
@@ -126,6 +138,7 @@ import { ConfirmDialogComponent } from './components/partials/confirm-dialog/con
         InvitesService,
         WishlistsService,
         GiftsService,
+        NotificationsService,
         Configuration
     ],
     entryComponents: [

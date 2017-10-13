@@ -16,6 +16,7 @@ import {EditWishComponent} from '../components/pages/edit-wish/edit-wish.compone
 import {WishlistComponent} from '../components/pages/wishlist/wishlist.component';
 import {MyGiftsComponent} from '../components/pages/my-gifts/my-gifts.component';
 import {EditGiftComponent} from '../components/pages/edit-gift/edit-gift.component';
+import {NotificationsComponent} from '../components/pages/notifications/notifications.component';
 
 const appRoutes: Routes = [
     {
@@ -54,6 +55,11 @@ const appRoutes: Routes = [
         path: 'settings',
         canActivate: [AuthGuard],
         component: SettingsComponent
+    },
+    {
+        path: 'notifications',
+        canActivate: [AuthGuard],
+        component: NotificationsComponent
     },
     {
         path: 'my-list',

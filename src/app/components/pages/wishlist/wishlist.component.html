@@ -10,4 +10,8 @@
                               (deleteEvent)="untakeWish($event)"></app-wish-display>
         </div>
     </mat-list>
+    <mat-card-actions>
+        <button mat-raised-button *ngIf="!subscribedToWishlist" (click)="subscribe()">Subscribe to this wishlist</button>
+        <button mat-raised-button *ngIf="subscribedToWishlist" (click)="unsubscribe()">Unsubscribe</button>
+    </mat-card-actions>
 </mat-card>

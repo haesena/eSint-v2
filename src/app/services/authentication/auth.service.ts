@@ -20,33 +20,6 @@ export class AuthService {
                 private router: Router) {
     }
 
-    refreshLogin() {
-        // this.auth
-    }
-
-    tryLogin(type) {
-        console.log('trying login type: ' + type);
-        if (type === 'email') {
-            const mail = localStorage.get('esintLoginMail');
-            const pwd = localStorage.get('esintLoginMail');
-            return Observable.fromPromise(this.logInEmail(mail, pwd)).map(r => {
-                    return true;
-                },
-                e => {
-                    return false;
-                });
-        } else {
-            return Observable.fromPromise(this.logInWithProvider(type)).map(r => {
-                console.log('2 got result');
-                return true;
-            },
-            e => {
-                console.log('2 got error');
-                return false;
-            });
-        }
-    }
-
     setLoggedIn(user: firebase.User | null) {
         if (user == null) {
             this.loggedIn = false;
@@ -64,7 +37,6 @@ export class AuthService {
     };
 
     logOut() {
-        localStorage.setItem('esintAuth', null);
         this.setLoggedIn(null);
         this.auth.auth.signOut();
     };
@@ -76,16 +48,13 @@ export class AuthService {
     logInWithProvider(type: string): firebase.Promise<any> {
         let provider = null;
         if (type === 'google') {
-            localStorage.setItem('esintAuth', 'google');
             provider = new firebase.auth.GoogleAuthProvider();
         } else if (type === 'facebook') {
-            localStorage.setItem('esintAuth', 'facebook');
             provider = new firebase.auth.FacebookAuthProvider()
         }
 
         return this.auth.auth.signInWithPopup(provider).then(
             result => {
-                console.log(result);
                 this.setLoggedIn(result.user);
             },
             error => {
@@ -95,7 +64,6 @@ export class AuthService {
     };
 
     logInEmail(email: string, password: string) {
-        localStorage.setItem('esintAuth', 'email');
         return this.auth.auth.signInWithEmailAndPassword(email, password)
             .then(
                 user => this.setLoggedIn(user)

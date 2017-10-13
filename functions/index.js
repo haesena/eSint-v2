@@ -2,11 +2,49 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
+exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wid}').onCreate(function(event) {
+
+    const gid = event.params.gid;
+    const uid = event.params.uid;
+    const wid = event.params.wid;
+
+    const wish = event.data.val();
+
+    var d = new Date();
+
+    admin.database().ref('wishlists/' + gid + '/' + uid + '/subscriptions').once("value").then(function(_subscriptions) {
+        subscriptions = _subscriptions.val();
+
+        admin.database().ref('users/' + uid).once("value").then(function(_user) {
+            var user = _user.val();
+
+            // iterate over users who subscribed to this wishlist
+            for(var u in subscriptions) {
+                if (!subscriptions.hasOwnProperty(u)) continue;
+                if (subscriptions[u] === true) {
+                    // Write Notification
+                    admin.database().ref('notifications/' + u).push({
+                        msg: user.displayName + ' added a new wish: ' + wish.name + '!',
+                        refUser: user,
+                        seen: false,
+                        time: d.toISOString()
+                    });
+                }
+            }
+        });
+    });
+
+    return true;
+    // 'wishlists/-KvJNNzbBagFeATemS4J/jLTIgS9vSwM4c6sZLFs83DRCISj1/wishes/test', {params: {gid: '-KvJNNzbBagFeATemS4J', uid: 'jLTIgS9vSwM4c6sZLFs83DRCISj1', wid: 'test'}}
+});
+
 exports.wishMarkedAsDeleted = functions.database.ref('/deleteFlag/{gid}/{uid}/{wid}').onCreate(function(event) {
 
     const gid = event.params.gid;
     const uid = event.params.uid;
     const wid = event.params.wid;
+
+    var d = new Date();
 
     admin.database().ref('takenFlag/' + gid + '/' + uid + '/' + wid).once("value").then(function(t) {
         // check if the wish to delete has already been taken by someone
@@ -45,7 +83,9 @@ exports.wishMarkedAsDeleted = functions.database.ref('/deleteFlag/{gid}/{uid}/{w
                                     // Write Notification
                                     admin.database().ref('notifications/' + gifts[u][g]['user']).push({
                                         msg: user.displayName + ' deleted the wish "' + wish.name + '". Hopefully you did not already buy the gift...',
-                                        seen: false
+                                        refUser: user,
+                                        seen: false,
+                                        time: d.toISOString()
                                     });
                                 });
                             });

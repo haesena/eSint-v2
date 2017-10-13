@@ -7,6 +7,12 @@
         </mat-toolbar>
         <app-group-select *ngIf="auth.loggedIn == true" (linkClicked)="collapse()"></app-group-select>
         <app-list-select *ngIf="config.activeGroup"></app-list-select>
+        <mat-nav-list class="side-list">
+            <a mat-list-item routerLink="/notifications" routerLinkActive="route-active">
+                <mat-icon class="menu-icon">notifications</mat-icon>
+                Notifications
+            </a>
+        </mat-nav-list>
     </mat-sidenav>
     <mat-toolbar color="primary">
         <button mat-icon-button (click)="sidenav.toggle()" *ngIf="sidenav_mode == 'over' && auth.loggedIn == true">

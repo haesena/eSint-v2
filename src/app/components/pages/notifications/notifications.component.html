@@ -1,0 +1,12 @@
+<mat-toolbar>Your notifications</mat-toolbar>
+<mat-list *ngIf="notifications.length; else no_notifications" style="padding-top: 0;">
+    <div *ngFor="let notification of notifications">
+        <app-notification-display [notification]="notification" (markAsReadEvent)="markAsread($event)"></app-notification-display>
+    </div>
+    <!--<mat-divider></mat-divider>-->
+</mat-list>
+<ng-template #no_notifications>
+    <mat-card>
+        No notifications to display yet.
+    </mat-card>
+</ng-template>
