@@ -14,18 +14,17 @@ export class GroupsService {
     }
 
     getUserGroups(uid) {
-        const groups$ = new ReplaySubject();
-        this.db.list('users/' + uid + '/groups').subscribe(gList => {
-            let groups = [];
+        return this.db.list('users/' + uid + '/groups').map(gList => {
             gList.forEach(group => {
+                group.users = [];
                 this.db.object('groups/' + group.$key).subscribe(g => {
-                    groups = groups.filter(fg => fg.$key !== g.$key);
-                    groups.push(g);
-                    groups$.next(groups);
+                    group.name = g.name;
+                    group.description = g.description;
+                    group.users = g.users;
                 });
             });
+            return gList;
         });
-        return groups$;
     }
 
     getUserGroupIds(uid) {
@@ -33,18 +32,15 @@ export class GroupsService {
     }
 
     getGroupUsers(gid) {
-        const users$ = new ReplaySubject();
-        this.db.list('groups/' + gid + '/users').subscribe(uList => {
-            let users = [];
+        return this.db.list('groups/' + gid + '/users').map(uList => {
             uList.forEach(user => {
                 this.db.object('users/' + user.$key).subscribe(u => {
-                    users = users.filter(_u => _u.$key !== u.$key);
-                    users.push(u);
-                    users$.next(users);
+                    user.displayName = u.displayName;
+                    user.photoUrl = u.photoUrl;
                 });
             });
+            return uList;
         });
-        return users$;
     }
 
     removeUserFromGroup(gid, uid) {

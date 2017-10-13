@@ -1,8 +1,12 @@
-<!--<mat-list-item class="notif-list-item">-->
-    <!--<mat-icon mat-list-icon>folder</mat-icon>-->
-    <!--<h4 mat-line>{{ notification.msg }}</h4>-->
-<!--</mat-list-item>-->
 <mat-card>
+    <mat-card-header>
+        <div mat-card-avatar *ngIf="notification.avatar">
+            <img class="avatar" [src]="notification.avatar" onerror="brokenImg(this);">
+        </div>
+        <mat-card-title>
+ {{ notification.title }}</mat-card-title>
+        <mat-card-subtitle>{{ notification.time | date:'dd.MM.y HH:mm' }}</mat-card-subtitle>
+    </mat-card-header>
     {{ notification.msg }}
     <mat-card-actions *ngIf="!notification.seen">
         <button mat-raised-button (click)="markAsRead()">Mark as read</button>

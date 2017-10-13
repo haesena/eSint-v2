@@ -9,7 +9,18 @@ export class NotificationsService {
     }
 
     getMyNotifications() {
-        return this.db.list('notifications/' + this.config.userId);
+        return this.db.list('notifications/' + this.config.userId, {
+            query: {
+                orderByChild: 'time'
+            }
+        }).map(nList => {
+            nList.forEach(n => {
+                this.db.object('users/' + n.refUser).subscribe(u => {
+                    n.avatar = u.photoUrl;
+                });
+            });
+            return nList;
+        });
     }
 
     markAsRead(nid) {

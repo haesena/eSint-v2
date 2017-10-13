@@ -11,41 +11,26 @@ export class WishlistsService {
     constructor(private db: AngularFireDatabase, private config: Configuration) {
     }
 
-    createWishlist(name) {
-        return this.db.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/name').update(name)
-    }
-
     getWishes(uid) {
-        const wishes$ = new ReplaySubject();
-        this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes').subscribe(wList => {
-            const wishes = [];
+        return this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes').map(wList => {
             wList.forEach(wish => {
                 this.db.object('deleteFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(d => {
                     wish.deleted = (d.marked === 'yes');
                 });
-                wishes.push(wish);
             });
-            wishes$.next(wishes);
+            return wList
         });
-        return wishes$;
     }
 
     getWishesWithAdditionalInfos(uid) {
-        const wishes$ = new ReplaySubject();
-        this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes').subscribe(wList => {
-            const wishes = [];
+        return this.getWishes(uid).map(wList => {
             wList.forEach(wish => {
                 this.db.object('takenFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(t => {
                     wish.taken = t.$value;
                 });
-                this.db.object('deleteFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(d => {
-                    wish.deleted = (d.marked === 'yes');
-                });
-                wishes.push(wish);
             });
-            wishes$.next(wishes);
+            return wList
         });
-        return wishes$;
     }
 
     getWish(wid) {
@@ -76,24 +61,13 @@ export class WishlistsService {
 
     getWishlistOfActiveGroup() {
         return this.config.activeGroup$.switchMap(ag => {
-            const lists$ = new ReplaySubject();
-            this.db.list('wishlists/' + ag).first().subscribe(lists => {
-                const wLists = [];
+            return this.db.list('wishlists/' + ag).first().map(lists => {
                 lists.forEach(list => {
-                    if (list.$key === this.config.userId) {
-                        return;
-                    }
-                    this.db.object('users/' + list.$key).subscribe(u => {
-                        wLists.push({
-                            name: list.name,
-                            photoUrl: u.photoUrl,
-                            lid: list.$key
-                        });
-                    });
+                    this.db.object('users/' + list.$key).subscribe(u => list.photoUrl = u.photoUrl);
                 });
-                lists$.next(wLists);
+                // filter out the list of the current user
+                return lists.filter(l => l.$key !== this.config.userId);
             });
-            return lists$;
         });
     }
 

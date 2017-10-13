@@ -1,6 +1,6 @@
 <mat-list-item *ngIf="gift.name">
     <mat-icon mat-list-icon *ngIf="gift.userObj">
-        <img mat-fab-image class="avatar" style="border-radius: 12px;" [src]="gift.userObj.photoUrl" onerror="brokenImg(this);">
+        <img mat-fab-image class="avatar-small" [src]="gift.userObj.photoUrl" onerror="brokenImg(this);">
     </mat-icon>
     <h4 mat-line>
         {{ gift.name }}

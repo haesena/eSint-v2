@@ -1,7 +1,7 @@
 <mat-nav-list class="side-list">
     <a mat-list-item routerLink="/my-list" routerLinkActive="route-active">
         <mat-icon class="menu-icon">
-            <img mat-fab-image class="avatar" [src]="photoUrl" onerror="brokenImg(this);">
+            <img mat-fab-image class="avatar-small" [src]="photoUrl" onerror="brokenImg(this);">
         </mat-icon>
         My list
     </a>
@@ -12,9 +12,9 @@
         My gifts
     </a>
     <span *ngFor="let l of wishlists">
-        <a mat-list-item [routerLink]="'/wishlist/' + l.lid">
-        <mat-icon class="menu-icon">
-            <img mat-fab-image class="avatar" [src]="l.photoUrl" onerror="brokenImg(this);">
+        <a mat-list-item [routerLink]="'/wishlist/' + l.$key">
+        <mat-icon class="menu-icon" *ngIf="l.photoUrl">
+            <img mat-fab-image class="avatar-small" [src]="l.photoUrl" onerror="brokenImg(this);">
         </mat-icon>
         {{ l.name }}
     </a>

@@ -15,7 +15,7 @@ export class NotificationsComponent implements OnInit {
 
     ngOnInit() {
         this.nService.getMyNotifications().subscribe(nList => {
-            this.notifications = nList;
+            this.notifications = nList.reverse();
         });
     }
 

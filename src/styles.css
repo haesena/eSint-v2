@@ -55,6 +55,12 @@ body {
     border-radius: 50%;
 }
 
+.avatar-small {
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+}
+
 .label-header {
     height: auto !important;
     padding-bottom: 0 !important;

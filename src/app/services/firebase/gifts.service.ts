@@ -14,23 +14,17 @@ export class GiftsService {
     }
 
     getMyGifts() {
-        const gifts$ = new ReplaySubject();
-        this.db.list('gifts/' + this.config.activeGroup + '/' + this.config.userId).subscribe(gList => {
-            const gifts = [];
+        return this.db.list('gifts/' + this.config.activeGroup + '/' + this.config.userId).map(gList => {
             gList.forEach(g => {
-                this.db.object('users/' + g.user).subscribe(u => {
-                    g['userObj'] = u;
-                });
+                this.db.object('users/' + g.user).subscribe(u => g.userObj = u);
                 if (g.wish) {
-                    this.db.object('wishlists/' + this.config.activeGroup + '/' + g.user + '/wishes/' + g.wish).subscribe(w => {
-                        g['name'] = w.name;
-                    });
+                    this.db.object('wishlists/' + this.config.activeGroup + '/' + g.user + '/wishes/' + g.wish)
+                        .subscribe(w => g.name = w.name);
                 }
-                gifts.push(g);
             });
-            gifts$.next(gifts);
+
+            return gList;
         });
-        return gifts$;
     }
 
     saveGift(gift) {

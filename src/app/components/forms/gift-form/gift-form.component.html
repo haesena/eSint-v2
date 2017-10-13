@@ -6,7 +6,7 @@
         <mat-select placeholder="For user" [(ngModel)]="gift.user" name="gUser">
             <mat-option *ngFor="let u of users" [value]="u.$key">
                 <mat-icon mat-list-icon *ngIf="u.photoUrl">
-                    <img mat-fab-image class="avatar" style="border-radius: 12px;" [src]="u.photoUrl" onerror="brokenImg(this);">
+                    <img mat-fab-image class="avatar-small" [src]="u.photoUrl" onerror="brokenImg(this);">
                 </mat-icon>
                 {{u.displayName}}
             </mat-option>
