@@ -6,13 +6,13 @@
         My list
     </a>
     <a mat-list-item routerLink="/my-gifts" routerLinkActive="route-active">
-        <mat-icon class="menu-icon">
+        <mat-icon class="menu-icon-gift">
             <i class="fa fa-gift"></i>
         </mat-icon>
         My gifts
     </a>
     <span *ngFor="let l of wishlists">
-        <a mat-list-item [routerLink]="'/wishlist/' + l.$key">
+        <a mat-list-item [routerLink]="'/wishlist/' + l.$key" routerLinkActive="route-active">
         <mat-icon class="menu-icon" *ngIf="l.photoUrl">
             <img mat-fab-image class="avatar-small" [src]="l.photoUrl" onerror="brokenImg(this);">
         </mat-icon>

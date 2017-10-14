@@ -18,8 +18,8 @@
         </mat-list>
     </mat-card-content>
     <mat-card-actions>
-        <button mat-raised-button (click)="leaveGroup()">Leave</button>
-        <a mat-raised-button *ngIf="group.users[config.userId] == 'creator'" [routerLink]="'/edit-group/'+group.$key">Edit</a>
-        <button mat-raised-button *ngIf="group.users[config.userId] == 'creator'" (click)="inviteGroup()">Invite</button>
+        <button mat-button color="primary" (click)="leaveGroup()">LEAVE</button>
+        <a mat-button color="primary" *ngIf="group.users[config.userId] == 'creator'" [routerLink]="'/edit-group/'+group.$key">EDIT</a>
+        <button mat-button color="primary" *ngIf="group.users[config.userId] == 'creator'" (click)="inviteGroup()">INVITE</button>
     </mat-card-actions>
 </mat-card>

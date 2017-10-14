@@ -1,9 +1,13 @@
 <mat-card *ngIf="this.userService.user$ | async">
     <div>
-        Welcome {{ (this.userService.user$ | async)?.displayName}}!
+        Welcome to eSint, the online wishlist-manager.<br>
+        <br>
+        Hello <b>{{ (this.userService.user$ | async)?.displayName}}</b>!
     </div>
     <div *ngIf="activeGroup; else no_groups">
         Active group: {{ activeGroup.name }}
     </div>
-    <ng-template #no_groups>You're in no groups yet...</ng-template>
+    <ng-template #no_groups>
+        You're in no groups yet. Start by <a routerLink="edit-group/new">creating a new group</a>.
+    </ng-template>
 </mat-card>

@@ -8,7 +8,7 @@ import {GiftsService} from '../../../services/firebase/gifts.service';
 })
 export class MyGiftsComponent implements OnInit {
 
-    public gifts;
+    public gifts = [];
 
     constructor(private gService: GiftsService) {
     }

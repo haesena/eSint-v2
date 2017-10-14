@@ -66,6 +66,12 @@
         ".read": "$userId === auth.uid",
         ".write": "$userId === auth.uid"
       }
+    },
+    "fcmTokens": {
+      "$userId": {
+        ".read": "$userId === auth.uid",
+        ".write": "$userId === auth.uid"
+      }
     }
   }
 }

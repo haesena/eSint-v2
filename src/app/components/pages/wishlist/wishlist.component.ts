@@ -14,14 +14,13 @@ import {AngularFireDatabase} from 'angularfire2/database';
 })
 export class WishlistComponent implements OnInit {
 
-    wishes;
-    myGifts = [];
-    wListName: string;
-    private lid: string;
-    subscribedToWishlist = false;
+    public wishes = [];
+    public myGifts = [];
+    public wListName: string;
+    public lid: string;
 
-    constructor(public wService: WishlistsService, public config: Configuration, private route: ActivatedRoute,
-                private gService: GiftsService, private nService: NotificationsService, private db: AngularFireDatabase) {
+    constructor(private wService: WishlistsService, public config: Configuration, private route: ActivatedRoute,
+                private gService: GiftsService, public nService: NotificationsService) {
     }
 
     ngOnInit() {
@@ -39,10 +38,6 @@ export class WishlistComponent implements OnInit {
             this.gService.getMyGiftIds().subscribe(gids => {
                 this.myGifts = gids.map(v => v.wish);
             });
-
-            this.nService.wishlistSubscribed(this.lid).subscribe(v => {
-                this.subscribedToWishlist = v.$value;
-            });
         });
     }
 
@@ -54,12 +49,8 @@ export class WishlistComponent implements OnInit {
         this.wService.untakeWish(this.config.activeGroup, this.lid, wish.$key);
     }
 
-    subscribe() {
-        this.nService.subscribeToWishlist(this.lid, true);
-    }
-
-    unsubscribe() {
-        this.nService.subscribeToWishlist(this.lid, false);
+    setSubscribed(value) {
+        this.nService.subscribeToWishlist(this.lid, value.checked);
     }
 
 }

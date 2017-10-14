@@ -1,5 +1,3 @@
-<div fxLayout='row' fxLayout.lt-lg="column" fxLayoutWrap class="container">
-    <div *ngFor="let g of groups" fxFlex="calc(50% - 1.6em)" style="margin-bottom: 0.8em;">
-       <app-group-display [group]="g" (inviteEvent)="inviteGroup($event)" (leaveEvent)="leaveGroup($event)"></app-group-display>
-    </div>
+<div *ngFor="let g of groups"style="margin-bottom: 0.8em;">
+   <app-group-display [group]="g" (inviteEvent)="inviteGroup($event)" (leaveEvent)="leaveGroup($event)"></app-group-display>
 </div>

@@ -5,4 +5,5 @@ export class User {
     photoUrl: string;
     groups: any;
     activeGroup: string;
+    notificationCount: number;
 }

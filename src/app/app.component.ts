@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
     sidenav_mode = 'side';
     @ViewChild('sidenav') private sidenav: MatDrawer;
     public photoUrl: string;
+    public notificationCount = 0;
 
     constructor(private _ngZone: NgZone, public auth: AuthService, public uService: UserService, public config: Configuration) {
     }
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
                     } else {
                         this.photoUrl = '../../assets/images/user-default.png';
                     }
+                    this.notificationCount = u.notificationCount;
                 });
             } else {
                 this.sidenav.close();

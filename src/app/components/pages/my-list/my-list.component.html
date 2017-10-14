@@ -9,13 +9,13 @@
     <mat-list>
         <div *ngFor="let w of wishes; let i = index;">
             <mat-divider *ngIf="i > 0"></mat-divider>
-            <app-wish-display [wish]="w" (deleteEvent)="deleteWish($event)" (restoreEvent)="restoreWish($event)" [myWish]="true"></app-wish-display>
+            <app-wish-display [wish]="w" (deleteEvent)="deleteWish($event)" [myWish]="true"></app-wish-display>
         </div>
     </mat-list>
-    <mat-card-content *ngIf="wishes && wishes.length === 0">
+    <mat-card-content *ngIf="wishes.length === 0">
         Your wishlist is empty, start by adding your first wish:
     </mat-card-content>
     <p>
-        <button mat-raised-button routerLink="/edit-wish/new">Add</button>
+        <button mat-button color="primary" routerLink="/edit-wish/new">ADD</button>
     </p>
 </mat-card>

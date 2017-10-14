@@ -12,14 +12,7 @@ export class WishlistsService {
     }
 
     getWishes(uid) {
-        return this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes').map(wList => {
-            wList.forEach(wish => {
-                this.db.object('deleteFlag/' + this.config.activeGroup + '/' + uid + '/' + wish.$key).subscribe(d => {
-                    wish.deleted = (d.marked === 'yes');
-                });
-            });
-            return wList
-        });
+        return this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes');
     }
 
     getWishesWithAdditionalInfos(uid) {
@@ -50,13 +43,7 @@ export class WishlistsService {
     }
 
     deleteWish(wid) {
-        this.db.object('deleteFlag/' + this.config.activeGroup + '/' + this.config.userId + '/' + wid).set({
-            marked: 'yes'
-        });
-    }
-
-    restoreWish(wid) {
-        this.db.object('deleteFlag/' + this.config.activeGroup + '/' + this.config.userId + '/' + wid).remove();
+        this.db.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wid).remove();
     }
 
     getWishlistOfActiveGroup() {

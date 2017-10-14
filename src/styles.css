@@ -42,7 +42,22 @@ body {
     margin:0.8em;
 }
 
+.inner-sidenav-content {
+    overflow: auto;
+    position: absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    top:64px;
+}
+
 .menu-icon {
+    padding-right: 0.5em;
+    height: 55%;
+}
+
+.menu-icon-gift {
+    margin-bottom: 10px;
     padding-right: 0.5em;
     height: 55%;
 }
@@ -78,5 +93,5 @@ body {
 }
 
 .route-active {
-    color: #ee1400;
+    color: #f44336 !important;
 }

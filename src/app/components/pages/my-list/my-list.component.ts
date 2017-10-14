@@ -13,7 +13,7 @@ import {ConfirmDialogComponent} from '../../partials/confirm-dialog/confirm-dial
 })
 export class MyListComponent implements OnInit {
     editName = false;
-    wishes;
+    public wishes = [];
     wishlist$;
     constructor(public wService: WishlistsService, public config: Configuration, private uService: UserService,
                 public dialog: MatDialog) {
@@ -35,7 +35,7 @@ export class MyListComponent implements OnInit {
     deleteWish(wish: Wish) {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             data: {confirmMessage: 'Are you sure you want to delete this wish? Another user may already have marked this ' +
-            'wish as taken. He mal even already have bought the gift!'}
+            'wish as taken. He may even already have bought the gift!'}
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -43,9 +43,5 @@ export class MyListComponent implements OnInit {
                 this.wService.deleteWish(wish.$key)
             }
         });
-    }
-
-    restoreWish(wish: Wish) {
-        this.wService.restoreWish(wish.$key)
     }
 }

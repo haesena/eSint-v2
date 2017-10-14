@@ -1,3 +1,18 @@
-.notif-list- {
-    background-color: white;
+.notification-new {
+    /*background-color: #faf3fb;*/
+}
+
+.new-badge {
+    background-color: #fd5555;
+    color: white;
+    border-radius: 4px;
+    padding: 0 4px;
+    margin-right: 5px;
+}
+
+.notification-card {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }

@@ -27,3 +27,21 @@
     /*margin: 10px;*/
 }
 
+.badge-container {
+    position:relative;
+}
+.badge {
+    position: absolute;
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
+    top: -3px;
+    right: 9px;
+    font-size: .6em;
+    background: #f44336;
+    color: white;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+    border-radius: 50%;
+    box-shadow: 0 0 1px #333;
+}

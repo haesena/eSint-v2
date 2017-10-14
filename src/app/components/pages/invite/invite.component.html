@@ -5,10 +5,10 @@
     <ng-template #show_invite>
         <p>{{config.invite.userName}} invited you to join the group {{config.invite.groupName}}</p>
         <div *ngIf="loggedIn">
-            <button mat-raised-button (click)="join()">Join !</button>
+            <button mat-button color="primary" (click)="join()">JOIN!</button>
         </div>
         <div *ngIf="!loggedIn">
-            <button mat-raised-button routerLink="/login">Log in!</button>
+            <button mat-button color="primary" routerLink="/login">LOG IN!</button>
         </div>
     </ng-template>
 </mat-card>

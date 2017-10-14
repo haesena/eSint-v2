@@ -3,7 +3,7 @@
     <p mat-line *ngIf="wish.linkURL" [ngClass]="{'taken':wish.taken, 'deleted':wish.deleted}">
         <a href="{{ wish.linkURL }}" target="_blank">{{ wish.linkTitle ? wish.linkTitle : wish.linkURL }}</a>
     </p>
-    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="myWish">
+    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="myWish && !wish.deleted">
         <mat-icon>more_vert</mat-icon>
     </button>
     <span *ngIf="!myWish">
@@ -22,10 +22,6 @@
         <button mat-menu-item (click)="deleteWish()" *ngIf="!wish.deleted">
             <mat-icon>delete</mat-icon>
             <span>Delete</span>
-        </button>
-        <button mat-menu-item (click)="restoreWish()" *ngIf="wish.deleted">
-            <mat-icon>delete_forever</mat-icon>
-            <span>Restore</span>
         </button>
     </mat-menu>
 </mat-list-item>

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationsService} from '../../../services/firebase/notifications.service';
+import {UserService} from '../../../services/firebase/user.service';
 
 @Component({
     selector: 'app-notifications',
@@ -10,13 +11,15 @@ export class NotificationsComponent implements OnInit {
 
     public notifications = [];
 
-    constructor(private nService: NotificationsService) {
+    constructor(private nService: NotificationsService, private uService: UserService) {
     }
 
     ngOnInit() {
         this.nService.getMyNotifications().subscribe(nList => {
-            this.notifications = nList.reverse();
+            this.notifications = nList.sort((a, b) => (a.time < b.time) ? 1 : -1);
         });
+
+        this.uService.user$.update({notificationCount: 0});
     }
 
     markAsread(notification) {

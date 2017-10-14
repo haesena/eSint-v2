@@ -2,111 +2,180 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
-exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wid}').onCreate(function(event) {
+exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wid}').onCreate(event => {
 
     const gid = event.params.gid;
     const uid = event.params.uid;
-    const wid = event.params.wid;
 
     const wish = event.data.val();
 
-    var d = new Date();
+    const d = new Date();
 
-    admin.database().ref('wishlists/' + gid + '/' + uid + '/subscriptions').once("value").then(function(_subscriptions) {
-        subscriptions = _subscriptions.val();
+    const groupPromise = admin.database().ref('groups/' + gid).once("value");
+    const userPromise = admin.database().ref('users/' + uid).once("value");
 
-        admin.database().ref('groups/' + gid).once("value").then(function(_group) {
-            var group = _group.val();
-            admin.database().ref('users/' + uid).once("value").then(function(_user) {
-                var user = _user.val();
+    return Promise.all([userPromise, groupPromise]).then((snapshots) => {
+        const user = snapshots[0].val();
+        const group = snapshots[1].val();
 
-                // iterate over users who subscribed to this wishlist
-                for(var u in subscriptions) {
-                    if (!subscriptions.hasOwnProperty(u)) continue;
-                    if (subscriptions[u] === true) {
-                        // Write Notification
-                        admin.database().ref('notifications/' + u).push({
-                            msg: user.displayName + ' added a new wish: ' + wish.name + '!',
-                            refUser: uid,
-                            seen: false,
-                            title: 'Group ' + group.name + ' - New wish',
-                            time: d.toISOString()
-                        });
-                    }
+        return admin.database().ref('wishlists/' + gid + '/' + uid + '/subscriptions').once("value").then(_subscriptions => {
+            const subscriptions = _subscriptions.val();
+
+            // iterate over users who subscribed to this wishlist
+            for (let u in subscriptions) {
+                if (!subscriptions.hasOwnProperty(u)) continue;
+                if (subscriptions[u] === true) {
+                    // Write Notification
+                    admin.database().ref('notifications/' + u).push({
+                        msg: user.displayName + ' added a new wish: ' + wish.name + '!',
+                        refUser: uid,
+                        seen: false,
+                        title: group.name + ' - New wish',
+                        time: d.toISOString()
+                    });
                 }
+            }
+
+            return true;
+        });
+    });
+
+    // 'wishlists/-KvJNNzbBagFeATemS4J/jLTIgS9vSwM4c6sZLFs83DRCISj1/wishes/test', {params: {gid: '-KvJNNzbBagFeATemS4J', uid: 'jLTIgS9vSwM4c6sZLFs83DRCISj1', wid: 'test'}}
+});
+
+
+exports.wishDeleted = functions.database.ref('/wishlists/{groupId}/{userId}/wishes/{wishId}').onDelete(event => processWishDeleted(event));
+
+function processWishDeleted(event) {
+
+    const groupId = event.params.groupId;
+    const userId = event.params.userId;
+    const wishId = event.params.wishId;
+
+    const wish = event.data.previous.val();
+
+    return admin.database().ref('takenFlag/' + groupId + '/' + userId + '/' + wishId).once("value").then(function (t) {
+        if (t.val() !== null) {
+            return getUserWhoTookWish(groupId, wishId).then(function (userAndGift) {
+                if (userAndGift === null) {
+                    return false;
+                }
+
+                const userWhoTookIt = userAndGift[0];
+                const giftId = userAndGift[1];
+
+                return createNotificationForWishDeletion(userId, groupId, wish.name).then(notification => {
+
+                    // update the gift, it no longer contains the reference to the wish, but the fields directly (as with manually added wishes)
+                    const newGiftFields = {
+                        user: userId,
+                        name: wish.name,
+                        deletedByUser: true
+                    };
+
+                    return admin.database().ref('gifts/' + groupId + '/' + userWhoTookIt + '/' + giftId).set(newGiftFields)
+                        .then(() => {
+                            // delete the taken-flag
+                            admin.database().ref('takenFlag/' + groupId + '/' + userId + '/' + wishId).remove();
+
+                            // insert notification
+                            admin.database().ref('notifications/' + userWhoTookIt).push(notification);
+
+                            return true;
+                        });
+                });
+            });
+        } else {
+            return true;
+        }
+    });
+
+    // 'wishlists/-KvJNNzbBagFeATemS4J/jLTIgS9vSwM4c6sZLFs83DRCISj1/wishes/-KwR2g-3_RVWA1SRZznH', {params: {groupId: '-KvJNNzbBagFeATemS4J', userId: 'jLTIgS9vSwM4c6sZLFs83DRCISj1', wishId: '-KwR2g-3_RVWA1SRZznH'}}
+
+}
+
+function createNotificationForWishDeletion(userId, groupId, wishName) {
+
+    const d = new Date();
+
+    const userPromise = admin.database().ref('users/' + userId).once("value");
+    const groupPromise = admin.database().ref('groups/' + groupId).once("value");
+
+    return Promise.all([userPromise, groupPromise]).then((snapshots) => {
+        const user = snapshots[0].val();
+        const group = snapshots[1].val();
+
+        return {
+            title: group.name + ' - Wish deleted',
+            msg: user.displayName + ' deleted the wish "' + wishName + '". Hopefully you did not already buy the gift...',
+            refUser: userId,
+            seen: false,
+            time: d.toISOString()
+        };
+    });
+}
+
+function getUserWhoTookWish(groupId, wishId) {
+    return admin.database().ref('gifts/' + groupId).once("value").then(function (_data) {
+        const data = _data.val();
+
+        // go through all users
+        for (let u in data) {
+            if (!data.hasOwnProperty(u)) continue;
+
+            // go through all gifts from this user
+            for (let g in data[u]) {
+                if (!data[u].hasOwnProperty(g)) continue;
+
+                if (data[u][g]['wish'] === wishId) {
+                    return [u, g];
+                }
+            }
+        }
+
+        return null;
+    });
+}
+
+exports.fcmSend = functions.database.ref('/notifications/{uid}/{nid}').onCreate(function (event) {
+
+    const notification = event.data.val();
+    const userId = event.params.uid;
+    let payload = {
+        notification: {
+            title: notification.title,
+            body: notification.msg
+        }
+    };
+
+    return incrementUserNotificationCount(userId).then(() => {
+        return admin.database().ref('users/' + notification.refUser).once('value').then(_user => {
+            const user = _user.val();
+            payload.notification.icon = user.photoUrl;
+
+            return admin.database().ref('/fcmTokens/' + userId).once('value').then(function (_tokens) {
+                const tokens = _tokens.val();
+                for (let fcmDeviceKey in tokens) {
+                    if (!tokens.hasOwnProperty(fcmDeviceKey)) continue;
+
+                    admin.messaging().sendToDevice(tokens[fcmDeviceKey], payload)
+                        .then(res => console.log("Sent Successfully", res))
+                        .catch(err => console.log(err));
+                }
+
+                return true;
             });
         });
     });
 
-    return true;
-    // 'wishlists/-KvJNNzbBagFeATemS4J/jLTIgS9vSwM4c6sZLFs83DRCISj1/wishes/test', {params: {gid: '-KvJNNzbBagFeATemS4J', uid: 'jLTIgS9vSwM4c6sZLFs83DRCISj1', wid: 'test'}}
+    // 'notifications/c0JaF3fKKMaHp3YO4wkrfecKQyl1/test', {params: {uid: 'c0JaF3fKKMaHp3YO4wkrfecKQyl1', nid: 'test'}}
 });
 
-exports.wishMarkedAsDeleted = functions.database.ref('/deleteFlag/{gid}/{uid}/{wid}').onCreate(function(event) {
 
-    const gid = event.params.gid;
-    const uid = event.params.uid;
-    const wid = event.params.wid;
-
-    var d = new Date();
-
-    admin.database().ref('takenFlag/' + gid + '/' + uid + '/' + wid).once("value").then(function(t) {
-        // check if the wish to delete has already been taken by someone
-        if(t.val() !== null) {
-
-            admin.database().ref('groups/' + gid).once("value").then(function(_group) {
-                var group = _group.val();
-                // if the wish is marked as teken, iterate through all gifts to find the user who took it
-                admin.database().ref('gifts/' + gid).once("value").then(function(gList) {
-                    var gifts = gList.val();
-
-                    // go through all users
-                    for(var u in gifts) {
-                        if (!gifts.hasOwnProperty(u)) continue;
-
-                        // go through all gifts from this user
-                        for(var g in gifts[u]) {
-                            if(!gifts[u].hasOwnProperty(g)) continue;
-
-                            if(gifts[u][g]['wish'] === wid && gifts[u][g]['user'] === uid) {
-                                // if this gift ist intenden for the wish wich is deleted
-                                admin.database().ref('users/' + uid).once("value").then(function(_user) {
-                                    // get user
-                                    var user = _user.val();
-                                    admin.database().ref('wishlists/' + gid + '/' + uid + '/wishes/' + wid).once("value").then(function(_wish) {
-                                        // get Wish
-                                        var wish = _wish.val();
-                                        wish.user = gifts[u][g]['user'];
-                                        wish.deletedByUser = true;
-                                        wish.manualAdd = true;
-
-                                        // update the gift, no more reference to wish
-                                        admin.database().ref('gifts/' + gid + '/' + u + '/' + g).set(wish);
-
-                                        // Delete the wish and the deleteFlag
-                                        admin.database().ref('wishlists/' + gid + '/' + uid + '/wishes/' + wid).remove();
-                                        admin.database().ref('deleteFlag/' + gid + '/' + uid + '/' + wid).remove();
-
-                                        // Write Notification
-                                        admin.database().ref('notifications/' + gifts[u][g]['user']).push({
-                                            msg: user.displayName + ' deleted the wish "' + wish.name + '". Hopefully you did not already buy the gift...',
-                                            refUser: uid,
-                                            title: 'Group ' + group.name + ' - Wish deleted',
-                                            seen: false,
-                                            time: d.toISOString()
-                                        });
-                                    });
-                                });
-                            }
-                        }
-                    }
-                });
-            });
-        } else {
-            admin.database().ref('deleteFlag/' + gid + '/' + uid + '/' + wid).remove();
-            admin.database().ref('wishlists/' + gid + '/' + uid + '/wishes/' + wid).remove();
-        }
+function incrementUserNotificationCount(userId) {
+    return admin.database().ref('users/' + userId).once('value').then(_user => {
+        const user = _user.val();
+        const count = user.notificationCount ? user.notificationCount + 1 : 1;
+        return admin.database().ref('users/' + userId + '/notificationCount').set(count);
     });
-    // 'deleteFlag/-KvJNNzbBagFeATemS4J/c0JaF3fKKMaHp3YO4wkrfecKQyl1/-Kvw9tZl_ExqXiLadsvQ', {params: {gid: '-KvJNNzbBagFeATemS4J', uid: 'c0JaF3fKKMaHp3YO4wkrfecKQyl1', wid: '-Kvw9tZl_ExqXiLadsvQ'}}
-    return true;
-});
+}

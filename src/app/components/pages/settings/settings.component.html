@@ -5,5 +5,10 @@
                    (ngModelChange)="userS.user$.update({displayName: $event})" name="email">
         </mat-input-container>
     </p>
-    <button mat-raised-button color="primary" (click)="logOut()">Log out</button>
+    <p>
+        <mat-slide-toggle [checked]="pushActivated" (change)="setPushNotifications($event)">
+            Activate push notifications
+        </mat-slide-toggle>
+    </p>
+    <button mat-button color="primary" (click)="logOut()">LOG OUT</button>
 </mat-card>

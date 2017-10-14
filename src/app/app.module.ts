@@ -15,7 +15,8 @@ import {
     MatDialogModule,
     MatMenuModule,
     MatSelectModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatProgressSpinnerModule
 } from '@angular/material';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -58,6 +59,7 @@ import { WishDisplayComponent } from './components/forms/wish-display/wish-displ
 import { WishFormComponent } from './components/forms/wish-form/wish-form.component';
 import { GiftDisplayComponent } from './components/forms/gift-display/gift-display.component';
 import { GiftFormComponent } from './components/forms/gift-form/gift-form.component';
+import { NotificationDisplayComponent } from './components/forms/notification-display/notification-display.component';
 
 // Dialog Components
 import { InviteDialogComponent } from './components/partials/invite-dialog/invite-dialog.component';
@@ -74,7 +76,6 @@ import { UserService } from './services/firebase/user.service';
 import { WishlistsService } from './services/firebase/wishlists.service';
 import { GiftsService } from './services/firebase/gifts.service';
 import { NotificationsService } from './services/firebase/notifications.service';
-import { NotificationDisplayComponent } from './components/forms/notification-display/notification-display.component';
 
 
 @NgModule({
@@ -122,6 +123,7 @@ import { NotificationDisplayComponent } from './components/forms/notification-di
         MatMenuModule,
         MatSelectModule,
         MatSlideToggleModule,
+        MatProgressSpinnerModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         AngularFireAuthModule,

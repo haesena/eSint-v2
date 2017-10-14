@@ -9,7 +9,10 @@
         <app-list-select *ngIf="config.activeGroup"></app-list-select>
         <mat-nav-list class="side-list">
             <a mat-list-item routerLink="/notifications" routerLinkActive="route-active">
-                <mat-icon class="menu-icon">notifications</mat-icon>
+                <mat-icon class="menu-icon badge-container">
+                    <span class="badge" *ngIf="notificationCount > 0">{{notificationCount}}</span>
+                    notifications
+                </mat-icon>
                 Notifications
             </a>
         </mat-nav-list>
@@ -27,7 +30,9 @@
         </button>
     </mat-toolbar>
     <mat-progress-bar *ngIf="config.loading" mode="indeterminate"></mat-progress-bar>
-    <div class="content">
-        <router-outlet></router-outlet>
+    <div class="inner-sidenav-content">
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
     </div>
 </mat-sidenav-container>

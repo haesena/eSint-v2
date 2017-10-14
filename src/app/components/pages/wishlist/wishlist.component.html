@@ -2,16 +2,22 @@
     <span>{{ wListName }}</span>
 </mat-toolbar>
 <mat-card>
-    <mat-list>
-        <div *ngFor="let w of wishes; let i = index;">
-            <mat-divider *ngIf="i > 0"></mat-divider>
-            <app-wish-display [wish]="w" [canDelete]="myGifts.indexOf(w.$key) > -1"
-                              (takeEvent)="takeWish($event)"
-                              (deleteEvent)="untakeWish($event)"></app-wish-display>
-        </div>
-    </mat-list>
-    <mat-card-actions>
-        <button mat-raised-button *ngIf="!subscribedToWishlist" (click)="subscribe()">Subscribe to this wishlist</button>
-        <button mat-raised-button *ngIf="subscribedToWishlist" (click)="unsubscribe()">Unsubscribe</button>
-    </mat-card-actions>
+    <mat-card-content>
+        <mat-list>
+            <div *ngFor="let w of wishes; let i = index;">
+                <mat-divider *ngIf="i > 0"></mat-divider>
+                <app-wish-display [wish]="w" [canDelete]="myGifts.indexOf(w.$key) > -1"
+                                  (takeEvent)="takeWish($event)"
+                                  (deleteEvent)="untakeWish($event)"></app-wish-display>
+            </div>
+        </mat-list>
+        <mat-list-item *ngIf="wishes.length === 0">
+            This list is empty...
+        </mat-list-item>
+        <section class="toggle-section">
+            <mat-slide-toggle [checked]="(nService.wishlistSubscribed(this.lid)|async)?.$value" (change)="setSubscribed($event)">
+                SUBSCRIBE TO THIS WISHLIST
+            </mat-slide-toggle>
+        </section>
+    </mat-card-content>
 </mat-card>
