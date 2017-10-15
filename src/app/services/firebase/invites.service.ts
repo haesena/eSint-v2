@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
-import {AngularFireDatabase} from 'angularfire2/database';
+import {AngularFireOfflineDatabase} from 'angularfire2-offline';
 import {Configuration} from '../../configuration';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
-import {UserService} from './user.service';
+import {AngularFireDatabase} from 'angularfire2/database';
 
 @Injectable()
 export class InvitesService {
 
-    constructor(private db: AngularFireDatabase, private config: Configuration) {
+    constructor(private db: AngularFireOfflineDatabase, private config: Configuration, private wdb: AngularFireDatabase) {
     }
 
     getInvite(inviteId) {
@@ -16,7 +15,7 @@ export class InvitesService {
     }
 
     getInviteForGroup(gid, uName, gName) {
-        const invites = this.db.list('invites');
+        const invites = this.wdb.list('invites');
         return invites.first().map(iList => {
             let invite = null;
             iList.forEach(i => {

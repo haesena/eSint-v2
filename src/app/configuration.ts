@@ -10,4 +10,6 @@ export class Configuration {
     activeGroup$ = new ReplaySubject();
 
     invite: Invite;
+
+    pageTitle: string;
 }

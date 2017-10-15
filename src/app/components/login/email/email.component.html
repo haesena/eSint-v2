@@ -6,10 +6,10 @@
 
     <form #formData='ngForm' (ngSubmit)="onSubmit(formData)">
         <mat-input-container class="full-width">
-            <input mdInput placeholder="Email address" (ngModel)="email" name="email">
+            <input matInput placeholder="Email address" (ngModel)="email" name="email">
         </mat-input-container>
         <mat-input-container class="full-width">
-            <input mdInput placeholder="Password" type="password" (ngModel)="password" name="password">
+            <input matInput placeholder="Password" type="password" (ngModel)="password" name="password">
         </mat-input-container>
 
         <button mat-raised-button type="submit" [disabled]="!formData.valid" class="fullwidth-button">Log in</button>

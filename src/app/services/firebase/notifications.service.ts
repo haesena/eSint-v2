@@ -1,16 +1,17 @@
 import {Injectable} from '@angular/core';
 import {Configuration} from '../../configuration';
-import {AngularFireDatabase} from 'angularfire2/database';
 import * as firebase from 'firebase';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import {AngularFireOfflineDatabase} from 'angularfire2-offline';
+import {AngularFireDatabase} from 'angularfire2/database';
 
 @Injectable()
 export class NotificationsService {
 
     messaging = firebase.messaging();
 
-    constructor(private db: AngularFireDatabase, private config: Configuration) {
+    constructor(private db: AngularFireOfflineDatabase, private config: Configuration, private wdb: AngularFireDatabase) {
     }
 
     getMyNotifications() {
@@ -29,7 +30,7 @@ export class NotificationsService {
     }
 
     markAsRead(nid) {
-        this.db.object('notifications/' + this.config.userId + '/' + nid + '/seen').set(true);
+        this.wdb.object('notifications/' + this.config.userId + '/' + nid + '/seen').set(true);
     }
 
     wishlistSubscribed(uid) {
@@ -37,7 +38,7 @@ export class NotificationsService {
     }
 
     subscribeToWishlist(uid, value) {
-        this.db.object('wishlists/' + this.config.activeGroup + '/' + uid + '/subscriptions/' + this.config.userId).set(value);
+        this.wdb.object('wishlists/' + this.config.activeGroup + '/' + uid + '/subscriptions/' + this.config.userId).set(value);
     }
 
     pushActivated(uid) {
@@ -55,11 +56,9 @@ export class NotificationsService {
     activatePushNotifications() {
         this.messaging.requestPermission()
             .then(() => {
-                console.log('Notification permission granted.');
                 return this.messaging.getToken()
             })
             .then(token => {
-                console.log('received token: ' + token);
                 this.updateToken(token);
                 return true;
             })
@@ -73,11 +72,12 @@ export class NotificationsService {
         const fcmDeviceKey = localStorage.getItem('fcmDeviceKey');
 
         if (fcmDeviceKey === null) {
-            this.db.list('fcmTokens/' + this.config.userId).push(token).then(v => {
+            this.wdb.list('fcmTokens/' + this.config.userId).push(token).then(v => {
                 localStorage.setItem('fcmDeviceKey', v.key);
             });
         } else {
-            this.db.object('fcmTokens/' + this.config.userId + '/' + fcmDeviceKey).update(token);
+            const data = {[fcmDeviceKey]: token};
+            this.wdb.object('fcmTokens/' + this.config.userId).update(data);
         }
     }
 
@@ -85,7 +85,6 @@ export class NotificationsService {
         this.messaging.onTokenRefresh(function() {
             this.messaging.getToken()
                 .then(refreshedToken => {
-                    console.log('Token refreshed: ' + refreshedToken);
                     this.updateToken(refreshedToken);
                 })
                 .catch(function(err) {

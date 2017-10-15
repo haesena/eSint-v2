@@ -1,8 +1,10 @@
 import {Component, NgZone, OnInit, ViewChild} from '@angular/core';
-import {MatDrawer} from '@angular/material';
+import {MatDialog, MatDrawer} from '@angular/material';
 import {AuthService} from './services/authentication/auth.service';
 import {UserService} from './services/firebase/user.service';
 import {Configuration} from './configuration';
+import {ConfirmDialogComponent} from './components/partials/confirm-dialog/confirm-dialog.component';
+import {NotificationsService} from './services/firebase/notifications.service';
 
 @Component({
     selector: 'app-root',
@@ -15,7 +17,8 @@ export class AppComponent implements OnInit {
     public photoUrl: string;
     public notificationCount = 0;
 
-    constructor(private _ngZone: NgZone, public auth: AuthService, public uService: UserService, public config: Configuration) {
+    constructor(private _ngZone: NgZone, public auth: AuthService, public uService: UserService, public config: Configuration,
+                public dialog: MatDialog, public nService: NotificationsService) {
     }
 
     ngOnInit() {
@@ -23,6 +26,7 @@ export class AppComponent implements OnInit {
         this.auth.loggedIn$.subscribe(value => {
             if (value === true) {
                 this.checkMenu();
+                this.checkNotification();
 
                 this.uService.user$.subscribe(u => {
                     if (u.photoUrl) {
@@ -58,6 +62,26 @@ export class AppComponent implements OnInit {
             } else {
                 this.sidenav.close();
                 this.sidenav_mode = 'over';
+            }
+        });
+    }
+
+    checkNotification() {
+        const askedForNotificationPermission = localStorage.getItem('askedForNotificationPermission');
+        if (askedForNotificationPermission === 'yes') {
+            return true;
+        }
+
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            data: {confirmMessage: 'Do you want to turn on push notifications for eSint? ' +
+            'You can always change this on the settings-page (click on your avatar in the top right corner).'}
+        });
+
+        localStorage.setItem('askedForNotificationPermission', 'yes');
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result === true) {
+                this.nService.activatePushNotifications();
             }
         });
     }

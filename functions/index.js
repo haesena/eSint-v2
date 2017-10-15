@@ -141,6 +141,7 @@ exports.fcmSend = functions.database.ref('/notifications/{uid}/{nid}').onCreate(
 
     const notification = event.data.val();
     const userId = event.params.uid;
+    const notificationId = event.params.nid;
     let payload = {
         notification: {
             title: notification.title,
@@ -159,7 +160,10 @@ exports.fcmSend = functions.database.ref('/notifications/{uid}/{nid}').onCreate(
                     if (!tokens.hasOwnProperty(fcmDeviceKey)) continue;
 
                     admin.messaging().sendToDevice(tokens[fcmDeviceKey], payload)
-                        .then(res => console.log("Sent Successfully", res))
+                        .then(res => {
+                            const messageId = res['results'][0]['messageId'];
+                            admin.database().ref('notifications/' + userId + '/' + notificationId + '/messageId').set(messageId);
+                        })
                         .catch(err => console.log(err));
                 }
 

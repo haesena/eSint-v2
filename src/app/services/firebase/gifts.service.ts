@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Configuration} from '../../configuration';
+import {AngularFireOfflineDatabase} from 'angularfire2-offline';
 import {AngularFireDatabase} from 'angularfire2/database';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class GiftsService {
 
-    constructor(private db: AngularFireDatabase, private config: Configuration) {
+    constructor(private db: AngularFireOfflineDatabase, private config: Configuration, private wdb: AngularFireDatabase) {
     }
 
     getMyGiftIds() {
@@ -30,9 +30,9 @@ export class GiftsService {
     saveGift(gift) {
         gift.manualAdd = true;
         if (gift.$key == null) {
-            return this.db.list('gifts/' + this.config.activeGroup + '/' + this.config.userId).push(gift);
+            return this.wdb.list('gifts/' + this.config.activeGroup + '/' + this.config.userId).push(gift);
         } else {
-            return this.db.object('gifts/' + this.config.activeGroup + '/' + this.config.userId + '/' + gift.$key).update(gift)
+            return this.wdb.object('gifts/' + this.config.activeGroup + '/' + this.config.userId + '/' + gift.$key).update(gift)
         }
     }
 
@@ -42,9 +42,9 @@ export class GiftsService {
 
     deleteGift(gift) {
         if (gift.wish !== undefined) {
-            this.db.object('takenFlag/' + this.config.activeGroup + '/' + gift.user + '/' + gift.wish).remove();
+            this.wdb.object('takenFlag/' + this.config.activeGroup + '/' + gift.user + '/' + gift.wish).remove();
         }
-        this.db.object('gifts/' + this.config.activeGroup + '/' + this.config.userId + '/' + gift.$key).remove();
+        this.wdb.object('gifts/' + this.config.activeGroup + '/' + this.config.userId + '/' + gift.$key).remove();
     }
 
 }

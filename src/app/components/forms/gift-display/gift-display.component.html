@@ -1,4 +1,4 @@
-<mat-list-item *ngIf="gift.name">
+<mat-list-item *ngIf="gift.name && gift.userObj">
     <mat-icon mat-list-icon *ngIf="gift.userObj">
         <img mat-fab-image class="avatar-small" [src]="gift.userObj.photoUrl" onerror="brokenImg(this);">
     </mat-icon>

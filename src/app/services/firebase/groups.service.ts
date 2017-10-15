@@ -1,16 +1,17 @@
 import 'rxjs/add/operator/map';
+import {AngularFireOfflineDatabase} from 'angularfire2-offline';
 import {Injectable} from '@angular/core';
-import {AngularFireDatabase} from 'angularfire2/database';
 import {Configuration} from '../../configuration';
 import {UserService} from './user.service';
 import {Group} from '../../models/group';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {AngularFireDatabase} from 'angularfire2/database';
 
 @Injectable()
 export class GroupsService {
-    constructor(public db: AngularFireDatabase, public config: Configuration, public userService: UserService) {
+    constructor(public db: AngularFireOfflineDatabase, public config: Configuration, public userService: UserService,
+                private wdb: AngularFireDatabase) {
     }
 
     getUserGroups(uid) {
@@ -44,10 +45,10 @@ export class GroupsService {
     }
 
     removeUserFromGroup(gid, uid) {
-        const users = this.db.list('/groups/' + gid + '/users');
+        const users = this.wdb.list('/groups/' + gid + '/users');
         users.subscribe(u => {
             if (u.length === 1) {
-                this.db.list('/groups').remove(gid);
+                this.wdb.list('/groups').remove(gid);
             } else {
                 users.remove(uid);
             }
@@ -61,17 +62,17 @@ export class GroupsService {
     createGroup(g: Group): Observable<string> {
         g.users = {};
         g.users[this.config.userId] = 'creator';
-        return Observable.fromPromise(this.db.list('/groups').push(g)).map(v => v.key);
+        return Observable.fromPromise(this.wdb.list('/groups').push(g)).map(v => v.key);
     }
 
     saveGroup(group: Group) {
-        this.db.object('groups/' + group.$key).update(group);
+        this.wdb.object('groups/' + group.$key).update(group);
     }
 
 
     addUser(gid, uid, type) {
         const newUser = {};
         newUser[uid] = type;
-        return this.db.object('groups/' + gid + '/users').update(newUser);
+        return this.wdb.object('groups/' + gid + '/users').update(newUser);
     }
 }

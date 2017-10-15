@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Configuration} from '../../configuration';
-import {AngularFireDatabase} from 'angularfire2/database';
+import {AngularFireOfflineDatabase} from 'angularfire2-offline';
 import {Wish} from '../../models/wish';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/switchMap';
+import {AngularFireDatabase} from 'angularfire2/database';
 
 @Injectable()
 export class WishlistsService {
 
-    constructor(private db: AngularFireDatabase, private config: Configuration) {
+    constructor(private db: AngularFireOfflineDatabase, private config: Configuration, private wdb: AngularFireDatabase) {
     }
 
     getWishes(uid) {
@@ -32,9 +32,9 @@ export class WishlistsService {
 
     saveWish(wish: Wish) {
         if (wish.$key == null) {
-            return this.db.list('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes').push(wish);
+            return this.wdb.list('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes').push(wish);
         } else {
-            return this.db.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wish.$key).update(wish)
+            return this.wdb.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wish.$key).update(wish)
         }
     }
 
@@ -43,7 +43,7 @@ export class WishlistsService {
     }
 
     deleteWish(wid) {
-        this.db.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wid).remove();
+        this.wdb.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wid).remove();
     }
 
     getWishlistOfActiveGroup() {
@@ -59,19 +59,19 @@ export class WishlistsService {
     }
 
     takeWish(gid, uid, wid) {
-        this.db.object('takenFlag/' + gid + '/' + uid + '/' + wid).set(true);
-        this.db.list('gifts/' + gid + '/' + this.config.userId).push({
+        this.wdb.object('takenFlag/' + gid + '/' + uid + '/' + wid).set(true);
+        this.wdb.list('gifts/' + gid + '/' + this.config.userId).push({
             wish: wid,
             user: uid
         });
     }
 
     untakeWish(gid, uid, wid) {
-        this.db.object('takenFlag/' + gid + '/' + uid + '/' + wid).remove();
-        this.db.list('gifts/' + gid + '/' + this.config.userId).first().subscribe(gList => {
+        this.wdb.object('takenFlag/' + gid + '/' + uid + '/' + wid).remove();
+        this.wdb.list('gifts/' + gid + '/' + this.config.userId).first().subscribe(gList => {
             gList.forEach(g => {
                 if (g.wish === wid) {
-                    this.db.object('gifts/' + gid + '/' + this.config.userId + '/' + g.$key).remove();
+                    this.wdb.object('gifts/' + gid + '/' + this.config.userId + '/' + g.$key).remove();
                 }
             });
         });

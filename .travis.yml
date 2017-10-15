@@ -16,7 +16,8 @@ before_script:
   - cd ..
 
 script:
-  - ng build --prod
+  - ng build --prod --aot
+  - npm run precache
 
 after_success:
   - firebase use --token $FIREBASE_TOKEN esint-v2

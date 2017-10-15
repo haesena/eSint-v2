@@ -26,6 +26,7 @@ import { Configuration } from './configuration';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireOfflineModule } from 'angularfire2-offline';
 
 // Routing
 import { AppRoutingModule } from './routing/app-routing.module';
@@ -127,6 +128,7 @@ import { NotificationsService } from './services/firebase/notifications.service'
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         AngularFireAuthModule,
+        AngularFireOfflineModule,
         AppRoutingModule,
         FlexLayoutModule
     ],

@@ -1,6 +1,12 @@
 {
   "short_name": "eSint",
-  "name": "eSint + Wishlist manager",
+  "name": "eSint - Wishlist manager",
+
+  "theme_color": "#dd4f44",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+
   "start_url": ".",
   "gcm_sender_id": "103953800507"
 }
