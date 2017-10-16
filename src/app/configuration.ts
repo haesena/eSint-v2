@@ -12,4 +12,6 @@ export class Configuration {
     invite: Invite;
 
     pageTitle: string;
+
+    errorMessage: string;
 }

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/authentication/auth.service';
+import {Configuration} from '../../configuration';
 
 @Component({
     selector: 'app-login',
@@ -10,7 +11,7 @@ export class LoginComponent implements OnInit {
 
     public loggingIn = false;
 
-    constructor(private auth: AuthService) {
+    constructor(private auth: AuthService, public config: Configuration) {
     }
 
     ngOnInit() {
@@ -18,15 +19,32 @@ export class LoginComponent implements OnInit {
 
     googleLogin() {
         this.loggingIn = true;
-        this.auth.logInWithProvider('google').then(
-            result => this.auth.redirectAfterLogin()
-        );
+        this.auth.logInWithProvider('google')
+            .then(
+                result => this.auth.redirectAfterLogin(),
+                error => {
+                    this.loggingIn = false;
+                })
+            .catch(error => {
+                this.loggingIn = false;
+            });
     }
 
     facebookLogin() {
         this.loggingIn = true;
-        this.auth.logInWithProvider('facebook').then(
-            result => this.auth.redirectAfterLogin()
-        );
+        this.auth.logInWithProvider('facebook')
+            .then(
+                result => this.auth.redirectAfterLogin(),
+                error => {
+                    this.loggingIn = false;
+                })
+            .catch(error => {
+                this.loggingIn = false;
+            });
+    }
+
+    close() {
+        this.config.errorMessage = null;
+        this.loggingIn = false;
     }
 }

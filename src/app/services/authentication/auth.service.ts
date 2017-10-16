@@ -58,9 +58,15 @@ export class AuthService {
                 this.setLoggedIn(result.user);
             },
             error => {
+                console.log('error while signing in with provieder ' + type, error);
                 this.setLoggedIn(null);
+                this.config.errorMessage = error.message;
+                this.router.navigate(['/start']);
             }
-        );
+        ).catch(error => {
+            console.log(' catched error', error);
+            return error;
+        });
     };
 
     logInEmail(email: string, password: string) {

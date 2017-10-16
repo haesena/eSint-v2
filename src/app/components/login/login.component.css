@@ -43,3 +43,14 @@
         background: #ECECEC;
     }
 }
+
+.logo-img {
+    height: 100px;
+    display: block;
+    margin: auto;
+}
+
+.intro-text {
+    margin: 1em 0;
+    text-align: center;
+}

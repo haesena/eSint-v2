@@ -1,4 +1,16 @@
-<mat-card class="form-container" *ngIf="!loggingIn; else loginLoader">
+<mat-card class="form-container" *ngIf="config.errorMessage">
+    {{config.errorMessage}}
+    <mat-card-actions>
+        <button mat-button color="primary" (click)="close()">CLOSE</button>
+    </mat-card-actions>
+</mat-card>
+
+<mat-card class="form-container" *ngIf="!loggingIn || config.errorMessage; else loginLoader">
+    <img src="../../../assets/icons/android-chrome-192x192.png" class="logo-img"/>
+    <p class="intro-text">
+        Welcome to eSint, the online wishlist manager!<br>
+        Login to start using eSint:
+    </p>
     <button class="fullwidth-button" mat-raised-button (click)="facebookLogin()" id="fb">Login with Facebook</button>
     <br>
     <button class="fullwidth-button" mat-raised-button (click)="googleLogin()" id="google">Login with Google</button>
@@ -7,5 +19,7 @@
 </mat-card>
 
 <ng-template #loginLoader>
-    Logging in...
+    <mat-card class="form-container">
+        Logging in...
+    </mat-card>
 </ng-template>
