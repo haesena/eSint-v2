@@ -1,28 +1,29 @@
 # ESintV2
 
+Manage your wishlists with the eSint application. You can create your own wishlist and browse the lists of the people in your group.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.1.3.
 
-## Development server
+# Errors
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## OAuth-Token not refreshed
+The auth-token expires after 20 minutes, the user needs to actively log in again with facebook or google.
 
-## Code scaffolding
+### Cause
+The request for token-refresh returned a 403 HTTP Status.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
+### Fix
+Identity Toolkit API was not enabled in the Google Cloud Platform. After activation, the refresh-request were valid.
 
-## Build
+## OAuth login and service-workers
+The login popup redirects to the app-login screen instead of opening the login popup from google or facebook. The window stays blank for a while and then closes. A Network-Error is thrown.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+###Cause
 
-## Running unit tests
+By clicking on the login button, the app redirects to /__auth/... for OAuth flow. The service-worker is intercepting this, and since the page does not exists, it is redirected to index.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Fix
 
-## Running end-to-end tests
+https://github.com/angular/angularfire2/issues/970
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Configure the fallback-whitelist for the service-worker, to not handle authorization requests. 

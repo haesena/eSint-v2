@@ -60,7 +60,7 @@ export class AuthService {
             error => {
                 console.log('error while signing in with provieder ' + type, error);
                 this.setLoggedIn(null);
-                this.config.errorMessage = error.message;
+                this.config.errorMessage = error.message ? error.message : '';
                 this.router.navigate(['/start']);
             }
         ).catch(error => {

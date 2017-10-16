@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     }
 
     close() {
-        this.config.errorMessage = null;
+        this.config.errorMessage = '';
         this.loggingIn = false;
     }
 }
