@@ -26,6 +26,9 @@
           "name": {
             ".write": "$userId === auth.uid"
           },
+          "referenceId": {
+            ".write": "$userId === auth.uid"
+          },
           "wishes": {
             ".write": "$userId === auth.uid"
           },

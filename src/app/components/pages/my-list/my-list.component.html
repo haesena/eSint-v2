@@ -1,9 +1,26 @@
 <mat-toolbar class="card-header-toolbar">
-    <span (click)="editName = true" *ngIf="!editName">{{(wishlist$|async)?.name}}</span>
-    <mat-form-field class="full-width" style="width: 100%;" *ngIf="editName">
-        <input matInput required="true" [ngModel]='(wishlist$|async)?.name'
-               (ngModelChange)="wishlist$.update({name  : $event})" name="email">
-    </mat-form-field>
+    <span (click)="editName = true" *ngIf="!editName">{{listName}}</span>
+    <form class="listName-form" (ngSubmit)="updateName(listName)">
+        <mat-form-field class="full-width" *ngIf="editName">
+            <input matInput required="true" name="listName" [(ngModel)]="listName" title="list name">
+        </mat-form-field>
+    </form>
+    <span class="space-filler"></span>
+    <button mat-button *ngIf="editName" (click)="updateName(listName)">SAVE</button>
+    <button mat-button *ngIf="editName" (click)="cancelEditName()">CANCEL</button>
+    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="!editName">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="editName = true;">
+            <mat-icon>mode_edit</mat-icon>
+            <span>Edit Name</span>
+        </button>
+        <button mat-menu-item (click)="inviteUserToList()">
+            <mat-icon>person_add</mat-icon>
+            <span>Invite</span>
+        </button>
+    </mat-menu>
 </mat-toolbar>
 <mat-card>
     <mat-list>

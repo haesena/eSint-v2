@@ -15,6 +15,16 @@ export class WishlistsService {
         return this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes');
     }
 
+    getWishlistId(groupId, userId) {
+        return this.db.object('wishlists/' + groupId + '/' + userId + '/referenceId').map(id => {
+            if (id.$value === null) {
+                return userId;
+            } else {
+                return id.$value;
+            }
+        });
+    }
+
     getWishesWithAdditionalInfos(uid) {
         return this.getWishes(uid).map(wList => {
             wList.forEach(wish => {
@@ -75,5 +85,9 @@ export class WishlistsService {
                 }
             });
         });
+    }
+
+    joinWishlist(userId, groupId, wishlistToJoin) {
+        this.db.object('wishlists/' + groupId + '/' + userId).update({referenceId: wishlistToJoin});
     }
 }

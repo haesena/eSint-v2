@@ -76,8 +76,10 @@ export class AppComponent implements OnInit {
         }
 
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            data: {confirmMessage: 'Do you want to turn on push notifications for eSint? ' +
-            'You can always change this on the settings-page (click on your avatar in the top right corner).'}
+            data: {confirmMessage: [
+                'Do you want to turn on push notifications for eSint?',
+                'You can always change this on the settings-page (click on your avatar in the top right corner).'
+            ]}
         });
 
         localStorage.setItem('askedForNotificationPermission', 'yes');

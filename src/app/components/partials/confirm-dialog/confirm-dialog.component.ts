@@ -9,7 +9,7 @@ import {DOCUMENT} from '@angular/common';
 })
 export class ConfirmDialogComponent implements OnInit {
 
-    public confirmMessage: string;
+    public confirmMessage: string[];
 
     constructor(@Inject(MAT_DIALOG_DATA) public data: any, @Inject(DOCUMENT) private document: any) {
     }

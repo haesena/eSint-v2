@@ -15,7 +15,11 @@ export class InvitesService {
     }
 
     getInviteForGroup(gid, uName, gName) {
-        const invites = this.wdb.list('invites');
+        const invites = this.wdb.list('invites', {
+            query: {
+                type: 'group'
+            }
+        });
         return invites.first().map(iList => {
             let invite = null;
             iList.forEach(i => {
@@ -32,7 +36,41 @@ export class InvitesService {
                     user: this.config.userId,
                     userName: uName,
                     group: gid,
-                    groupName: gName
+                    groupName: gName,
+                    type: 'group'
+                };
+
+                return invites.push(newInvite).key;
+            }
+        });
+    }
+
+    getInviteForList(lid, userName, listName, groupId, groupName) {
+        const invites = this.wdb.list('invites', {
+            query: {
+                type: 'list'
+            }
+        });
+        return invites.first().map(iList => {
+            let invite = null;
+            iList.forEach(i => {
+                if (i.list === lid) {
+                    invite = i.$key;
+                }
+            });
+
+            if (invite !== null) {
+                return invite;
+            } else {
+
+                const newInvite = {
+                    user: this.config.userId,
+                    userName: userName,
+                    group: groupId,
+                    groupName: groupName,
+                    list: lid,
+                    listName: listName,
+                    type: 'list'
                 };
 
                 return invites.push(newInvite).key;

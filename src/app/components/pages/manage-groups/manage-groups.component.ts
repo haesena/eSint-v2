@@ -29,7 +29,7 @@ export class ManageGroupsComponent implements OnInit {
 
     leaveGroup(group: Group) {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            data: {confirmMessage: 'Are you sure you want to leave this group?'}
+            data: {confirmMessage: ['Are you sure you want to leave this group?']}
         });
 
         dialogRef.afterClosed().subscribe(result => {

@@ -1,16 +1,34 @@
 <mat-card *ngIf="config.invite; else no_invite">
-    <div *ngIf="alreadyInGroup; else show_invite">
-        You're already part of the group {{config.invite.groupName}}. Start wishing!
-    </div>
-    <ng-template #show_invite>
-        <p>{{config.invite.userName}} invited you to join the group {{config.invite.groupName}}</p>
-        <div *ngIf="loggedIn">
-            <button mat-button color="primary" (click)="join()">JOIN!</button>
+    <mat-card-content>
+        <div *ngIf="noNeedForInvite; else show_invite">
+            <div *ngIf="config.invite.type === 'group'">
+                You're already part of the group {{config.invite.groupName}}. Start wishing!
+            </div>
+            <div *ngIf="config.invite.type === 'list'">
+                The wishlist <i>{{config.invite.listName}}</i> is already your wishlist. Start wishing!
+            </div>
         </div>
-        <div *ngIf="!loggedIn">
-            <button mat-button color="primary" routerLink="/login">LOG IN!</button>
-        </div>
-    </ng-template>
+        <ng-template #show_invite>
+            <div *ngIf="config.invite.type === 'group'">
+                <p>{{config.invite.userName}} invited you to join the group {{config.invite.groupName}}</p>
+                <div *ngIf="loggedIn">
+                    <button mat-button color="primary" (click)="joinGroup()">JOIN!</button>
+                </div>
+                <div *ngIf="!loggedIn">
+                    <button mat-button color="primary" routerLink="/login">LOG IN!</button>
+                </div>
+            </div>
+            <div *ngIf="config.invite.type === 'list'">
+                <p>{{config.invite.userName}} invited you to join his wishlist <i>{{config.invite.listName}}</i> for the group <i>{{config.invite.groupName}}</i>.</p>
+                <div *ngIf="loggedIn">
+                    <button mat-button color="primary" (click)="joinList()">JOIN!</button>
+                </div>
+                <div *ngIf="!loggedIn">
+                    <button mat-button color="primary" routerLink="/login">LOG IN!</button>
+                </div>
+            </div>
+        </ng-template>
+    </mat-card-content>
 </mat-card>
 <ng-template #no_invite>
     <mat-card>

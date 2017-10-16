@@ -1,16 +1,10 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {InvitesService} from '../../../services/firebase/invites.service';
-import {Invite} from '../../../models/invite';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {Configuration} from '../../../configuration';
 import {AuthService} from '../../../services/authentication/auth.service';
 import {GroupsService} from '../../../services/firebase/groups.service';
-import {Observable} from 'rxjs/Observable';
 import {UserService} from '../../../services/firebase/user.service';
-import {Group} from '../../../models/group';
-import {Subject} from 'rxjs/Subject';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {WishlistsService} from '../../../services/firebase/wishlists.service';
 
 @Component({
     selector: 'app-invite',
@@ -20,11 +14,11 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 export class InviteComponent implements OnInit {
 
     public loggedIn = false;
-    public alreadyInGroup = false;
+    public noNeedForInvite = false;
     public msg = 'loading invite...';
 
     constructor(public config: Configuration, private router: Router, private auth: AuthService,
-                private gService: GroupsService, private uService: UserService) {
+                private gService: GroupsService, private uService: UserService, private wService: WishlistsService) {
     }
 
     ngOnInit() {
@@ -35,20 +29,48 @@ export class InviteComponent implements OnInit {
                 this.auth.setLoggedIn(auth);
                 if (auth !== null) {
                     this.loggedIn = true;
-                    this.gService.getUserGroupIds(auth.uid).subscribe(groups => {
-                        this.alreadyInGroup = groups[this.config.invite.group] != null;
-                    });
+                    this.checkIfInviteNeeded(auth.uid);
                 }
             });
         }
     }
 
-    join() {
+    checkIfInviteNeeded(uid) {
+        if (this.config.invite.type === 'group') {
+            this.gService.getUserGroupIds(uid).subscribe(groups => {
+                this.noNeedForInvite = groups[this.config.invite.group] != null;
+            });
+        } else if (this.config.invite.type === 'list') {
+            this.wService.getWishlistId(this.config.invite.group, uid).subscribe(id => {
+                this.noNeedForInvite = (id === this.config.invite.list);
+            });
+        } else {
+            this.config.invite = null;
+            this.msg = 'Invalid invite';
+        }
+    }
+
+    joinGroup() {
         this.uService.addGroup(this.config.invite.group, 'invite').then(() => {
             this.gService.addUser(this.config.invite.group, this.config.userId, 'invite').then(ok => {
                 this.uService.setActiveGroup(this.config.invite.group);
                 this.router.navigate(['/start']);
             });
         });
+    }
+
+    joinList() {
+        // this.wService.getWishes(this.config.userId).take(1).subscribe(wList => {
+        //     // if (wList.length > 0) {
+        //     //
+        //     // } else {
+        //     //
+        //     // }
+        //     this.wService.joinWishlist(this.config.userId, this.config.invite.group, this.config.invite.list);
+        // });
+    }
+
+    decisionForMergingWishlists() {
+
     }
 }

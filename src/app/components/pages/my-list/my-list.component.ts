@@ -5,6 +5,9 @@ import {Wish} from '../../../models/wish';
 import {UserService} from '../../../services/firebase/user.service';
 import {MatDialog, MatInput} from '@angular/material';
 import {ConfirmDialogComponent} from '../../partials/confirm-dialog/confirm-dialog.component';
+import {InvitesService} from '../../../services/firebase/invites.service';
+import {InviteDialogComponent} from '../../partials/invite-dialog/invite-dialog.component';
+import {GroupsService} from '../../../services/firebase/groups.service';
 
 @Component({
     selector: 'app-my-list',
@@ -14,19 +17,15 @@ import {ConfirmDialogComponent} from '../../partials/confirm-dialog/confirm-dial
 export class MyListComponent implements OnInit {
     editName = false;
     public wishes = [];
+    public listName: string = null;
     wishlist$;
     constructor(public wService: WishlistsService, public config: Configuration, private uService: UserService,
-                public dialog: MatDialog) {
+                public dialog: MatDialog, private iService: InvitesService, private gService: GroupsService) {
     }
 
     ngOnInit() {
         this.wishlist$ = this.wService.getWishlist(this.config.userId);
-        this.wishlist$.subscribe(n => {
-            if (n.name == null) {
-                this.wishlist$.update({name: this.uService.user.displayName + '\'s wishlist'});
-            }
-        });
-
+        this.syncName();
         this.wService.getWishes(this.config.userId).subscribe(wishes => {
             this.wishes = wishes;
         });
@@ -34,8 +33,10 @@ export class MyListComponent implements OnInit {
 
     deleteWish(wish: Wish) {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            data: {confirmMessage: 'Are you sure you want to delete this wish? Another user may already have marked this ' +
-            'wish as taken. He may even already have bought the gift!'}
+            data: {confirmMessage: [
+                'Are you sure you want to delete this wish?',
+                'Another user may already have marked this wish as taken. He may even already have bought the gift!'
+            ]}
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -43,5 +44,36 @@ export class MyListComponent implements OnInit {
                 this.wService.deleteWish(wish.$key)
             }
         });
+    }
+
+    syncName() {
+        this.wishlist$.take(1).subscribe(n => {
+            if (n.name == null) {
+                this.updateName(this.uService.user.displayName + '\'s wishlist');
+            }
+            this.listName = n.name;
+        });
+    }
+
+    updateName(newName) {
+        this.wishlist$.update({name: newName});
+        this.editName = false;
+    }
+
+    cancelEditName() {
+        this.editName = false;
+        this.syncName();
+    }
+
+    inviteUserToList() {
+        this.wishlist$.take(1).subscribe(l => {
+            this.gService.getGroup(this.config.activeGroup).take(1).subscribe(g => {
+                this.iService.getInviteForList(l.$key, this.uService.user.displayName, this.listName, this.config.activeGroup, g.name).subscribe(i => {
+                    const dialogRef = this.dialog.open(InviteDialogComponent, {
+                        data: {invite: i, type: 'wishlist'}
+                    });
+                });
+            });
+        })
     }
 }

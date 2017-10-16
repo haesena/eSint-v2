@@ -1,6 +1,6 @@
 <mat-dialog-content>
-    <p style='font-family: Roboto, "Helvetica Neue", sans-serif;'>
-        {{confirmMessage}}
+    <p style='font-family: Roboto, "Helvetica Neue", sans-serif;' *ngFor="let msg of confirmMessage;">
+        {{msg}}
     </p>
 </mat-dialog-content>
 <mat-dialog-actions>
