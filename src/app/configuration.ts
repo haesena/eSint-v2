@@ -13,5 +13,5 @@ export class Configuration {
 
     pageTitle: string;
 
-    errorMessage: string;
+    errorMessage = '';
 }
