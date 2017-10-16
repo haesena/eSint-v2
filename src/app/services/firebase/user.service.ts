@@ -18,7 +18,7 @@ export class UserService {
         this.user = new User();
         this.user.uid = user.uid;
         this.user.photoUrl = user.providerData[0].photoURL;
-        if(this.user.photoUrl === null) {
+        if (this.user.photoUrl === null) {
             this.user.photoUrl = 'assets/images/user-default.png';
         }
         if (user.displayName != null) {

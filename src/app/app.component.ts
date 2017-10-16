@@ -34,7 +34,10 @@ export class AppComponent implements OnInit {
                     } else {
                         this.photoUrl = '../../assets/images/user-default.png';
                     }
-                    this.notificationCount = u.notificationCount;
+                });
+
+                this.nService.getNotificationCount(this.config.userId).subscribe(count => {
+                    this.notificationCount = count.$value;
                 });
             } else {
                 this.sidenav.close();

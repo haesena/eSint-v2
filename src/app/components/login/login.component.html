@@ -1,11 +1,11 @@
-<mat-card class="form-container" *ngIf="config.errorMessage">
+<mat-card class="form-container" *ngIf="config.errorMessage.length">
     {{config.errorMessage}}
     <mat-card-actions>
         <button mat-button color="primary" (click)="close()">CLOSE</button>
     </mat-card-actions>
 </mat-card>
 
-<mat-card class="form-container" *ngIf="!loggingIn || config.errorMessage; else loginLoader">
+<mat-card class="form-container" *ngIf="!loggingIn || config.errorMessage.length; else loginLoader">
     <img src="../../../assets/icons/android-chrome-192x192.png" class="logo-img"/>
     <p class="intro-text">
         Welcome to eSint, the online wishlist manager!<br>

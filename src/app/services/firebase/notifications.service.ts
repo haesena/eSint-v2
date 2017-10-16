@@ -14,6 +14,10 @@ export class NotificationsService {
     constructor(private db: AngularFireOfflineDatabase, private config: Configuration, private wdb: AngularFireDatabase) {
     }
 
+    getNotificationCount(uid) {
+        return this.wdb.object('users/' + uid + '/notificationCount');
+    }
+
     getMyNotifications() {
         return this.db.list('notifications/' + this.config.userId, {
             query: {
