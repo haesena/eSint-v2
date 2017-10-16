@@ -10,5 +10,5 @@ module.exports = {
     root: 'dist',
     stripPrefix: 'dist/',
     navigateFallback: '/index.html',
-    navigateFallbackWhitelist: [/^(?!\/__)/]
+    navigateFallbackWhitelist: [/^\/home\//, /^\/other\//]
 };

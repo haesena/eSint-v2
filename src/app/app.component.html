@@ -1,5 +1,6 @@
 <mat-sidenav-container class="fullscreen">
     <mat-sidenav #sidenav mode="{{sidenav_mode}}" class="sidenav">
+        <a style="height: 0; position: absolute" mat-button></a><!--button to absorb the focus-event, which will happen on the first clickable element in the sidenav-->
         <mat-toolbar color="accent" routerLink="/start">
 			<span class="logo">
 				eSint

@@ -13,14 +13,14 @@ The auth-token expires after 20 minutes, the user needs to actively log in again
 The request for token-refresh returned a 403 HTTP Status.
 
 ### Fix
-Identity Toolkit API was not enabled in the Google Cloud Platform. After activation, the refresh-request were valid.
+Identity Toolkit API was not enabled in the Google Cloud Platform. After activation, the refresh-requests are valid and the token is refreshed.
 
 ## OAuth login and service-workers
-The login popup redirects to the app-login screen instead of opening the login popup from google or facebook. The window stays blank for a while and then closes. A Network-Error is thrown.
+The login popup redirects to the app-login screen instead of opening the google or facebook login-form. The window stays blank for a while and then closes. A Network-Error is thrown.
 
-###Cause
+### Cause
 
-By clicking on the login button, the app redirects to /__auth/... for OAuth flow. The service-worker is intercepting this, and since the page does not exists, it is redirected to index.
+By clicking on the login button, the app redirects to `/__auth/...` for OAuth flow. The service-worker is intercepting this, and since the page does not exists, it is redirected to index.
 
 ### Fix
 
