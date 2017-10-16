@@ -41,11 +41,9 @@ export class ManageGroupsComponent implements OnInit {
     }
 
     inviteGroup(group: Group) {
-        this.userService.user$.subscribe(u => {
-            this.inviteService.getInviteForGroup(group.$key, u.displayName, group.name).subscribe(i => {
-                const dialogRef = this.dialog.open(InviteDialogComponent, {
-                    data: {invite: i}
-                });
+        this.inviteService.getInviteForGroup(group.$key, this.userService.user.displayName, group.name).subscribe(i => {
+            const dialogRef = this.dialog.open(InviteDialogComponent, {
+                data: {invite: i}
             });
         });
     }

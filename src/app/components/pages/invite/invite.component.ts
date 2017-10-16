@@ -44,7 +44,7 @@ export class InviteComponent implements OnInit {
     }
 
     join() {
-        this.uService.addGroup(this.config.invite.group, 'invite').then(v => {
+        this.uService.addGroup(this.config.invite.group, 'invite').then(() => {
             this.gService.addUser(this.config.invite.group, this.config.userId, 'invite').then(ok => {
                 this.uService.setActiveGroup(this.config.invite.group);
                 this.router.navigate(['/start']);

@@ -44,6 +44,68 @@ exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wi
 });
 
 
+exports.userJoinedGroup = functions.database.ref('/groups/{gid}/users/{uid}').onCreate(event => {
+
+    const gid = event.params.gid;
+    const uid = event.params.uid;
+
+    const d = new Date();
+
+    const groupPromise = admin.database().ref('groups/' + gid).once("value");
+    const userPromise = admin.database().ref('users/' + uid).once("value");
+
+    return Promise.all([userPromise, groupPromise]).then((snapshots) => {
+        const user = snapshots[0].val();
+        const group = snapshots[1].val();
+
+        // iterate over users of this group
+        return admin.database().ref('groups/' + gid + '/users').once("value").then(_groupUsers => {
+            const groupUsers = _groupUsers.val();
+
+            for (let u in groupUsers) {
+                if (!groupUsers.hasOwnProperty(u) || u === uid) continue;
+
+                admin.database().ref('notifications/' + u).push({
+                    msg: user.displayName + ' joined the group ' + group.name + '!',
+                    refUser: uid,
+                    seen: false,
+                    title: group.name + ' - New user',
+                    time: d.toISOString()
+                });
+            }
+        });
+    });
+
+    return Promise.all([userPromise, groupPromise]).then((snapshots) => {
+        const user = snapshots[0].val();
+        const group = snapshots[1].val();
+
+        return admin.database().ref('wishlists/' + gid + '/' + uid + '/subscriptions').once("value").then(_subscriptions => {
+            const subscriptions = _subscriptions.val();
+
+            // iterate over users who subscribed to this wishlist
+            for (let u in subscriptions) {
+                if (!subscriptions.hasOwnProperty(u)) continue;
+                if (subscriptions[u] === true) {
+                    // Write Notification
+                    admin.database().ref('notifications/' + u).push({
+                        msg: user.displayName + ' added a new wish: ' + wish.name + '!',
+                        refUser: uid,
+                        seen: false,
+                        title: group.name + ' - New wish',
+                        time: d.toISOString()
+                    });
+                }
+            }
+
+            return true;
+        });
+    });
+
+    // 'wishlists/-KvJNNzbBagFeATemS4J/jLTIgS9vSwM4c6sZLFs83DRCISj1/wishes/test', {params: {gid: '-KvJNNzbBagFeATemS4J', uid: 'jLTIgS9vSwM4c6sZLFs83DRCISj1', wid: 'test'}}
+});
+
+
 exports.wishDeleted = functions.database.ref('/wishlists/{groupId}/{userId}/wishes/{wishId}').onDelete(event => processWishDeleted(event));
 
 function processWishDeleted(event) {
