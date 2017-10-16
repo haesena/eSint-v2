@@ -10,6 +10,7 @@ import {UserService} from '../../../services/firebase/user.service';
 export class NotificationsComponent implements OnInit {
 
     public notifications = [];
+    public deleting = false;
 
     constructor(private nService: NotificationsService, private uService: UserService) {
     }
@@ -26,4 +27,12 @@ export class NotificationsComponent implements OnInit {
         this.nService.markAsRead(notification.$key);
     }
 
+    deleteAll() {
+        this.nService.deleteAllNotifications();
+        this.deleting = false;
+    }
+
+    delete(notification) {
+        this.nService.deleteNotification(notification.$key);
+    }
 }

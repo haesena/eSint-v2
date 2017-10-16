@@ -89,5 +89,9 @@ export class AuthService {
         } else {
             this.router.navigate(['/invite/' + this.config.invite.$key]);
         }
+
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            location.reload(true);
+        }
     }
 }

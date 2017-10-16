@@ -8,6 +8,8 @@
     border-radius: 4px;
     padding: 0 4px;
     margin-right: 5px;
+    border: 1px solid red;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
 }
 
 .notification-card {

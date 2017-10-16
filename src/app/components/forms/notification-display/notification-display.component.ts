@@ -8,7 +8,9 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 export class NotificationDisplayComponent implements OnInit {
 
     @Input() notification = null;
+    @Input() canDelete = false;
     @Output() markAsReadEvent: EventEmitter<any> = new EventEmitter();
+    @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
 
     constructor() {
     }
@@ -18,6 +20,10 @@ export class NotificationDisplayComponent implements OnInit {
 
     markAsRead() {
         this.markAsReadEvent.emit(this.notification);
+    }
+
+    delete() {
+        this.deleteEvent.emit(this.notification);
     }
 
 }

@@ -145,11 +145,13 @@ exports.fcmSend = functions.database.ref('/notifications/{uid}/{nid}').onCreate(
     let payload = {
         notification: {
             title: notification.title,
-            body: notification.msg
+            body: notification.msg,
+            click_action: 'https://esint-v2.firebaseapp.com/notifications/'
         }
     };
 
-    return incrementUserNotificationCount(userId).then(() => {
+    return incrementUserNotificationCount(userId).then((count) => {
+        payload.notification.badge = count.toString();
         return admin.database().ref('users/' + notification.refUser).once('value').then(_user => {
             const user = _user.val();
             payload.notification.icon = user.photoUrl;
@@ -180,6 +182,8 @@ function incrementUserNotificationCount(userId) {
     return admin.database().ref('users/' + userId).once('value').then(_user => {
         const user = _user.val();
         const count = user.notificationCount ? user.notificationCount + 1 : 1;
-        return admin.database().ref('users/' + userId + '/notificationCount').set(count);
+        admin.database().ref('users/' + userId + '/notificationCount').set(count);
+
+        return count;
     });
 }

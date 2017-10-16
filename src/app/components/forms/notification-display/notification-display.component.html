@@ -10,7 +10,8 @@
         <mat-card-subtitle>{{ notification.time | date:'dd.MM.y HH:mm' }}</mat-card-subtitle>
     </mat-card-header>
     {{ notification.msg }}
-    <mat-card-actions *ngIf="!notification.seen">
-        <button mat-button color="primary" (click)="markAsRead()">MARK AS READ</button>
+    <mat-card-actions *ngIf="!notification.seen || canDelete">
+        <button *ngIf="!notification.seen" mat-button color="primary" (click)="markAsRead()">MARK AS READ</button>
+        <button *ngIf="canDelete" mat-button color="primary" (click)="delete()">DELETE</button>
     </mat-card-actions>
 </mat-card>

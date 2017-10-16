@@ -37,6 +37,14 @@ export class NotificationsService {
         this.wdb.object('notifications/' + this.config.userId + '/' + nid + '/seen').set(true);
     }
 
+    deleteNotification(nid) {
+        this.wdb.object('notifications/' + this.config.userId + '/' + nid).remove();
+    }
+
+    deleteAllNotifications() {
+        this.wdb.object('notifications/' + this.config.userId).remove();
+    }
+
     wishlistSubscribed(uid) {
         return this.db.object('wishlists/' + this.config.activeGroup + '/' + uid + '/subscriptions/' + this.config.userId);
     }

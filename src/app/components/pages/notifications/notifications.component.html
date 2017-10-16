@@ -1,7 +1,14 @@
-<mat-toolbar>Your notifications</mat-toolbar>
-<mat-list *ngIf="notifications.length; else no_notifications" style="padding-top: 0;">
+<mat-toolbar>
+    Your notifications
+    <span class="space-filler"></span>
+    <button mat-button (click)="deleting = true" *ngIf="!deleting && notifications.length > 0">DELETE</button>
+    <button mat-button (click)="deleteAll()" *ngIf="deleting">DELETE ALL</button>
+    <button mat-button (click)="deleting = false" *ngIf="deleting">DONE</button>
+</mat-toolbar>
+<mat-list *ngIf="notifications.length > 0; else no_notifications" style="padding-top: 0;">
     <div *ngFor="let notification of notifications">
-        <app-notification-display [notification]="notification" (markAsReadEvent)="markAsread($event)"></app-notification-display>
+        <app-notification-display [notification]="notification" [canDelete]="deleting"
+                                  (markAsReadEvent)="markAsread($event)" (deleteEvent)="delete($event)"></app-notification-display>
     </div>
     <!--<mat-divider></mat-divider>-->
 </mat-list>

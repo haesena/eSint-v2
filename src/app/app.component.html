@@ -25,9 +25,9 @@
 			{{config.pageTitle}}
 		</span>
         <span class="space-filler"></span>
-        <button mat-mini-fab color="warn" *ngIf="auth.loggedIn == true" class="badge-container margin-right" routerLink="/notifications">
+        <button mat-icon-button *ngIf="auth.loggedIn == true && notificationCount > 0" class="badge-container margin-right" routerLink="/notifications">
             <mat-icon>
-                <span class="badge" *ngIf="notificationCount > 0">{{notificationCount}}</span>
+                <span class="badge badge-toolbar">{{notificationCount}}</span>
                 notifications
             </mat-icon>
         </button>
