@@ -42,7 +42,6 @@ export class InviteComponent implements OnInit {
         // check if user the user is already in the group
         this.gService.getUserGroupIds(uid).subscribe(groups => {
             const inGroup = groups[this.config.invite.group] != null;
-            console.log('inGroup', inGroup);
             // if this is a group invite, this ties directly to the need to show the invite
             if (this.config.invite.type === 'group') {
                 this.noNeedForInvite = inGroup;
@@ -79,12 +78,11 @@ export class InviteComponent implements OnInit {
             .switchMap(list => list)
             .switchMap(list => list.length > 0 ? this.decisionForMergingWishlists(list) : Observable.of(false))
             .subscribe(decision => {
-                console.log('joining list');
                 this.wService.joinWishlist(this.config.userId, this.config.invite.group, this.config.invite.list).then(() => {
                     if (decision) {
                         this.wService.mergeWishes(this.config.userId, this.config.invite.group, this.config.invite.list);
-                        console.log('merging wishes');
                     }
+                    this.router.navigate(['/my-list']);
                 });
             });
     }

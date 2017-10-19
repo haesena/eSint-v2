@@ -6,6 +6,7 @@ import {Wish} from '../../../models/wish';
 import {GiftsService} from '../../../services/firebase/gifts.service';
 import {NotificationsService} from '../../../services/firebase/notifications.service';
 import {AngularFireDatabase} from 'angularfire2/database';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
     selector: 'app-wishlist',
@@ -21,7 +22,7 @@ export class WishlistComponent implements OnInit {
     public sharedUsers;
 
     constructor(private wService: WishlistsService, public config: Configuration, private route: ActivatedRoute,
-                private gService: GiftsService, public nService: NotificationsService) {
+                private gService: GiftsService, public nService: NotificationsService, private snackBar: MatSnackBar) {
     }
 
     ngOnInit() {
@@ -52,6 +53,9 @@ export class WishlistComponent implements OnInit {
     }
 
     setSubscribed(value) {
+        if (value.checked) {
+            this.snackBar.open('You will receive notifications when a wish is added', 'OK', {duration: 3000});
+        }
         this.nService.subscribeToWishlist(this.lid, value.checked);
     }
 

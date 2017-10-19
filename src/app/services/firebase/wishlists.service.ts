@@ -40,7 +40,9 @@ export class WishlistsService {
     }
 
     getWish(wid) {
-        return this.db.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wid);
+        return this.getWishlistId(this.config.activeGroup, this.config.userId).switchMap(lid => {
+            return this.db.object('wishlists/' + this.config.activeGroup + '/' + lid + '/wishes/' + wid);
+        });
     }
 
     saveWish(wish: Wish) {
@@ -66,6 +68,7 @@ export class WishlistsService {
                             continue;
                         }
                         this.db.object('users/' + u).subscribe(user => {
+                            wishlist.users = wishlist.users.filter(_u => _u !== u);
                             wishlist.users.push(user);
                         });
                     }
@@ -93,7 +96,6 @@ export class WishlistsService {
                 lists.forEach(list => {
                     this.db.object('users/' + list.$key).subscribe(u => list.photoUrl = u.photoUrl);
                 });
-                console.log(lists);
                 // filter out the list of the current user
                 return lists.filter(l => {
                     // if i'm a collaborator of this list, filter it out
@@ -139,6 +141,8 @@ export class WishlistsService {
             .then(() => {
                 return this.wdb.object('wishlists/' + groupId + '/' + wishlistToJoin + '/sharedWith').update({[userId]: true});
             }).then(() => {
+                return this.wdb.object('wishlists/' + groupId + '/' + wishlistToJoin + '/subscriptions/' + userId).remove();
+            }).then(() => {
                 // if the user already took gifts for the wishlist wich he is joining, these gifts get deleted
                 return this.wdb.list('gifts/' + groupId + '/' + userId).take(1).subscribe(gifts => {
                     gifts.forEach(gift => {
@@ -153,7 +157,6 @@ export class WishlistsService {
 
     mergeWishes(userId, groupId, newListId) {
         this.wdb.list('wishlists/' + groupId + '/' + userId + '/wishes').take(1).subscribe(wishes => {
-            console.log('inserting into wishlists/' + groupId + '/' + newListId + '/wishes');
             wishes.forEach(wish => {
                 this.wdb.list('wishlists/' + groupId + '/' + newListId + '/wishes').push(wish);
             });

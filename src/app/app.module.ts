@@ -16,7 +16,8 @@ import {
     MatMenuModule,
     MatSelectModule,
     MatSlideToggleModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule
 } from '@angular/material';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -125,6 +126,7 @@ import { NotificationsService } from './services/firebase/notifications.service'
         MatSelectModule,
         MatSlideToggleModule,
         MatProgressSpinnerModule,
+        MatSnackBarModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         AngularFireAuthModule,
