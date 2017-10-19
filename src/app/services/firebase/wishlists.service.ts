@@ -4,6 +4,7 @@ import {AngularFireOfflineDatabase} from 'angularfire2-offline';
 import {Wish} from '../../models/wish';
 import 'rxjs/add/operator/switchMap';
 import {AngularFireDatabase} from 'angularfire2/database';
+import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class WishlistsService {
@@ -12,7 +13,9 @@ export class WishlistsService {
     }
 
     getWishes(uid) {
-        return this.db.list('wishlists/' + this.config.activeGroup + '/' + uid + '/wishes');
+        return this.getWishlistId(this.config.activeGroup, uid).switchMap(lid => {
+            return this.db.list('wishlists/' + this.config.activeGroup + '/' + lid + '/wishes');
+        });
     }
 
     getWishlistId(groupId, userId) {
@@ -41,19 +44,47 @@ export class WishlistsService {
     }
 
     saveWish(wish: Wish) {
-        if (wish.$key == null) {
-            return this.wdb.list('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes').push(wish);
-        } else {
-            return this.wdb.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wish.$key).update(wish)
-        }
+        return this.getWishlistId(this.config.activeGroup, this.config.userId).subscribe(lid => {
+            if (wish.$key == null) {
+                return this.wdb.list('wishlists/' + this.config.activeGroup + '/' + lid + '/wishes').push(wish);
+            } else {
+                return this.wdb.object('wishlists/' + this.config.activeGroup + '/' + lid + '/wishes/' + wish.$key).update(wish);
+            }
+        });
     }
 
     getWishlist(uid) {
-        return this.db.object('wishlists/' + this.config.activeGroup + '/' + uid);
+        return this.getWishlistId(this.config.activeGroup, uid).switchMap(lid => {
+            return this.db.object('wishlists/' + this.config.activeGroup + '/' + lid).map(wishlist => {
+                if (!isNullOrUndefined(wishlist.sharedWith)) {
+                    wishlist.users = [];
+                    this.db.object('users/' + lid).subscribe(user => {
+                        wishlist.users.push(user);
+                    });
+                    for (const u in wishlist.sharedWith) {
+                        if (!wishlist.sharedWith.hasOwnProperty(u)) {
+                            continue;
+                        }
+                        this.db.object('users/' + u).subscribe(user => {
+                            wishlist.users.push(user);
+                        });
+                    }
+                }
+                return wishlist;
+            });
+        });
+    }
+
+    updateWishlist(newFields) {
+        return this.getWishlistId(this.config.activeGroup, this.config.userId).subscribe(lid => {
+            return this.db.object('wishlists/' + this.config.activeGroup + '/' + lid).update(newFields);
+        });
     }
 
     deleteWish(wid) {
-        this.wdb.object('wishlists/' + this.config.activeGroup + '/' + this.config.userId + '/wishes/' + wid).remove();
+        return this.getWishlistId(this.config.activeGroup, this.config.userId).subscribe(lid => {
+            this.wdb.object('wishlists/' + this.config.activeGroup + '/' + lid + '/wishes/' + wid).remove();
+        });
     }
 
     getWishlistOfActiveGroup() {
@@ -62,8 +93,24 @@ export class WishlistsService {
                 lists.forEach(list => {
                     this.db.object('users/' + list.$key).subscribe(u => list.photoUrl = u.photoUrl);
                 });
+                console.log(lists);
                 // filter out the list of the current user
-                return lists.filter(l => l.$key !== this.config.userId);
+                return lists.filter(l => {
+                    // if i'm a collaborator of this list, filter it out
+                    if (!isNullOrUndefined(l.sharedWith)) {
+                        if (l.sharedWith[this.config.userId] === true) {
+                            return false;
+                        }
+                    }
+
+                    // if this is a list of a collaborator of my list, filter it out
+                    if (!isNullOrUndefined(l.referenceId)) {
+                        return false;
+                    }
+
+                    // if it's my list, filter it out
+                    return l.$key !== this.config.userId;
+                });
             });
         });
     }
@@ -88,6 +135,36 @@ export class WishlistsService {
     }
 
     joinWishlist(userId, groupId, wishlistToJoin) {
-        this.db.object('wishlists/' + groupId + '/' + userId).update({referenceId: wishlistToJoin});
+        return this.wdb.object('wishlists/' + groupId + '/' + userId).update({referenceId: wishlistToJoin})
+            .then(() => {
+                return this.wdb.object('wishlists/' + groupId + '/' + wishlistToJoin + '/sharedWith').update({[userId]: true});
+            }).then(() => {
+                // if the user already took gifts for the wishlist wich he is joining, these gifts get deleted
+                return this.wdb.list('gifts/' + groupId + '/' + userId).take(1).subscribe(gifts => {
+                    gifts.forEach(gift => {
+                        if (gift.user === wishlistToJoin && gift.manualAdd !== true) {
+                            this.wdb.object('gifts/' + groupId + '/' + userId + '/' + gift.$key).remove();
+                            this.wdb.object('takenFlag/' + groupId + '/' + wishlistToJoin + '/' + gift.wish).remove();
+                        }
+                    })
+                });
+            });
+    }
+
+    mergeWishes(userId, groupId, newListId) {
+        this.wdb.list('wishlists/' + groupId + '/' + userId + '/wishes').take(1).subscribe(wishes => {
+            console.log('inserting into wishlists/' + groupId + '/' + newListId + '/wishes');
+            wishes.forEach(wish => {
+                this.wdb.list('wishlists/' + groupId + '/' + newListId + '/wishes').push(wish);
+            });
+            this.wdb.list('wishlists/' + groupId + '/' + userId + '/wishes').remove();
+        });
+    }
+
+    removeUserFromSharedList(userId) {
+        this.getWishlistId(this.config.activeGroup, userId).take(1).subscribe(lid => {
+            this.wdb.object('wishlists/' + this.config.activeGroup + '/' + lid + '/sharedWith/' + userId).remove();
+            this.wdb.object('wishlists/' + this.config.activeGroup + '/' + userId + '/referenceId').remove();
+        });
     }
 }

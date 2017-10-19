@@ -18,6 +18,7 @@ export class WishlistComponent implements OnInit {
     public myGifts = [];
     public wListName: string;
     public lid: string;
+    public sharedUsers;
 
     constructor(private wService: WishlistsService, public config: Configuration, private route: ActivatedRoute,
                 private gService: GiftsService, public nService: NotificationsService) {
@@ -29,6 +30,7 @@ export class WishlistComponent implements OnInit {
 
             this.wService.getWishlist(this.lid).subscribe(wList => {
                 this.wListName = wList.name;
+                this.sharedUsers = wList.users
             });
 
             this.wService.getWishesWithAdditionalInfos(this.lid).subscribe(wishes => {

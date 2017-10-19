@@ -24,17 +24,26 @@
         ".read": "root.child('users').child(auth.uid).child('groups').child($groupId).exists()",
         "$userId": {
           "name": {
-            ".write": "$userId === auth.uid"
+            ".write": "$userId === auth.uid || root.child('wishlists').child($groupId).child(auth.uid).child('referenceId').val() === $userId"
           },
           "referenceId": {
-            ".write": "$userId === auth.uid"
+            // allow write if it's my list, or if the reference is my list (if I want to kick him from my list)
+            ".write": "$userId === auth.uid || data.val() === auth.uid"
           },
           "wishes": {
-            ".write": "$userId === auth.uid"
+            // allow write if it's my list
+            ".write": "$userId === auth.uid
+            // or if this is my reference list
+            || root.child('wishlists').child($groupId).child(auth.uid).child('referenceId').val() === $userId"
           },
           "subscriptions": {
             "$subscriber": {
               ".write": "$subscriber === auth.uid"
+            }
+          },
+          "sharedWith": {
+            "$invited": {
+              ".write": "$invited === auth.uid || $userId === auth.uid"
             }
           }
         }
@@ -43,8 +52,13 @@
     "takenFlag": {
       "$groupId": {
         "$userId": {
-          ".read": "root.child('users').child(auth.uid).child('groups').child($groupId).exists() && $userId !== auth.uid",
-          ".write": "root.child('users').child(auth.uid).child('groups').child($groupId).exists() && $userId !== auth.uid"
+          // no read or write if the taken-flags are for my list, or for my referencelist
+          ".read": "root.child('users').child(auth.uid).child('groups').child($groupId).exists()
+          && $userId !== auth.uid
+          && root.child('wishlists').child($groupId).child(auth.uid).child('referenceId').val() !== $userId",
+          ".write": "root.child('users').child(auth.uid).child('groups').child($groupId).exists()
+          && $userId !== auth.uid
+          && root.child('wishlists').child($groupId).child(auth.uid).child('referenceId').val() !== $userId"
         }
       }
     },

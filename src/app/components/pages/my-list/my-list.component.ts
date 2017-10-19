@@ -18,13 +18,19 @@ export class MyListComponent implements OnInit {
     editName = false;
     public wishes = [];
     public listName: string = null;
-    wishlist$;
+    public sharedUsers;
+    public rightfulOwner = false;
+
     constructor(public wService: WishlistsService, public config: Configuration, private uService: UserService,
                 public dialog: MatDialog, private iService: InvitesService, private gService: GroupsService) {
     }
 
     ngOnInit() {
-        this.wishlist$ = this.wService.getWishlist(this.config.userId);
+        this.wService.getWishlist(this.config.userId).subscribe(w => {
+            this.sharedUsers = w.users;
+            this.rightfulOwner = w.$key === this.config.userId;
+        });
+
         this.syncName();
         this.wService.getWishes(this.config.userId).subscribe(wishes => {
             this.wishes = wishes;
@@ -33,10 +39,12 @@ export class MyListComponent implements OnInit {
 
     deleteWish(wish: Wish) {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            data: {confirmMessage: [
-                'Are you sure you want to delete this wish?',
-                'Another user may already have marked this wish as taken. He may even already have bought the gift!'
-            ]}
+            data: {
+                confirmMessage: [
+                    'Are you sure you want to delete this wish?',
+                    'Another user may already have marked this wish as taken. He may even already have bought the gift!'
+                ]
+            }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -47,7 +55,7 @@ export class MyListComponent implements OnInit {
     }
 
     syncName() {
-        this.wishlist$.take(1).subscribe(n => {
+        this.wService.getWishlist(this.config.userId).take(1).subscribe(n => {
             if (n.name == null) {
                 this.updateName(this.uService.user.displayName + '\'s wishlist');
             }
@@ -56,7 +64,7 @@ export class MyListComponent implements OnInit {
     }
 
     updateName(newName) {
-        this.wishlist$.update({name: newName});
+        this.wService.updateWishlist({name: newName});
         this.editName = false;
     }
 
@@ -66,14 +74,19 @@ export class MyListComponent implements OnInit {
     }
 
     inviteUserToList() {
-        this.wishlist$.take(1).subscribe(l => {
+        this.wService.getWishlist(this.config.userId).take(1).subscribe(l => {
             this.gService.getGroup(this.config.activeGroup).take(1).subscribe(g => {
-                this.iService.getInviteForList(l.$key, this.uService.user.displayName, this.listName, this.config.activeGroup, g.name).subscribe(i => {
-                    const dialogRef = this.dialog.open(InviteDialogComponent, {
-                        data: {invite: i, type: 'wishlist'}
+                this.iService.getInviteForList(l.$key, this.uService.user.displayName, this.listName, this.config.activeGroup, g.name)
+                    .subscribe(i => {
+                        const dialogRef = this.dialog.open(InviteDialogComponent, {
+                            data: {invite: i, type: 'wishlist'}
+                        });
                     });
-                });
             });
         })
+    }
+
+    removeUserFromList(uid) {
+        this.wService.removeUserFromSharedList(uid);
     }
 }

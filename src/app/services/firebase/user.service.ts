@@ -50,7 +50,11 @@ export class UserService {
         this.config.activeGroup = gid;
         this.config.activeGroup$.next(gid);
         this.user.activeGroup = gid;
-        this.wdb.object('users/' + this.user.uid).update(this.user);
+        if (gid === null) {
+            return this.wdb.object('users/' + this.user.uid + '/activeGroup').remove();
+        } else {
+            return this.wdb.object('users/' + this.user.uid).update(this.user);
+        }
     }
 
     getActiveGroupName() {
@@ -62,7 +66,11 @@ export class UserService {
         groups.remove(gid);
         if (this.config.activeGroup === gid) {
             groups.subscribe(g => {
-                this.setActiveGroup(g[0].$key);
+                if (g.length === 0) {
+                    this.setActiveGroup(null);
+                } else {
+                    this.setActiveGroup(g[0].$key);
+                }
             });
         }
     }

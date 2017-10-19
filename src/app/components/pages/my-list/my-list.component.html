@@ -16,16 +16,46 @@
             <mat-icon>mode_edit</mat-icon>
             <span>Edit Name</span>
         </button>
-        <button mat-menu-item (click)="inviteUserToList()">
+        <button mat-menu-item (click)="inviteUserToList()" *ngIf="rightfulOwner">
             <mat-icon>person_add</mat-icon>
             <span>Invite</span>
         </button>
+        <button mat-menu-item (click)="removeUserFromList(config.userId)" *ngIf="!rightfulOwner">
+            <mat-icon>remove_circle_outline</mat-icon>
+            <span>Leave</span>
+        </button>
+        <button mat-menu-item [matMenuTriggerFor]="removeUsers" *ngIf="rightfulOwner && sharedUsers">
+            <mat-icon>remove_circle_outline</mat-icon>
+            Remove users
+        </button>
+    </mat-menu>
+    <mat-menu #removeUsers="matMenu">
+        <span *ngFor="let u of sharedUsers">
+            <button mat-menu-item *ngIf="u.$key !== config.userId" (click)="removeUserFromList(u.$key)">
+                <mat-icon>
+                    <img mat-fab-image class="avatar-small" [src]="u.photoUrl" onerror="brokenImg(this);">
+                </mat-icon>
+                {{ u.displayName }}
+            </button>
+        </span>
     </mat-menu>
 </mat-toolbar>
 <mat-card>
     <mat-list>
-        <div *ngFor="let w of wishes; let i = index;">
-            <mat-divider *ngIf="i > 0"></mat-divider>
+        <div *ngIf="sharedUsers">
+            <h2 mat-subheader>This is a shared wishlist</h2>
+            <mat-list-item *ngFor="let u of sharedUsers">
+                <mat-icon mat-list-icon *ngIf="u.photoUrl">
+                    <img mat-fab-image class="avatar-small" [src]="u.photoUrl" onerror="brokenImg(this);">
+                </mat-icon>
+                <h4 mat-line>
+                    {{ u.displayName }}
+                </h4>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <h3 mat-subheader>Wishes</h3>
+        </div>
+        <div *ngFor="let w of wishes">
             <app-wish-display [wish]="w" (deleteEvent)="deleteWish($event)" [myWish]="true"></app-wish-display>
         </div>
     </mat-list>
