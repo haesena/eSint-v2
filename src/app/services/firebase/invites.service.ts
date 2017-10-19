@@ -54,7 +54,7 @@ export class InvitesService {
         return invites.first().map(iList => {
             let invite = null;
             iList.forEach(i => {
-                if (i.list === lid) {
+                if (i.list === lid && i.group === groupId) {
                     invite = i.$key;
                 }
             });
