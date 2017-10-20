@@ -4,6 +4,7 @@ import {GroupsService} from '../../../services/firebase/groups.service';
 import {User} from '../../../models/user';
 import {Configuration} from '../../../configuration';
 import {WishlistsService} from '../../../services/firebase/wishlists.service';
+import {isNullOrUndefined} from "util";
 
 @Component({
     selector: 'app-list-select',
@@ -13,22 +14,18 @@ import {WishlistsService} from '../../../services/firebase/wishlists.service';
 export class ListSelectComponent implements OnInit {
 
     public photoUrl: string;
+    public myList;
     public wishlists = [];
 
     constructor(private uService: UserService, private wService: WishlistsService, private config: Configuration) {
     }
 
     ngOnInit() {
-        this.uService.user$.subscribe(u => {
-            if (u.photoUrl) {
-                this.photoUrl = u.photoUrl;
-            } else {
-                this.photoUrl = '../../assets/images/user-default.png';
-            }
-        });
-
-        this.wService.getWishlistOfActiveGroup().subscribe((wLists: any) => {
-            this.wishlists = wLists;
+        this.wService.getWishlistId(this.config.activeGroup, this.config.userId).subscribe(id => {
+            this.wService.getWishlistOfActiveGroup().subscribe((wLists: any) => {
+                this.myList = wLists.find(l => l.$key === id);
+                this.wishlists = wLists.filter(l => l.$key !== id);
+            });
         });
     }
 

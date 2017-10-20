@@ -62,6 +62,7 @@ export class WishlistsService {
                 if (!isNullOrUndefined(wishlist.sharedWith)) {
                     wishlist.users = [];
                     this.db.object('users/' + lid).subscribe(user => {
+                        wishlist.users = wishlist.users.filter(_u => _u !== lid);
                         wishlist.users.push(user);
                     });
                     for (const u in wishlist.sharedWith) {
@@ -96,24 +97,20 @@ export class WishlistsService {
             return this.db.list('wishlists/' + ag).first().map(lists => {
                 lists.forEach(list => {
                     this.db.object('users/' + list.$key).subscribe(u => list.photoUrl = u.photoUrl);
-                });
-                // filter out the list of the current user
-                return lists.filter(l => {
-                    // if i'm a collaborator of this list, filter it out
-                    if (!isNullOrUndefined(l.sharedWith)) {
-                        if (l.sharedWith[this.config.userId] === true) {
-                            return false;
+                    list.collaborators = [];
+                    if (!isNullOrUndefined(list.sharedWith)) {
+                        for (const u in list.sharedWith) {
+                            if (!list.sharedWith.hasOwnProperty(u)) {
+                                continue;
+                            }
+                            this.db.object('users/' + u).take(1).subscribe(user => {
+                                list.collaborators.push(user.photoUrl);
+                            });
                         }
                     }
-
-                    // if this is a list of a collaborator of my list, filter it out
-                    if (!isNullOrUndefined(l.referenceId)) {
-                        return false;
-                    }
-
-                    // if it's my list, filter it out
-                    return l.$key !== this.config.userId;
                 });
+                // filter out the lists of collaborators
+                return lists.filter(l => isNullOrUndefined(l.referenceId));
             });
         });
     }

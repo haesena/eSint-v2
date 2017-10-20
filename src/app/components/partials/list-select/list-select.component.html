@@ -1,7 +1,10 @@
-<mat-nav-list class="side-list">
+<mat-nav-list class="side-list" *ngIf="myList">
     <a mat-list-item routerLink="/my-list" routerLinkActive="route-active">
         <mat-icon class="menu-icon">
-            <img mat-fab-image class="avatar-small" [src]="photoUrl" onerror="brokenImg(this);">
+            <img mat-fab-image class="avatar-small" [src]="myList.photoUrl" onerror="brokenImg(this);">
+        </mat-icon>
+        <mat-icon class="menu-icon collaborator" *ngFor="let u of myList.collaborators">
+            <img mat-fab-image class="avatar-small" [src]="u" onerror="brokenImg(this);">
         </mat-icon>
         My list
     </a>
@@ -15,6 +18,9 @@
         <a mat-list-item [routerLink]="'/wishlist/' + l.$key" routerLinkActive="route-active">
         <mat-icon class="menu-icon" *ngIf="l.photoUrl">
             <img mat-fab-image class="avatar-small" [src]="l.photoUrl" onerror="brokenImg(this);">
+        </mat-icon>
+        <mat-icon class="menu-icon collaborator" *ngFor="let u of l.collaborators">
+            <img mat-fab-image class="avatar-small" [src]="u" onerror="brokenImg(this);">
         </mat-icon>
         {{ l.name }}
     </a>
