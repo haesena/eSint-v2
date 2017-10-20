@@ -3,13 +3,19 @@
     <p mat-line *ngIf="wish.linkURL" [ngClass]="{'taken':wish.taken, 'deleted':wish.deleted}">
         <a href="{{ wish.linkURL }}" target="_blank">{{ wish.linkTitle ? wish.linkTitle : wish.linkURL }}</a>
     </p>
-    <button color="warn" mat-icon-button *ngIf="wish.history && wish.history.length > 0" (click)="showHistory(wish.history)">
-        <mat-icon style="color: rgba(0, 0, 0, 0.3);">history</mat-icon>
-    </button>
-    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="myWish && !wish.deleted">
+    <p mat-line *ngIf="wish.history && wish.history.length > 0 && !history">
+        <a href="javascript:void(0)" (click)="showHistory(wish.history)" class="edit-history">wish edited</a>
+    </p>
+    <p mat-line class="edit-history" *ngIf="history === 'current'">
+        current wish
+    </p>
+    <p mat-line class="edit-history" *ngIf="history === 'history'">
+        until {{ wish.timestamp | date:'dd.MM.y HH:mm' }}
+    </p>
+    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="myWish && !wish.deleted && !history">
         <mat-icon>more_vert</mat-icon>
     </button>
-    <span *ngIf="!myWish">
+    <span *ngIf="!myWish && !history">
         <button mat-icon-button *ngIf="!wish.taken && !wish.deleted" (click)="takeWish()">
             <i class="fa fa-gift fa-2x"></i>
         </button>

@@ -7,4 +7,5 @@ export class Wish {
     deleted: boolean;
     userId: string;
     history: any;
+    timestamp: string;
 }

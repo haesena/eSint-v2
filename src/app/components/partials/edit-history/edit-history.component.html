@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>
+    Edit History
+</h2>
+<mat-dialog-content>
+    <mat-list>
+        <app-wish-display [wish]="currentWish" [history]="'current'"></app-wish-display>
+        <div *ngFor="let w of editHistory">
+            <app-wish-display [wish]="w" [history]="'history'"></app-wish-display>
+        </div>
+    </mat-list>
+</mat-dialog-content>

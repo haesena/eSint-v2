@@ -78,6 +78,7 @@ import { UserService } from './services/firebase/user.service';
 import { WishlistsService } from './services/firebase/wishlists.service';
 import { GiftsService } from './services/firebase/gifts.service';
 import { NotificationsService } from './services/firebase/notifications.service';
+import { EditHistoryComponent } from './components/partials/edit-history/edit-history.component';
 
 
 @NgModule({
@@ -107,7 +108,8 @@ import { NotificationsService } from './services/firebase/notifications.service'
         GroupDisplayComponent,
         ConfirmDialogComponent,
         NotificationsComponent,
-        NotificationDisplayComponent
+        NotificationDisplayComponent,
+        EditHistoryComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -149,7 +151,8 @@ import { NotificationsService } from './services/firebase/notifications.service'
     ],
     entryComponents: [
         InviteDialogComponent,
-        ConfirmDialogComponent
+        ConfirmDialogComponent,
+        EditHistoryComponent
     ],
     bootstrap: [AppComponent]
 })
