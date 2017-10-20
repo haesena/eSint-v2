@@ -14,7 +14,13 @@ export class WishlistsService {
 
     getWishes(uid) {
         return this.getWishlistId(this.config.activeGroup, uid).switchMap(lid => {
-            return this.db.list('wishlists/' + this.config.activeGroup + '/' + lid + '/wishes');
+            return this.db.list('wishlists/' + this.config.activeGroup + '/' + lid + '/wishes').map(wList => {
+                wList.forEach(wish => {
+                    this.db.list('wishlists/' + this.config.activeGroup + '/' + lid + '/wishHistory/' + wish.$key)
+                        .subscribe(h => wish.history = h);
+                });
+                return wList
+            });
         });
     }
 
@@ -62,6 +68,7 @@ export class WishlistsService {
                 if (!isNullOrUndefined(wishlist.sharedWith)) {
                     wishlist.users = [];
                     this.db.object('users/' + lid).subscribe(user => {
+                        console.log('pushing owner ' + user.displayName);
                         wishlist.users = wishlist.users.filter(_u => _u !== lid);
                         wishlist.users.push(user);
                     });
@@ -70,6 +77,7 @@ export class WishlistsService {
                             continue;
                         }
                         this.db.object('users/' + u).subscribe(user => {
+                            console.log('pushing '  + user.displayName);
                             wishlist.users = wishlist.users.filter(_u => _u !== u);
                             wishlist.users.push(user);
                         });

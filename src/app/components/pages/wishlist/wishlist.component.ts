@@ -30,12 +30,14 @@ export class WishlistComponent implements OnInit {
             this.lid = p.get('lid');
 
             this.wService.getWishlist(this.lid).subscribe(wList => {
+                console.log(wList.users);
                 this.wListName = wList.name;
                 this.sharedUsers = wList.users
             });
 
             this.wService.getWishesWithAdditionalInfos(this.lid).subscribe(wishes => {
                 this.wishes = wishes;
+                console.log(wishes);
             });
 
             this.gService.getMyGiftIds().subscribe(gids => {

@@ -6,7 +6,7 @@
         <mat-icon class="menu-icon collaborator" *ngFor="let u of myList.collaborators">
             <img mat-fab-image class="avatar-small" [src]="u" onerror="brokenImg(this);">
         </mat-icon>
-        My list
+        {{ myList.name }}
     </a>
     <a mat-list-item routerLink="/my-gifts" routerLinkActive="route-active">
         <mat-icon class="menu-icon-gift">

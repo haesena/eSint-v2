@@ -3,6 +3,9 @@
     <p mat-line *ngIf="wish.linkURL" [ngClass]="{'taken':wish.taken, 'deleted':wish.deleted}">
         <a href="{{ wish.linkURL }}" target="_blank">{{ wish.linkTitle ? wish.linkTitle : wish.linkURL }}</a>
     </p>
+    <button color="warn" mat-icon-button *ngIf="wish.history && wish.history.length > 0" (click)="showHistory(wish.history)">
+        <mat-icon style="color: rgba(0, 0, 0, 0.3);">history</mat-icon>
+    </button>
     <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="myWish && !wish.deleted">
         <mat-icon>more_vert</mat-icon>
     </button>

@@ -30,4 +30,8 @@ export class WishDisplayComponent implements OnInit {
     takeWish() {
         this.takeEvent.emit(this.wish);
     }
+
+    showHistory(history) {
+
+    }
 }

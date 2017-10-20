@@ -6,4 +6,5 @@ export class Wish {
     taken: boolean;
     deleted: boolean;
     userId: string;
+    history: any;
 }

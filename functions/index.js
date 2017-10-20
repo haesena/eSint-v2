@@ -10,21 +10,67 @@ exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wi
 
     const wish = event.data.val();
 
+    if(wish.userId != null) {
+        userWhoInserted = wish.userId;
+    }
+
+    return notifyWishEvent(gid, uid, userWhoInserted, 'insert', wish.name);
+
+    // 'wishlists/-KvJNNzbBagFeATemS4J/jLTIgS9vSwM4c6sZLFs83DRCISj1/wishes/test', {params: {gid: '-KvJNNzbBagFeATemS4J', uid: 'jLTIgS9vSwM4c6sZLFs83DRCISj1', wid: 'test'}}
+});
+
+exports.wishChanged = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wid}').onUpdate(event => {
+
+    const gid = event.params.gid;
+    const uid = event.params.uid;
+    const wid = event.params.wid;
+    let userWhoInserted = uid;
+
+    const wish = event.data.val();
+    const wishBefore = event.data.previous.val();
+
     const d = new Date();
+
+    wishBefore.timestamp = d.toISOString();
 
     if(wish.userId != null) {
         userWhoInserted = wish.userId;
     }
 
-    const groupPromise = admin.database().ref('groups/' + gid).once("value");
-    const userPromise = admin.database().ref('users/' + userWhoInserted).once("value");
+    return admin.database().ref('/wishlists/' + gid + '/' + uid + '/wishHistory/' + wid)
+        .push(wishBefore)
+        .then(() => notifyWishEvent(gid, uid, userWhoInserted, 'update', wish.name));
+
+    // 'wishlists/-KvJNNzbBagFeATemS4J/jLTIgS9vSwM4c6sZLFs83DRCISj1/wishes/test', {params: {gid: '-KvJNNzbBagFeATemS4J', uid: 'jLTIgS9vSwM4c6sZLFs83DRCISj1', wid: 'test'}}
+});
+
+function notifyWishEvent(groupId, wishlistID, refUserId, action, wishName) {
+
+    let titleMsg = '';
+    if (action === 'insert')  {
+        titleMsg =  'New wish'
+    } else if (action === 'update') {
+        titleMsg = 'Wish updated';
+    }
+
+    const d = new Date();
+
+    const groupPromise = admin.database().ref('groups/' + groupId).once("value");
+    const userPromise = admin.database().ref('users/' + refUserId).once("value");
 
     return Promise.all([userPromise, groupPromise]).then((snapshots) => {
         const user = snapshots[0].val();
         const group = snapshots[1].val();
 
-        const subscribersPromise = admin.database().ref('wishlists/' + gid + '/' + uid + '/subscriptions').once("value");
-        const collaboratorsPromise = admin.database().ref('wishlists/' + gid + '/' + uid + '/sharedWith').once("value");
+        let notification = {
+            refUser: refUserId,
+            seen: false,
+            title: group.name + ' - ' + titleMsg,
+            time: d.toISOString()
+        };
+
+        const subscribersPromise = admin.database().ref('wishlists/' + groupId + '/' + wishlistID + '/subscriptions').once("value");
+        const collaboratorsPromise = admin.database().ref('wishlists/' + groupId + '/' + wishlistID + '/sharedWith').once("value");
 
         // .then(_subscriptions => {
         return Promise.all([subscribersPromise, collaboratorsPromise]).then((snapshots2) => {
@@ -36,50 +82,44 @@ exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wi
                 if (!subscriptions.hasOwnProperty(u)) continue;
                 if (subscriptions[u] === true) {
                     // Write Notification
-                    admin.database().ref('notifications/' + u).push({
-                        msg: user.displayName + ' added a new wish: ' + wish.name + '!',
-                        refUser: userWhoInserted,
-                        seen: false,
-                        title: group.name + ' - New wish',
-                        time: d.toISOString()
-                    });
+                    if (action === 'insert')  {
+                        notification.msg = user.displayName + ' added a new wish: ' + wishName + '!';
+                    } else if (action === 'update') {
+                        notification.msg = user.displayName + ' updated a wish: ' + wishName + '!';
+                    }
+                    admin.database().ref('notifications/' + u).push(notification);
                 }
             }
 
             // iterate over users who collaborate to this wishlist
             for (let u in collaborators) {
                 if (!collaborators.hasOwnProperty(u)) continue;
-                if (collaborators[u] === true && u !== userWhoInserted) {
+                if (collaborators[u] === true && u !== refUserId) {
                     // Write Notification
-                    admin.database().ref('notifications/' + u).push({
-                        msg: user.displayName + ' added a new wish to your shared wishlist: ' + wish.name + '!',
-                        refUser: userWhoInserted,
-                        seen: false,
-                        title: group.name + ' - New wish',
-                        time: d.toISOString()
-                    });
+                    if (action === 'insert')  {
+                        notification.msg = user.displayName + ' added a new wish to your shared wishlist: ' + wishName + '!';
+                    } else if (action === 'update') {
+                        notification.msg = user.displayName + ' updated a wish in your shared wishlist: ' + wishName + '!';
+                    }
+                    admin.database().ref('notifications/' + u).push(notification);
                 }
             }
 
             return true;
         }).then(() => {
             //  if the user who inserted the wish is not the owner of the wishlist, send a notification to the owner too
-            if (userWhoInserted !== event.params.uid) {
-                admin.database().ref('notifications/' + event.params.uid).push({
-                    msg: user.displayName + ' added a new wish to your shared wishlist: ' + wish.name + '!',
-                    refUser: userWhoInserted,
-                    seen: false,
-                    title: group.name + ' - New wish',
-                    time: d.toISOString()
-                });
+            if (refUserId !== wishlistID) {
+                if (action === 'insert')  {
+                    notification.msg = user.displayName + ' added a new wish to your shared wishlist: ' + wishName + '!';
+                } else if (action === 'update') {
+                    notification.msg = user.displayName + ' updated a wish in your shared wishlist: ' + wishName + '!';
+                }
+                admin.database().ref('notifications/' + wishlistID).push(notification);
             }
             return true;
         });
     });
-
-    // 'wishlists/-KvJNNzbBagFeATemS4J/jLTIgS9vSwM4c6sZLFs83DRCISj1/wishes/test', {params: {gid: '-KvJNNzbBagFeATemS4J', uid: 'jLTIgS9vSwM4c6sZLFs83DRCISj1', wid: 'test'}}
-});
-
+}
 
 exports.userJoinedGroup = functions.database.ref('/groups/{gid}/users/{uid}').onCreate(event => {
 
