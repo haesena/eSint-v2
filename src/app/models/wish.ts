@@ -5,4 +5,5 @@ export class Wish {
     linkURL: any;
     taken: boolean;
     deleted: boolean;
+    userId: string;
 }

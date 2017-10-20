@@ -6,20 +6,30 @@ exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wi
 
     const gid = event.params.gid;
     const uid = event.params.uid;
+    let userWhoInserted = uid;
 
     const wish = event.data.val();
 
     const d = new Date();
 
+    if(wish.userId != null) {
+        userWhoInserted = wish.userId;
+    }
+
     const groupPromise = admin.database().ref('groups/' + gid).once("value");
-    const userPromise = admin.database().ref('users/' + uid).once("value");
+    const userPromise = admin.database().ref('users/' + userWhoInserted).once("value");
 
     return Promise.all([userPromise, groupPromise]).then((snapshots) => {
         const user = snapshots[0].val();
         const group = snapshots[1].val();
 
-        return admin.database().ref('wishlists/' + gid + '/' + uid + '/subscriptions').once("value").then(_subscriptions => {
-            const subscriptions = _subscriptions.val();
+        const subscribersPromise = admin.database().ref('wishlists/' + gid + '/' + uid + '/subscriptions').once("value");
+        const collaboratorsPromise = admin.database().ref('wishlists/' + gid + '/' + uid + '/sharedWith').once("value");
+
+        // .then(_subscriptions => {
+        return Promise.all([subscribersPromise, collaboratorsPromise]).then((snapshots2) => {
+            const subscriptions = snapshots2[0].val();
+            const collaborators = snapshots2[1].val();
 
             // iterate over users who subscribed to this wishlist
             for (let u in subscriptions) {
@@ -28,7 +38,7 @@ exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wi
                     // Write Notification
                     admin.database().ref('notifications/' + u).push({
                         msg: user.displayName + ' added a new wish: ' + wish.name + '!',
-                        refUser: uid,
+                        refUser: userWhoInserted,
                         seen: false,
                         title: group.name + ' - New wish',
                         time: d.toISOString()
@@ -36,6 +46,33 @@ exports.wishInserted = functions.database.ref('/wishlists/{gid}/{uid}/wishes/{wi
                 }
             }
 
+            // iterate over users who collaborate to this wishlist
+            for (let u in collaborators) {
+                if (!collaborators.hasOwnProperty(u)) continue;
+                if (collaborators[u] === true && u !== userWhoInserted) {
+                    // Write Notification
+                    admin.database().ref('notifications/' + u).push({
+                        msg: user.displayName + ' added a new wish to your shared wishlist: ' + wish.name + '!',
+                        refUser: userWhoInserted,
+                        seen: false,
+                        title: group.name + ' - New wish',
+                        time: d.toISOString()
+                    });
+                }
+            }
+
+            return true;
+        }).then(() => {
+            //  if the user who inserted the wish is not the owner of the wishlist, send a notification to the owner too
+            if (userWhoInserted !== event.params.uid) {
+                admin.database().ref('notifications/' + event.params.uid).push({
+                    msg: user.displayName + ' added a new wish to your shared wishlist: ' + wish.name + '!',
+                    refUser: userWhoInserted,
+                    seen: false,
+                    title: group.name + ' - New wish',
+                    time: d.toISOString()
+                });
+            }
             return true;
         });
     });

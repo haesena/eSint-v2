@@ -46,6 +46,7 @@ export class WishlistsService {
     }
 
     saveWish(wish: Wish) {
+        wish.userId = this.config.userId;
         return this.getWishlistId(this.config.activeGroup, this.config.userId).subscribe(lid => {
             if (wish.$key == null) {
                 return this.wdb.list('wishlists/' + this.config.activeGroup + '/' + lid + '/wishes').push(wish);
