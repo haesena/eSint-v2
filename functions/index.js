@@ -316,7 +316,6 @@ exports.fcmSend = functions.database.ref('/notifications/{uid}/{nid}').onCreate(
     // 'notifications/c0JaF3fKKMaHp3YO4wkrfecKQyl1/test', {params: {uid: 'c0JaF3fKKMaHp3YO4wkrfecKQyl1', nid: 'test'}}
 });
 
-
 function incrementUserNotificationCount(userId) {
     return admin.database().ref('users/' + userId).once('value').then(_user => {
         const user = _user.val();
@@ -326,3 +325,52 @@ function incrementUserNotificationCount(userId) {
         return count;
     });
 }
+
+
+
+exports.userLeftGroup = functions.database.ref('/groups/{groupId}/users/{userId}').onDelete(event => {
+
+    const groupId = event.params.groupId;
+    const userId = event.params.userId;
+
+    // when a user leaves a group:
+    // - all his gifts have to be deleted
+    // - all corresponding takenFlags have to be removed
+    // - all his wishes have to be deleted
+    // - all gifts for his wishes have to be deleted
+
+    return deleteUserGisfts(groupId, userId)
+        .then(() => deleteWishes(groupId, userId));
+
+});
+
+function deleteUserGisfts(groupId, userId) {
+    return admin.database().ref('gifts/' + groupId + '/' + userId).once('value').then(_gifts => {
+        const gifts = _gifts.val();
+        for (let giftId in gifts) {
+            if (!gifts.hasOwnProperty(giftId)) continue;
+            const gift = gifts[giftId];
+            if (gift.wish != null) {
+                admin.database().ref('takenFlag/' + groupId + '/' + gift.user + '/' + gift.wish).remove();
+            }
+        }
+        return true;
+    }).then(() => {
+        return admin.database().ref('gifts/' + groupId + '/' + userId).remove();
+    });
+}
+
+function deleteWishes(groupId, userId) {
+    return admin.database().ref('wishlists/' + groupId + '/' + userId).once('value').then(_wishlist => {
+        const wishlist = _wishlist.val();
+
+        if (wishlist.referenceId != null) {
+            return admin.database().ref('wishlists/' + groupId + '/' + wishlist.referenceId + '/sharedWith/' + userId).remove();
+        } else {
+            return true;
+        }
+    }).then(() => {
+        return admin.database().ref('wishlists/' + groupId + '/' + userId).remove();
+    });
+}
+

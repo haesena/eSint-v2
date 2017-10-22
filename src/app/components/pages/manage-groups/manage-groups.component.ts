@@ -15,7 +15,7 @@ import {ConfirmDialogComponent} from '../../partials/confirm-dialog/confirm-dial
     styleUrls: ['./manage-groups.component.css']
 })
 export class ManageGroupsComponent implements OnInit {
-    public groups;
+    public groups = [];
 
     constructor(public groupsService: GroupsService, public userService: UserService, private inviteService: InvitesService,
                 public config: Configuration, public dialog: MatDialog) {
@@ -34,8 +34,10 @@ export class ManageGroupsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result === true) {
-                this.groupsService.removeUserFromGroup(group.$key, this.config.userId);
-                this.userService.removeGroupFromUser(this.config.userId, group.$key);
+                // filter the group to be deleted from those that are displayed, else we will get firebase-permission-errors
+                this.groups = this.groups.filter(g => g.$key !== group.$key);
+                this.groupsService.removeUserFromGroup(group.$key, this.config.userId)
+                    .subscribe(() => this.userService.removeGroupFromUser(this.config.userId, group.$key));
             }
         });
     }

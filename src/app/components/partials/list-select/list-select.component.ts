@@ -21,11 +21,18 @@ export class ListSelectComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.wService.getWishlistId(this.config.activeGroup, this.config.userId).subscribe(id => {
-            this.wService.getWishlistOfActiveGroup().subscribe((wLists: any) => {
-                this.myList = wLists.find(l => l.$key === id);
-                this.wishlists = wLists.filter(l => l.$key !== id);
-            });
+        this.config.activeGroup$.subscribe(ag => {
+            if (!isNullOrUndefined(ag)) {
+                this.wService.getWishlistId(ag, this.config.userId).subscribe(id => {
+                    this.wService.getWishlistOfGroup(ag).subscribe((wLists: any) => {
+                        this.myList = wLists.find(l => l.$key === id);
+                        this.wishlists = wLists.filter(l => l.$key !== id);
+                    });
+                });
+            } else {
+                this.myList = null;
+                this.wishlists = [];
+            }
         });
     }
 

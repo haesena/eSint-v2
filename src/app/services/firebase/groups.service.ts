@@ -46,7 +46,7 @@ export class GroupsService {
 
     removeUserFromGroup(gid, uid) {
         const users = this.wdb.list('/groups/' + gid + '/users');
-        users.subscribe(u => {
+        return users.map(u => {
             if (u.length === 1) {
                 this.wdb.list('/groups').remove(gid);
             } else {
@@ -60,8 +60,7 @@ export class GroupsService {
     }
 
     createGroup(g: Group): Observable<string> {
-        g.users = {};
-        g.users[this.config.userId] = 'creator';
+        g.users = {[this.config.userId]: 'creator'};
         return Observable.fromPromise(this.wdb.list('/groups').push(g)).map(v => v.key);
     }
 
@@ -71,8 +70,6 @@ export class GroupsService {
 
 
     addUser(gid, uid, type) {
-        const newUser = {};
-        newUser[uid] = type;
-        return this.wdb.object('groups/' + gid + '/users').update(newUser);
+        return this.wdb.object('groups/' + gid + '/users').update({[uid]: type});
     }
 }

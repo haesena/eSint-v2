@@ -1,3 +1,7 @@
 <div *ngFor="let g of groups"style="margin-bottom: 0.8em;">
    <app-group-display [group]="g" (inviteEvent)="inviteGroup($event)" (leaveEvent)="leaveGroup($event)"></app-group-display>
 </div>
+
+<mat-card *ngIf="groups && groups.length === 0">
+   You're in no groups yet. <a routerLink="edit-group/new">Create a new group</a>.
+</mat-card>

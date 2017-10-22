@@ -5,11 +5,16 @@ import {Wish} from '../../models/wish';
 import 'rxjs/add/operator/switchMap';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {isNullOrUndefined} from 'util';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class WishlistsService {
 
     constructor(private db: AngularFireOfflineDatabase, private config: Configuration, private wdb: AngularFireDatabase) {
+    }
+
+    createWishlist(gid, uid, listName) {
+        return this.wdb.object('wishlists/' + gid + '/' + uid).update({name: listName});
     }
 
     getWishes(uid) {
@@ -25,6 +30,9 @@ export class WishlistsService {
     }
 
     getWishlistId(groupId, userId) {
+        if (isNullOrUndefined(groupId)) {
+            return Observable.of(null);
+        }
         return this.db.object('wishlists/' + groupId + '/' + userId + '/referenceId').map(id => {
             if (id.$value === null) {
                 return userId;
@@ -68,7 +76,6 @@ export class WishlistsService {
                 if (!isNullOrUndefined(wishlist.sharedWith)) {
                     wishlist.users = [];
                     this.db.object('users/' + lid).subscribe(user => {
-                        console.log('pushing owner ' + user.displayName);
                         wishlist.users = wishlist.users.filter(_u => _u !== lid);
                         wishlist.users.push(user);
                     });
@@ -77,7 +84,6 @@ export class WishlistsService {
                             continue;
                         }
                         this.db.object('users/' + u).subscribe(user => {
-                            console.log('pushing '  + user.displayName);
                             wishlist.users = wishlist.users.filter(_u => _u !== u);
                             wishlist.users.push(user);
                         });
@@ -100,26 +106,24 @@ export class WishlistsService {
         });
     }
 
-    getWishlistOfActiveGroup() {
-        return this.config.activeGroup$.switchMap(ag => {
-            return this.db.list('wishlists/' + ag).first().map(lists => {
-                lists.forEach(list => {
-                    this.db.object('users/' + list.$key).subscribe(u => list.photoUrl = u.photoUrl);
-                    list.collaborators = [];
-                    if (!isNullOrUndefined(list.sharedWith)) {
-                        for (const u in list.sharedWith) {
-                            if (!list.sharedWith.hasOwnProperty(u)) {
-                                continue;
-                            }
-                            this.db.object('users/' + u).take(1).subscribe(user => {
-                                list.collaborators.push(user.photoUrl);
-                            });
+    getWishlistOfGroup(groupId) {
+        return this.db.list('wishlists/' + groupId).first().map(lists => {
+            lists.forEach(list => {
+                this.db.object('users/' + list.$key).subscribe(u => list.photoUrl = u.photoUrl);
+                list.collaborators = [];
+                if (!isNullOrUndefined(list.sharedWith)) {
+                    for (const u in list.sharedWith) {
+                        if (!list.sharedWith.hasOwnProperty(u)) {
+                            continue;
                         }
+                        this.db.object('users/' + u).take(1).subscribe(user => {
+                            list.collaborators.push(user.photoUrl);
+                        });
                     }
-                });
-                // filter out the lists of collaborators
-                return lists.filter(l => isNullOrUndefined(l.referenceId));
+                }
             });
+            // filter out the lists of collaborators
+            return lists.filter(l => isNullOrUndefined(l.referenceId));
         });
     }
 

@@ -69,22 +69,23 @@ export class InviteComponent implements OnInit {
             .map(groups => groups[this.config.invite.group] != null)
             .map(inGroup => {
                 if (!inGroup) {
-                    return this.addUserToGroup(this.config.userId, this.config.invite.group);
+                    return this.addUserToGroup(this.config.userId, this.config.invite.group).then(() => true);
                 } else {
                     return this.uService.setActiveGroup(this.config.invite.group).then(() => true);
                 }
             })
-            .map(() => this.wService.getWishes(this.config.userId).take(1))
-            .switchMap(list => list)
-            .switchMap(list => list.length > 0 ? this.decisionForMergingWishlists(list) : Observable.of(false))
-            .subscribe(decision => {
-                this.wService.joinWishlist(this.config.userId, this.config.invite.group, this.config.invite.list).then(() => {
-                    if (decision) {
-                        this.wService.mergeWishes(this.config.userId, this.config.invite.group, this.config.invite.list);
-                    }
-                    this.router.navigate(['/my-list']);
-                });
-            });
+            .subscribe((v) => v.then(() => {
+                this.wService.getWishes(this.config.userId).take(1)
+                    .switchMap(list => list.length > 0 ? this.decisionForMergingWishlists(list) : Observable.of(false))
+                    .subscribe(decision => {
+                        this.wService.joinWishlist(this.config.userId, this.config.invite.group, this.config.invite.list).then(() => {
+                            if (decision) {
+                                this.wService.mergeWishes(this.config.userId, this.config.invite.group, this.config.invite.list);
+                            }
+                            this.router.navigate(['/my-list'])
+                        });
+                    });
+            }));
     }
 
     decisionForMergingWishlists(wishes) {
@@ -104,6 +105,7 @@ export class InviteComponent implements OnInit {
     addUserToGroup(uid, gid) {
         return this.uService.addGroup(gid, 'invite')
             .then(() => this.gService.addUser(gid, uid, 'invite'))
-            .then(() => this.uService.setActiveGroup(gid));
+            .then(() => this.uService.setActiveGroup(gid))
+            .then(() => this.wService.createWishlist(gid, uid, this.uService.user.displayName + '\'s wishlist'));
     }
 }

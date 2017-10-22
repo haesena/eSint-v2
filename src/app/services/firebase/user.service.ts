@@ -4,6 +4,8 @@ import {User} from '../../models/user';
 import 'rxjs/add/operator/mergeMap';
 import {Configuration} from '../../configuration';
 import {AngularFireDatabase} from 'angularfire2/database';
+import {isNullOrUndefined} from 'util';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class UserService {
@@ -40,10 +42,7 @@ export class UserService {
     }
 
     addGroup(gid: string, type: string) {
-        const newGroup = {};
-        newGroup[gid] = type;
-        const userGroups = this.wdb.object('users/' + this.config.userId + '/groups');
-        return userGroups.update(newGroup);
+        return this.wdb.object('users/' + this.config.userId + '/groups').update({[gid]: type});
     }
 
     setActiveGroup(gid) {
@@ -58,21 +57,25 @@ export class UserService {
     }
 
     getActiveGroupName() {
-        return this.db.object('groups/' + this.config.activeGroup + '/name');
+        return this.config.activeGroup$.switchMap(ag => {
+            if (isNullOrUndefined(ag)) {
+                return Observable.of({$value: null});
+            } else {
+                return this.db.object('groups/' + this.config.activeGroup + '/name');
+            }
+        })
     }
 
     removeGroupFromUser(uid, gid) {
-        const groups = this.wdb.list('/users/' + uid + '/groups');
-        groups.remove(gid);
-        if (this.config.activeGroup === gid) {
-            groups.subscribe(g => {
-                if (g.length === 0) {
-                    this.setActiveGroup(null);
-                } else {
-                    this.setActiveGroup(g[0].$key);
-                }
-            });
-        }
+        return this.wdb.list('/users/' + uid + '/groups').map(g => {
+            if (g.length === 0) {
+                return this.setActiveGroup(null);
+            } else {
+                return this.setActiveGroup(g[0].$key);
+            }
+        }).subscribe(() => {
+            this.wdb.list('/users/' + uid + '/groups/' + gid).remove();
+        });
     }
 
     getUserGroups(uid) {
