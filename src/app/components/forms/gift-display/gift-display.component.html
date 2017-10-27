@@ -2,7 +2,7 @@
     <mat-icon mat-list-icon *ngIf="gift.userObj">
         <img mat-fab-image class="avatar-small" [src]="gift.userObj.photoUrl" onerror="brokenImg(this);">
     </mat-icon>
-    <h4 mat-line>
+    <h4 mat-line style="white-space: normal;">
         {{ gift.name }}
         <span *ngIf="gift.deletedByUser"> (wish deleted by {{ gift.userObj.displayName }})</span>
         <span *ngIf="gift.manualAdd"> (added manually)</span>

@@ -1,5 +1,5 @@
-<mat-list-item>
-    <h4 mat-line [ngClass]="{'taken':wish.taken, 'deleted':wish.deleted}">{{ wish.name }}</h4>
+<mat-list-item class="margin-top">
+    <h4 mat-line [ngClass]="{'taken':wish.taken, 'deleted':wish.deleted}" style="white-space: normal;">{{ wish.name }}</h4>
     <p mat-line *ngIf="wish.linkURL" [ngClass]="{'taken':wish.taken, 'deleted':wish.deleted}">
         <a href="{{ wish.linkURL }}" target="_blank">{{ wish.linkTitle ? wish.linkTitle : wish.linkURL }}</a>
     </p>
