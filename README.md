@@ -4,6 +4,10 @@ Manage your wishlists with the eSint application. You can create your own wishli
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.1.3.
 
+## Demo
+
+[eSint-v2 demo](https://esint-v2.firebaseapp.com)
+
 # Errors
 
 ## OAuth-Token not refreshed
